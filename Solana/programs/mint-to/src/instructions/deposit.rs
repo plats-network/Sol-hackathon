@@ -54,40 +54,10 @@ impl DepositNft<'_> {
         )?;
         msg!("Token address closed successfully.");
 
-        // let pool = &mut ctx.accounts.pool;
-        // pool.price = Self::get_price(metadata_symbol);
-        // pool.mint = ctx.accounts.mint.key();
-        // pool.initializer = ctx.accounts.mint_authority.key();
-        // msg!("Pool initialized successfully.");
-
         msg!("NFT transferred successfully.");
-        Ok(())
-        
+        Ok(())       
     }
 
-    // fn init_pool(
-    //     ctx: &Context<MintNft>, 
-    //     seed: u64,
-    //     metadata_symbol: &String,
-    // ) -> Result<()> {
-    //     let pool = mut ctx.accounts.pool;
-    //     pool.seed = seed;
-    //     pool.price = Self::get_price(metadata_symbol);
-    //     pool.mint = ctx.accounts.mint.key();
-    //     pool.initializer = ctx.accounts.mint_authority.key();
-    //     msg!("Pool initialized successfully.");
-    //     Ok(())
-    // }
-
-    // pub fn get_price(symbol: &String) -> u64 {
-    //     let mut word = String::new();
-    //     word.push_str("TICKET");
-    //     if symbol == &word {
-    //         123000000
-    //     } else {
-    //         0
-    //     }
-    // }
 }
 
 #[derive(Accounts)]

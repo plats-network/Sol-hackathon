@@ -84,33 +84,6 @@ impl ClaimNft<'_> {
     
         Ok(())
     }
-
-    // fn pay_fee(
-    //     ctx: &Context<ClaimNft>,
-    // ) -> Result<()> {
-    //     let sale_lamports = ctx.accounts.pool.price;
-    //     msg!("Initiating transfer of {} lamports...", sale_lamports);
-    //     require_keys_eq!(
-    //         ctx.accounts.pool.initializer,
-    //         ctx.accounts.fee_wallet.key(),
-    //         ErrorFactory::MisMatchdFeeWalletAddress
-    //     );
-    //     msg!("Purchaser (sending lamports): {}", &ctx.accounts.buyer_authority.key());
-    //     msg!("Seller (receiving lamports): {}", &ctx.accounts.pool.initializer);
-    //     system_program::transfer(
-    //         CpiContext::new(
-    //             ctx.accounts.system_program.to_account_info(),
-    //             system_program::Transfer {
-    //                 from: ctx.accounts.buyer_authority.to_account_info(),
-    //                 to: ctx.accounts.fee_wallet.to_account_info(),
-    //             }
-    //         ),
-    //         sale_lamports
-    //     )?;
-        
-    //     msg!("Lamports transferred successfully.");
-    //     Ok(())
-    // }
 }
 
 
