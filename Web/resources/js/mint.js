@@ -49,6 +49,9 @@ $('.connect_wallet').click(function () {
         pub = adapter;
         $('.connect_wallet').hide()
         $('.mint_nft').show();
+        $('.mint_number').show();
+        $('.mint-image').show();
+        // $('.nft-image').show();
         provider = new AnchorProvider(connection, adapter, { commitment: "confirmed" })
         program = new Program(idl, PROGRAM_ID, provider);
         setProvider(provider)
@@ -179,7 +182,7 @@ $('.mint_nft').click(async function () {
 
         const res = await axios.post("/create-nft-claim", body);
         if (res.data.status === "success") {
-            console.log('success');
+            alert('Mint NFT is success.')
         }
     } catch (error) {
         throw new Error(error.message)
