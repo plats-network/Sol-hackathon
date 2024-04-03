@@ -59,14 +59,15 @@
             <div class="col-lg-9">
                 <div class="mb-3">
                     <label for="basicpill-pancard-input" class="form-label">Name</label>
-                    <input type="text" class="form-control" value="{{$sessions->name}}" placeholder="Name" id="sessions[name]" name="sessions[name]">
+                    <input type="text" class="form-control" value="{{$sessions->name}}" placeholder="Name"
+                           id="sessions[name]" name="sessions[name]">
                     <div class="valid-feedback"></div>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="mb-3">
                     <label for="basicpill-vatno-input"
-                        class="form-label">Max job</label>
+                           class="form-label">Max job</label>
                     <input
                         type="number"
                         class="form-control"
@@ -86,10 +87,10 @@
                     <label for="basicpill-cstno-input" class="form-label">Description</label>
                     <div id="editor2"></div>
                     <input type="hidden"
-                        class="form-control"
-                        id="sessions-description"
-                        name="sessions[description]"
-                        value="{{$sessions->description}}" />
+                           class="form-control"
+                           id="sessions-description"
+                           name="sessions[description]"
+                           value="{{$sessions->description}}"/>
                 </div>
             </div>
         </div>
@@ -97,64 +98,65 @@
         @if ($isPreview)
             <table class="table table-bordered mb-0">
                 <thead class="table-light">
-                    <tr class="text-center">
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>QR</th>
-                        <th>Total</th>
-                        <th>Quiz</th>
-                        <th>Click</th>
-                        <th>QR <span class="text-danger">(ON/OFF)</span></th>
-                        <th>Sort</th>
-                    </tr>
+                <tr class="text-center">
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>QR</th>
+                    <th>Total</th>
+                    <th>Quiz</th>
+                    <th>Click</th>
+                    <th>QR <span class="text-danger">(ON/OFF)</span></th>
+                    <th>Sort</th>
+                </tr>
                 </thead>
                 <tbody id="list-session-id" data-s-ids="{{json_encode($sessions->detail->pluck('id')->toArray())}}">
-                    @foreach($sessions->detail as $k => $session)
-                        @php
-                            $qr = $session->getQrUrlAttribute();
+                @foreach($sessions->detail as $k => $session)
+                    @php
+                        $qr = $session->getQrUrlAttribute();
 
-                        @endphp
-                        <tr>
-                           <td width="5%">{{$k+1}}</td>
-                           <td width="20%">{{$session->name}}</td>
-                           <td width="20%">{!!$session->description!!}</td>
-                           <td width="20%" class="text-center" data-url="{{$qr}}">
-                                <p class="qr d-none" id="se-{{$session->id}}" data-se-url="{{$qr}}"></p>
-                                <div class="d-none2 mb-3" style="width: 300px; height: 300px;" id="dse-{{$session->id}}" data-se-url="{{$qr}}"></div>
-                                <a class="se-donw mt-3" data-id="{{$session->id}}" data-num="{{$k+1}}" data-name="session">Download</a>
-                           </td>
-                           <td width="5%">{{totalUserJob($session->id)}}</td>
-                           <td width="5%">{{$session->is_question ? 'Yes' : 'No'}}</td>
-                           <td width="5%"><a href="{{$qr}}" target="_blank">link</a></td>
-                           <td width="10%">
-                                <input
-                                        type="checkbox"
-                                        id="session_{{ $k+1 }}"
-                                        switch="none"
-                                        @if($session->status) checked @endif
-                                    >
-                                    <label class="job"
-                                        data-id="{{$session->code}}"
-                                        data-detail-id="{{$sessions->id}}"
-                                        for="session_{{ $k+1 }}"
-                                        data-on-label="On"
-                                        data-off-label="Off">
-                                    </label>
-                           </td>
-                           <td width="20%">
-                               <select
-                                    name="sort"
-                                    class="form-select sortUpdate"
-                                    data-id="{{$session->id}}"
-                                    data-url="{{route('api.upEventSort', ['id' => $session->id])}}">
-                                    @foreach($lists as $k => $v)
-                                        <option value="{{ $k }}" {{$k == $session->sort ? 'selected' : ''}}>{{$v}}</option>
-                                    @endforeach
-                                </select>
-                           </td>
-                        </tr>
-                    @endforeach
+                    @endphp
+                    <tr>
+                        <td width="5%">{{$k+1}}</td>
+                        <td width="20%">{{$session->name}}</td>
+                        <td width="20%">{!!$session->description!!}</td>
+                        <td width="20%" class="text-center" data-url="{{$qr}}">
+                            <p class="qr d-none" id="se-{{$session->id}}" data-se-url="{{$qr}}"></p>
+                            <div class="d-none2 mb-3" style="width: 300px; height: 300px;" id="dse-{{$session->id}}"
+                                 data-se-url="{{$qr}}"></div>
+                            <a class="se-donw mt-3" data-id="{{$session->id}}" data-num="{{$k+1}}" data-name="session">Download</a>
+                        </td>
+                        <td width="5%">{{totalUserJob($session->id)}}</td>
+                        <td width="5%">{{$session->is_question ? 'Yes' : 'No'}}</td>
+                        <td width="5%"><a href="{{$qr}}" target="_blank">link</a></td>
+                        <td width="10%">
+                            <input
+                                type="checkbox"
+                                id="session_{{ $k+1 }}"
+                                switch="none"
+                                @if($session->status) checked @endif
+                            >
+                            <label class="job"
+                                   data-id="{{$session->code}}"
+                                   data-detail-id="{{$sessions->id}}"
+                                   for="session_{{ $k+1 }}"
+                                   data-on-label="On"
+                                   data-off-label="Off">
+                            </label>
+                        </td>
+                        <td width="20%">
+                            <select
+                                name="sort"
+                                class="form-select sortUpdate"
+                                data-id="{{$session->id}}"
+                                data-url="{{route('api.upEventSort', ['id' => $session->id])}}">
+                                @foreach($lists as $k => $v)
+                                    <option value="{{ $k }}" {{$k == $session->sort ? 'selected' : ''}}>{{$v}}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         @else
@@ -180,11 +182,24 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <label class="col-form-label">Chọn travel game</label>
-                                    <select class="form-select" name="sessions[detail][{{$sessionDetail->id}}][travel_game_id]">
+                                    <select class="form-select"
+                                            name="sessions[detail][{{$sessionDetail->id}}][travel_game_id]">
                                         @foreach($travelGames as $game)
-                                            <option value="{{$game->id}}" @if($sessionDetail->travel_game_id == $game->id) selected @endif>{{$game->name}}</option>
+                                            <option value="{{$game->id}}"
+                                                    @if($sessionDetail->travel_game_id == $game->id) selected @endif>{{$game->name}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col-lg-4 d-flex align-items-end">
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">
+                                        Mint NFT
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -198,7 +213,8 @@
                                     value="{{$sessionDetail->name}}">
                             </div>
                             <div class="col-sm-4">
-                                <label class="col-form-label">Description <span class="text-danger" style="font-size: 11px;">(optional)</label>
+                                <label class="col-form-label">Description <span class="text-danger"
+                                                                                style="font-size: 11px;">(optional)</label>
                                 <input
                                     type="text"
                                     placeholder="Description"
@@ -208,7 +224,8 @@
                                     value="{{$sessionDetail->description}}">
                             </div>
                             <div class="col-sm-4 mt-5 d-none">
-                                <input type="hidden" name="sessions[detail][{{$sessionDetail->id}}][is_required]" value="{{$sessionDetail->is_required}}">
+                                <input type="hidden" name="sessions[detail][{{$sessionDetail->id}}][is_required]"
+                                       value="{{$sessionDetail->is_required}}">
                                 <input
                                     class="form-check-input sCheck"
                                     data-id="{{$sessionDetail->id}}"
@@ -330,7 +347,9 @@
 
                             <div class="col-sm-12 text-right">
                                 <div class="col-auto">
-                                    <button type="button" data-id="{{$sessionDetail->id}}" class="btn btn-danger mb-3 sRemove">Remove</button>
+                                    <button type="button" data-id="{{$sessionDetail->id}}"
+                                            class="btn btn-danger mb-3 sRemove">Remove
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -344,7 +363,8 @@
                                 id="btnAddItemSession"
                                 type="button"
                                 class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
-                                <i class="mdi mdi-plus me-1"></i> Add More</button>
+                                <i class="mdi mdi-plus me-1"></i> Add More
+                            </button>
                         </div>
                     </div>
                     <hr>
