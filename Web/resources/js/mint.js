@@ -58,7 +58,7 @@ $('.connect_wallet').click(function () {
     });
 })
 
-$('.mint_nft').click(async function () {
+$('.page-content').on("click", ".mint_nft", async function () {
     const type = $(this).val();
     const mintKeypair = web3.Keypair.generate();
     const ownerWallet = new PublicKey(walletOr);
@@ -184,6 +184,7 @@ $('.mint_nft').click(async function () {
         alert('Mint NFT is success. Please see on https://explorer.solana.com/')
         $('#mint-sol').attr('href', 'https://explorer.solana.com/address/'+ provider.wallet.publicKey.toString() +'=devnet')
         $('#mint-sol').show();
+        $(this).text('Minted');
     } catch (error) {
         throw new Error(error.message)
     }
