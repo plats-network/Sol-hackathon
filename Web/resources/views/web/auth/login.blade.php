@@ -2,7 +2,6 @@
 
 @viteReactRefresh
 @vite(['resources/js/connect-wallet.jsx'])
-@vite(['resources/js/login.js'])
 
 
 @section('content')
