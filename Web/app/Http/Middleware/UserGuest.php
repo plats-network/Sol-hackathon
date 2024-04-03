@@ -28,8 +28,8 @@ class UserGuest
 
             session()->put('type', 'quiz-game');
         }
-        
-        return redirect()->route('web.formLoginGuest');
-        
+
+        return redirect()->route('web.login');
+
     }
 }

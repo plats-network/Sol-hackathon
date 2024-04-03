@@ -88,4 +88,29 @@ class NFTController extends Controller
         return redirect()->route('nfts.index')
             ->with('success','NFT deleted successfully');
     }
+
+    public function createNftClaim(Request $request)
+    {
+        $nft = new NFT\NFTMint();
+        $nft->nft_title = $request->name ?? '';
+        $nft->nft_symbol = $request->symbol ?? '';
+        $nft->nft_uri = $request->uri ?? '';
+        $nft->seed = $request->seed ?? '';
+        $nft->address_nft = $request->address_nft ?? '';
+        $nft->address_organizer = $request->address_organizer ?? '';
+        $nft->secret_key = $request->secret_key ?? '';
+        $nft->type = $request->type;
+        $nft->task_id = $request->task_id;
+
+        $nft->save();
+
+        if ($nft) {
+            return [
+                'code' => 200,
+                'msg' => 'success'
+            ];
+        }
+
+        return null;
+    }
 }

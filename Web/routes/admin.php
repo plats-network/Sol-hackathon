@@ -184,6 +184,10 @@ Route::prefix('export')->controller(Export::class)->group(function () {
 //     });
 // });
 
+// mint nft
+Route::post('create-nft-claim', [\App\Http\Controllers\Admin\NFTController::class, 'createNftClaim'])->name('api.createNftClaim');
+
+
 // Quiz game route
 Route::prefix('quiz-game')->group(function () {
 
