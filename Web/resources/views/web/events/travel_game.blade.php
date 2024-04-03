@@ -125,11 +125,96 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="text-center">
-                        <img
-                            src="data:image/png;base64, {!! $qrCode !!}"
-                            alt="QR Code" style="max-width: 400px;">
+                <ul class="nav nav-tabs">
+                    <li><a data-toggle="tab" href="#sesion">Sessions Game</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="sesion" class="tab-pane fade in active">
+                        @foreach($travelSessions as $k => $session)
+                            @php
+                                $codes = $userCode->where('user_id', $userId)
+                                    ->where('travel_game_id', $session->id)
+                                    ->where('task_event_id', $session_id)
+                                    ->where('type', 0)
+                                    ->pluck('number_code')
+                                    ->implode(',');
+                                $sTests = [];
+//                                dd($codes);
+                                if ($session->note) {
+                                    $sTests = explode('-', $session->note);
+                                }
+                            @endphp
+
+                            <div class="item">
+                                <h3 class="text-center">{{$session->name}}</h3>
+                                <p>
+                                    <strong>Missions: Scan the QR to receive a Lucky Draw Code.</strong>
+                                </p>
+                                <p><strong>Lucky Code:</strong> <span class="fs-25">{{$codes ? $codes : '---'}}</span>
+                                </p>
+
+                                <p><strong>Joined: <span style="color:green">{{$totalCompleted}}</span> / 8
+                                        sessions</strong></p>
+                                @if(false)
+                                    <p><strong>Prize drawing time:</strong> {{dateFormat($session->prize_at)}}</p>
+                                    <p><strong>Position:</strong> Main Stage</p>
+                                    <p><strong>Reward:</strong></p>
+
+                                    <p style="padding-left: 15px; line-height: 20px;">
+                                        @foreach($sTests as $item)
+                                            @if($item)
+                                                {!! '➤ '.$item.'<br>' !!}
+                                            @endif
+                                        @endforeach
+                                    </p>
+                                @endif
+                            </div>
+                            <div class="timeline-container">
+                                @foreach($groupSessions as  $itemDatas)
+                                    <div id="day{{($loop->index+1)}}">&nbsp;</div>
+                                    @if(false)
+                                        <h3 class="step">{{$itemDatas && $itemDatas[0] ? $itemDatas[0]['travel_game_name'] : ''}}</h3>
+                                    @endif
+                                    <ul class="tl">
+                                        @foreach($itemDatas as $item)
+                                            <li class="tl-item {{ $item['flag'] ? '' : 'dashed'}}">
+                                                <div class="item-icon {{ $item['flag'] ? '' : 'not__active'}}"></div>
+                                                <div class="item-text">
+                                                    <div class="item-title {{$item['flag'] ? '' : 'not-active'}}">
+                                                        <p class="{{$item['flag'] ? 'ac-color' : ''}}">
+                                                            {{Str::limit($item['name'], 50)}}
+                                                        </p>
+                                                    </div>
+                                                    {{-- <div class="item-detail {{$item['flag'] ? 'ac-color' : ''}}">{{Str::limit($item['desc'], 20)}}</div> --}}
+                                                </div>
+                                                @if ($item['date'])
+                                                    <div class="item-timestamp">
+                                                        {{$item['date']}}<br> {{$item['time']}}
+                                                    </div>
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
+                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
+                </div>
+
+                <div class="event-info" style="border-top: 0; margin-top: 15px;">
+                    <div class="app text-center">
+                        <a href="https://apps.apple.com/us/app/plats/id1672212885" style="padding-right: 20px;"
+                           target="_blank">
+                            <img style="width: 150px;" src="{{url('/')}}/events/apple-store.svg">
+                        </a>
+                        <a href="https://play.google.com/store/apps/details?id=network.plats.action" target="_blank">
+                            <img style="width: 150px;" src="{{url('/')}}/events/ggplay.svg">
+                        </a>
                     </div>
                 </div>
             </div>
@@ -193,3 +278,12 @@
         </div>
     </div>
 @endsection
+@push('custom-scripts')
+    <script>
+        $('#button-claim').click(function (){
+            alert('Claim is success.');
+            $('#button-claim').hide()
+            $('#button-claim-link').show();
+        })
+    </script>
+@endpush

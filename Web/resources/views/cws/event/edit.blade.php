@@ -279,6 +279,9 @@
                                                            accept="image/png, image/gif, image/jpeg"
                                                            name="_fileinput_nft" style="display: none"/>
                                                 </div>
+                                                <div class="mb-3 col-5">
+                                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
