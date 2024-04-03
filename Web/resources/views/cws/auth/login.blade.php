@@ -1,5 +1,7 @@
 @extends('cws.auth.auth')
-
+@section('vite')
+    @vite(['resources/js/admin/pages/pass-addon.init.js'])
+@endsection
 
 @section('content')
     <div class="card">
@@ -20,14 +22,15 @@
                                 name="email"
                                 class="form-control"
                                 placeholder="user@event.com"
-                                required >
+                                required>
                             <span class="bx bx-user"></span>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <div class="float-end">
-                            <a href="{{route('cws.formForgot')}}" class="text-muted text-decoration-underline">Forgot password?</a>
+                            <a href="{{route('cws.formForgot')}}" class="text-muted text-decoration-underline">Forgot
+                                password?</a>
                         </div>
                         <label class="form-label" for="password-input">Password</label>
                         <div class="position-relative auth-pass-inputgroup input-custom-icon">
@@ -38,7 +41,8 @@
                                 class="form-control"
                                 id="password-input"
                                 placeholder="********">
-                            <button type="button" class="btn btn-link position-absolute h-100 end-0 top-0" id="password-addon">
+                            <button type="button" class="btn btn-link position-absolute h-100 end-0 top-0"
+                                    id="password-addon">
                                 <i class="mdi mdi-eye-outline font-size-18 text-muted"></i>
                             </button>
                         </div>
@@ -50,12 +54,12 @@
                     <div class="mt-3">
                         <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Sign In</button>
                     </div>
-                </x-form>
-                <div class="mt-4 text-center">
-                    <p class="mb-0">Don't have an account ?
-                        <a href="{{route('cws.fromSignUp')}}" class="fw-medium text-primary">Signup now</a>
-                    </p>
-                </div>
+                    </x-form>
+                    <div class="mt-4 text-center">
+                        <p class="mb-0">Don't have an account ?
+                            <a href="{{route('cws.fromSignUp')}}" class="fw-medium text-primary">Signup now</a>
+                        </p>
+                    </div>
             </div>
 
         </div>
