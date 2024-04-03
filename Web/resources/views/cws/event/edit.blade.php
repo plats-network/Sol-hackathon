@@ -259,9 +259,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <div class="row">
-                                                <div class="mb-3 col-2">
+                                        <div class="col-lg-12 mt-4">
+                                            <div class="row align-items-center">
+
+                                                <div class="mb-3 col-1">
+                                                    <input class="mint_number form-control" type="number" name="quantity" min="1" max="1000" style="display: none">
+                                                </div>
+                                                <div class="mb-3 col-5">
+                                                    <input type="file" id="w0" class="mint-image"
+                                                           accept="image/png, image/gif, image/jpeg"
+                                                           name="_fileinput_nft" style="display: none"/>
+                                                </div>
+                                                <div class="mb-3 col-2 d-flex justify-content-end">
                                                     <button
                                                         type="button"
                                                         class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
@@ -270,14 +279,6 @@
                                                         type="button"
                                                         class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">Mint NFT
                                                     </button>
-                                                </div>
-                                                <div class="mb-3 col-1">
-                                                    <input class="mint_number form-control" type="number" name="quantity" min="1" max="1000" style="display: none">
-                                                </div>
-                                                <div class="mb-3 col-5">
-                                                    <input type="file" id="w0" class="mint-image"
-                                                           accept="image/png, image/gif, image/jpeg"
-                                                           name="_fileinput_nft" style="display: none"/>
                                                 </div>
                                                 <div class="mb-3 col-5">
                                                     <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
