@@ -41,4 +41,11 @@
             </div>
         </div>
     </li>
+    <li class="wizard-list-item">
+        <div class="list-item">
+            <div class="step-icon" data-step="6"  data-bs-toggle="tooltip" data-bs-placement="top" title="Dashboard">
+                <i class="bx bx-edit"></i>
+            </div>
+        </div>
+    </li>
 </ul>

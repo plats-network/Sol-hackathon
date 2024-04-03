@@ -131,11 +131,11 @@
 {{--                                    </li>--}}
                                     @if($is_update)
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab4" data-step="4" href="#">Users
+                                            <a class="nav-link navItemTab" id="navItemTab5" data-step="5" href="#">Users
                                                 List</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab5" data-step="5" href="#">Dashboard</a>
+                                            <a class="nav-link navItemTab" id="navItemTab6" data-step="6" href="#">Dashboard</a>
                                         </li>
                                     @endif
 
@@ -335,7 +335,7 @@
                             @endif
 
                             {{--NFT--}}
-                            <div id="tabwizard{{$is_update ? '4':'3'}}" class="wizard-tab" style="display: none;">
+                            <div id="tabwizard{{$is_update ? '4':'3'}}" class="wizard-tab">
                                 <div>
                                     <div class="text-center mb-4">
                                         <h5>NFT Setting</h5>
@@ -422,7 +422,7 @@
                             @if($is_update)
 
                                 {{--User List--}}
-                                <div id="tabwizard4" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard5" class="wizard-tab" style="display: none;">
                                     <div>
                                         <div class="text-center mb-4">
                                             <h5>User List</h5>
@@ -505,7 +505,7 @@
                                 </div>
 
                                 {{--Dashboard--}}
-                                <div id="tabwizard5" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard6" class="wizard-tab" style="display: none;">
                                     <div>
 
                                         <div class="text-center mb-4">
@@ -1533,8 +1533,6 @@
         function showTab(n) {
             // This function will display the specified tab of the form...
             var x = document.getElementsByClassName("wizard-tab");
-            console.log(n);
-            console.log(x);
             x[n].style.display = "block";
 
             //navItemTab  add class active
@@ -1659,8 +1657,6 @@
             $(this).addClass('active');
             var id = $(this).attr('data-step');
             $('#currentTab').val(id);
-            //alert(id)
-            // alert(id);
             showTab(id);
             $('#tabwizard0').css('display', 'none');
 
