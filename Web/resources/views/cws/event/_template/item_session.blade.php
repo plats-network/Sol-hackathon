@@ -12,6 +12,17 @@
                 @endforeach
             </select>
         </div>
+        <div class="col-lg-4 d-flex align-items-end mb-2">
+            <button
+                type="button"
+                class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
+            </button>
+            <button
+                type="button"
+                class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">
+                Mint NFT
+            </button>
+        </div>
     </div>
     <div class="col-sm-4">
         <input
