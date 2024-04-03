@@ -16,38 +16,56 @@ class EventController extends Controller
     public function register($id)
     {
         // get nft claim
-        $nft = NFTMint::where([
-            'status' => NFTMint::ACTIVE,
-            'task_id' => $id
-        ])->first();
+//        $nft = NFTMint::where([
+//            'status' => NFTMint::ACTIVE,
+//            'task_id' => $id
+//        ])->first();
+//
+//        // check user nft
+//        $check = UserNft::where([
+//            'user_id' => auth()->user()->id,
+//            'task_id' => $id
+//        ])->first();
+//
+//        if ($check) {
+//            return about(404);
+//        }
+//
+//        // fake to demo
+//        $userNft = new UserNft();
+//        $userNft->user_id = auth()->user()->id;
+//        $userNft->nft_mint_id = $nft->id;
+//        $userNft->type = $nft->type;
+//        $userNft->task_id = $id;
+//        $userNft->save();
+//
+//        if ($nft) {
+//            // send email
+//            $qrCode = base64_encode(QrCode::format('png')->size(250)->generate(route('nft.claim', $nft->id)));
+//            $nft->status = NFTMint::SENDING;
+//            $nft->save();
+//
+//            // create user mint
+//            // save nft
+//            $userNft = new UserNft();
+//            $userNft->user_id = auth()->user()->id;
+//            $userNft->nft_mint_id = $nft->id;
+//            $userNft->type = $nft->type;
+//            $userNft->task_id = $id;
+//            $userNft->save();
 
-        // check user nft
-        $check = UserNft::where([
-            'user_id' => auth()->user()->id,
-            'task_id' => $id
-        ])->first();
+        $nft = NFTMint::orderBy('id', 'desc')->first();
 
-        if ($check) {
-            return about(404);
-        }
+        // fake to demo
+        $userNft = new UserNft();
+        $userNft->user_id = auth()->user()->id;
+        $userNft->nft_mint_id = $nft ? $nft->id + 1 : 1;
+        $userNft->type = $nft->type;
+        $userNft->task_id = $id;
+        $userNft->save();
 
-        if ($nft) {
-            // send email
-            $qrCode = base64_encode(QrCode::format('png')->size(250)->generate(route('nft.claim', $nft->id)));
-            $nft->status = NFTMint::SENDING;
-            $nft->save();
-
-            // create user mint
-            // save nft
-            $userNft = new UserNft();
-            $userNft->user_id = auth()->user()->id;
-            $userNft->nft_mint_id = $nft->id;
-            $userNft->type = $nft->type;
-            $userNft->task_id = $id;
-            $userNft->save();
-
-            Mail::to(auth()->user()->email)->send(new SendEmailLoginEvent($qrCode));
-        }
+//            Mail::to(auth()->user()->email)->send(new SendEmailLoginEvent($qrCode));
+//        }
 
         return redirect(route('web.events.show', ['id'=>$id]));
     }
