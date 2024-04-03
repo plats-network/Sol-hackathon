@@ -125,6 +125,11 @@
                     </div>
                 </div>
 
+                <div class="row justify-content-center">
+                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
+                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
+                </div>
+
                 <ul class="nav nav-tabs">
                     <li><a data-toggle="tab" href="#sesion">Sessions Game</a></li>
                 </ul>
@@ -200,10 +205,6 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
-                <div class="row justify-content-center">
-                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
-                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
                 </div>
 
                 <div class="event-info" style="border-top: 0; margin-top: 15px;">
