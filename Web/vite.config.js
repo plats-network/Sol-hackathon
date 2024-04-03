@@ -21,6 +21,7 @@ export default defineConfig({
                 'resources/js/admin.js',
                 'resources/js/event.js',
                 'resources/js/game.js',
+                'resources/js/login.js',
                 //'resources/css/mail.css',
 
                 'resources/js/connect-wallet.jsx',

@@ -30,7 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            // Local: http://cws.plats.test
+            // Local: http://cws-colosseum.plats.test
             // Dev: https://dev-cws.plats.network
             // Prod: https://cws.plats.network
             $this->mapCwsRoute(ENV('APP_URL'));
