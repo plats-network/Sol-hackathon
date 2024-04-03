@@ -20,8 +20,8 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.12",
         "maatwebsite/excel": "^3.1",
-        "mckenziearts/laravel-notify": "^2.4",
         "magiclabs/magic-laravel": "^0.1.6",
+        "mckenziearts/laravel-notify": "^2.4",
         "mpdf/mpdf": "*",
         "pagevamp/laravel-cloudwatch-logs": "^1.0",
         "php-open-source-saver/jwt-auth": "^2.1",
@@ -105,8 +105,7 @@
         "sort-packages": true,
         "allow-plugins": {
             "php-http/discovery": true
-        },
-        "platform-check": false
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

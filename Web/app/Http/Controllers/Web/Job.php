@@ -15,11 +15,12 @@ use App\Models\Event\{
     UserEvent,
     UserCode,
 };
-use App\Models\{Task, User, TravelGame, Sponsor, SponsorDetail, UserSponsor};
+use App\Models\{NFT\NFTMint, NFT\UserNft, Task, User, TravelGame, Sponsor, SponsorDetail, UserSponsor};
 use App\Services\{CodeHashService, TaskService};
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Job extends Controller
 {
@@ -69,19 +70,19 @@ class Job extends Controller
         }
 
         try {
-            if (Auth::guest()) {
-                $time = Carbon::now()->timestamp;
-                $user = User::create([
-                    'name' => 'Guest-'.$time,
-                    'email' => 'guest-'.$time.'@gmail.com',
-                    'password' => '12345678a@#',
-                    'role' => GUEST_ROLE,
-                    'confirmation_code' => null,
-                    'email_verified_at' => now()
-                ]);
-
-                Auth::login($user, true);
-            }
+//            if (Auth::guest()) {
+//                $time = Carbon::now()->timestamp;
+//                $user = User::create([
+//                    'name' => 'Guest-'.$time,
+//                    'email' => 'guest-'.$time.'@gmail.com',
+//                    'password' => '12345678a@#',
+//                    'role' => GUEST_ROLE,
+//                    'confirmation_code' => null,
+//                    'email_verified_at' => now()
+//                ]);
+//
+//                Auth::login($user, true);
+//            }
 
             $user = Auth::user();
             $code = $request->input('id');
@@ -128,14 +129,13 @@ class Job extends Controller
                     ->whereUserId($user->id)
                     ->exists();
 
-                if (!$checkUserEvent) {
-                    $this->userEvent->create([
-                        'user_id' => $user->id,
-                        'task_id' => $task->id
-                    ]);
-                }
+//                if (!$checkUserEvent) {
+//                    $this->userEvent->create([
+//                        'user_id' => $user->id,
+//                        'task_id' => $task->id
+//                    ]);
+//                }
             }
-
             //không có mã qr hợp lệ
             if ($event && !$event->status) {
 
@@ -214,15 +214,7 @@ class Job extends Controller
             //không có user thì tạo 1 user mới ngẫu nhiên
             if (!$checkJoin) {
 
-                $this->eventUserTicket->create([
-                    'name' => $user->name,
-                    'phone' => $user->phone ?? '092384234',
-                    'email' => $user->email,
-                    'task_id' => $taskId,
-                    'user_id' => $user->id,
-                    'is_checkin' => true,
-                    'hash_code' => Str::random(35)
-                ]);
+                return abort('404');
             }
 
             $checkEventJob = $this->joinEvent
@@ -536,6 +528,42 @@ class Job extends Controller
             array_splice($groupSessions[$item['travel_game_id']], 6, 0, [$tempArray[0]]);
             array_splice($groupSessions[$item['travel_game_id']], 7, 0, [$tempArray[1]]);
         }
+
+        $checkNftMint = UserNft::where([
+            'booth_id'=> $booth->id,
+            'session_id' => $session->id,
+            'user_id' => \auth()->user()->id,
+        ])->first();
+
+        $qrCode = '';
+
+        if ($checkNftMint) {
+            $qrCode = base64_encode(QrCode::format('png')->size(250)->generate(route('nft.claimAction', $checkNftMint->id)));
+        } else {
+            // get nft claim
+            $nft = NFTMint::where('status', NFTMint::ACTIVE)->whereIn(
+                'type', [2, 3]
+            )->first();
+
+
+            if ($nft) {
+                $nft->status = NFTMint::SENDING;
+                $nft->save();
+
+                // create user mint
+                // save nft
+                $userNft = new UserNft();
+                $userNft->user_id = \auth()->user()->id;
+                $userNft->nft_mint_id = $nft->id;
+                $userNft->type = $nft->booth_id;
+                $userNft->booth_id = $booth->id;
+                $userNft->session_id = $session->id;
+                $userNft->save();
+
+                $qrCode = base64_encode(QrCode::format('png')->size(250)->generate(route('nft.claimAction', $nft->id)));
+            }
+        }
+
         return view('web.events.travel_game', [
             'event' => $event,
             'totalCompleted' => $totalCompleted,
@@ -546,6 +574,7 @@ class Job extends Controller
             'url' => $sessionNFT && $sessionNFT['url'] ? $sessionNFT['url'] : null,
             'nft' => $sessionNFT && $sessionNFT['nft'] ? 1 : 0,
             'flagU' => $flagU,
+            'qrCode' => $qrCode,
 
             'groupSessions' => ($groupSessions),
         ]);

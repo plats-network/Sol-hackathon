@@ -2,7 +2,7 @@
 
 @section('content')
     @include('web.layouts.event')
-
+    @vite(['resources/js/claim.js'])
     <section class="home-top section-padding-100-0">
         <div class="container">
             <div class="row align-items-center">
@@ -267,7 +267,7 @@
                     <a class="regis" href="{{route('web.contact')}}">Register now</a>
                 </div>
             </div>
-            
+
         </div>
     </section>
 
@@ -328,7 +328,7 @@
             </div>
         </div>
     </section>
-    
+
     <section class="our-sponsor-client-area section-padding-100">
         <div class="container">
             <div class="row">

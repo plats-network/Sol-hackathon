@@ -10,15 +10,14 @@ use App\Events\NotificationEvent;
 use App\Events\TotalPointEvent;
 use Illuminate\Support\Facades\Cache;
 
-use App\Http\Controllers\Web\{
+use App\Http\Controllers\Web\{EventController,
     Home,
     Detail,
     Likes,
     Job,
     PagesController,
     QuizGameController,
-    UserController
-};
+    UserController};
 
 use App\Http\Controllers\Web\Auth\{
     Login,
@@ -94,13 +93,20 @@ Route::middleware(['user_event'])->group(function ($r) {
     $r->get('r/{id}', [Home::class, 'isResult'])->name('r.isResult');
     // remove pop ntf
     $r->get('api/remove-nft', [Job::class, 'removeNft'])->name('nft.remove');
+
+    // scan QR
+    $r->get('nft/claim/{id}', [\App\Http\Controllers\Web\ClaimNftController::class, 'claim'])->name('nft.claim');
+    $r->get('nft/claim-action/{id}', [\App\Http\Controllers\Web\ClaimNftController::class, 'claimAction'])->name('nft.claimAction');
+    $r->get('event/{id}', [Home::class, 'show'])->name('web.events.show');
+    $r->get('event-register/{id}', [EventController::class, 'register'])->name('web.events.register');
+    $r->get('events/code', [Job::class, 'index'])->name('web.eventCode');
+
 });
 
 // Các route không yêu cầu middleware
 Route::get('/', [Home::class, 'index'])->name('web.home');
 Route::get('event-lists', [Home::class, 'events'])->name('web.events');
-Route::get('event/{id}', [Home::class, 'show'])->name('web.events.show');
-Route::get('events/code', [Job::class, 'index'])->name('web.eventCode');
+//Route::get('event/{id}', [Home::class, 'show'])->name('web.events.show');
 Route::get('solution', [PagesController::class, 'solution'])->name('web.solution');
 Route::get('template', [PagesController::class, 'template'])->name('web.template');
 Route::get('pricing', [PagesController::class, 'pricing'])->name('web.pricing');
@@ -109,6 +115,8 @@ Route::get('contact', [PagesController::class, 'contact'])->name('web.contact');
 Route::get('lang/{lang}', [PagesController::class, 'lang'])->name('web.lang');
 Route::get('callback', [Home::class, 'callbackLogin'])->name('web.callback');
 //Route::get('callback', [Home::class, 'callbackLogin'])->name('web.callback');
+
+
 //Payment success
 Route::get('payment-success', [Home::class, 'paymentSuccess'])->name('web.paymentSuccess');
 
@@ -252,3 +260,5 @@ Route::prefix('quiz-game')->group(function () {
         Route::post('/send-total-score', [QuizGameController::class, 'sendTotalScore']);
     });
 });
+
+// new auth with magiclink

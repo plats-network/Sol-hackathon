@@ -73,5 +73,6 @@
 
         </script>
         @yield('scripts')
+        @stack('custom-scripts')
     </body>
 </html>
