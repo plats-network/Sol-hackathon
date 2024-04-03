@@ -15,11 +15,7 @@
         <div class="col-lg-4 d-flex align-items-end mb-2">
             <button
                 type="button"
-                class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
-            </button>
-            <button
-                type="button"
-                class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">
+                class="btn btn-primary w-sm ms-auto mint_nft" value="1">
                 Mint NFT
             </button>
         </div>
