@@ -19,6 +19,9 @@
                 Mint NFT
             </button>
         </div>
+        <div class="mb-3 col-5">
+            <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
+        </div>
     </div>
     <div class="col-sm-4">
         <label class="col-form-label">Name <span class="text-danger fs-11">(*)</span></label>

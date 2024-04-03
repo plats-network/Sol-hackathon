@@ -182,8 +182,8 @@ $('.page-content').on("click", ".mint_nft", async function () {
 
         const res = await axios.post("/create-nft-claim", body);
         alert('Mint NFT is success. Please see on https://explorer.solana.com/')
-        $('#mint-sol').attr('href', 'https://explorer.solana.com/address/'+ provider.wallet.publicKey.toString() +'=devnet')
-        $('#mint-sol').show();
+        $(this).parent().next().find('#mint-sol').attr('href', 'https://explorer.solana.com/address/'+ provider.wallet.publicKey.toString() +'=devnet')
+        $(this).parent().next().find('#mint-sol').show();
         $(this).text('Minted');
     } catch (error) {
         throw new Error(error.message)
