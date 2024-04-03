@@ -431,12 +431,6 @@ class Home extends Controller
                 }
             }
 
-            // check claim nft
-            $check = UserNft::where([
-                'user_id' => \auth()->user()->id,
-                'task_id' => $id
-            ])->count();
-
         } catch (\Exception $e) {
             dd($e->getMessage());
             notify()->error('Error show event');
@@ -457,7 +451,6 @@ class Home extends Controller
             'booth_id' => $booth->id,
             'totalCompletedBooth' => $totalCompletedBooth,
             'countEventDetailBooth' => $countEventDetailBooth,
-            'checkMint' => $check
         ]);
     }
 
@@ -532,8 +525,8 @@ class Home extends Controller
                         'status' => USER_CONFIRM
                     ]);
                 }
-
-                Auth::login($user);
+                return redirect(route('web.formLogin'));
+//                Auth::login($user);
             }
 
             $check = $this->eventUserTicket
