@@ -66,136 +66,151 @@
                     <div class="confer-sidebar-area mb-100">
                         <div class="single-widget-area">
                             <div class="post-author-widget">
-                                <a id="showModal" class="btn btn-info" href="#">Get Ticket</a>
+                                @if ($checkMint)
+                                    <a id="showModal" class="btn btn-info" href="#">Claim already</a>
+                                    <a style="
+    border: none;
+    background: none;
+    color: blue;
+" class="link-primary" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">
+                                        Solana Explorer Link
+                                    </a>
+                                @else
+                                    <a id="showModal" class="btn btn-info" href="{{ route('web.events.register', ['id' => $event->id]) }}">Register event</a>
+                                @endif
                                 <hr>
-
-                                @if ($sponsor)
-                                    <div class="sponsor d-none">
-                                        <h3 style="font-size: 30px;">Sponsor</h3>
-                                        <h3 class="title" title="{{$sponsor->name}}">{{$sponsor->name}}</h3>
-                                        <p class="descs" title="{{$sponsor->description}}">{{$sponsor->description}}</p>
-                                        <div class="note">
-                                            <p class="price">Total Price: {{number_format($sponsor->price)}} ACA</p>
-                                            <p>Backers: 10+</p>
-                                            <p>Est delivery: {{dateFormat($sponsor->end_at)}}</p>
-                                        </div>
-
-                                        <h3>Support</h3>
-                                        {{--Form--}}
-                                        <form action="{{ route('web.createCrowdSponsor',['task_id' =>$event->id] ) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('POST')
-                                            <div class="buget">
-                                                <h3>Make a pledge without a reward</h3>
-                                                <div class="row text-left">
-                                                    <div class="col-12 text-left">
-                                                        <label class="text-left" style="width: 100%; font-size: 12px;">Pledge
-                                                            amount</label>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-5" style="padding-top: 8px; padding-right: 0px;">
-                                                        ACA
-                                                    </div>
-                                                    <div class="col-md-7" style="padding-left: 2px">
-                                                        <input id="amount" class="form-control" type="text"
-                                                               name="price">
-                                                        <input id="sponsorId" type="hidden">
-                                                    </div>
-                                                </div>
-                                                @if (auth()->guest())
-                                                    <a class="guest"
-                                                       href="{{route('web.formLogin', ['type' => 'sponsor', 'id' => $event->id])}}">Continue</a>
-                                                @else
-                                                    <button
-                                                        type="submit"
-                                                        id="cSponsor2"
-                                                        data-type="sponsor2"
-                                                        data-id="{{$event->id}}"
-                                                        data-url="{{route('new.sponsor')}}">Continue
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </form>
-
-                                        <h3>Package</h3>
-                                        <div class="package-item">
-                                            @foreach($sponsor->sponsorDetails as $item)
-                                                <div class="item price-package"
-                                                     data-price="{{number_format($item->price)}}"
-                                                     data-id="{{$item->id}}">
-                                                    <p>{{$item->name}} <span class="price">{{$item->price}}</span> ACA
-                                                    </p>
-                                                    <p class="desc">{{$item->description}}</p>
-                                                    <hr>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-                                @if(auth()->user() !== null)
-                                    <div class="box_gift" style="margin-top: 20px">
-                                        @if($travelSessions->isNotEmpty())
-                                            <div class="session" style="margin-bottom: 20px">
-                                                <div class="d-flex justify-content-between align-items-center mb-3"
-                                                     style="margin-bottom: 20px">
-                                                    <strong>Session</strong>
-                                                    <a class="p-0" href="{{route('job.getTravelGame', $task_id)}}">See
-                                                        more</a>
-                                                </div>
-                                                @foreach($travelSessions as $k => $session)
-                                                    @php
-                                                        $codes = $userCode->where('user_id', $userId)
-                                                            ->where('travel_game_id', $session->id)
-                                                            ->where('task_event_id', $session_id)
-                                                            ->where('type', 0)
-                                                            ->pluck('number_code')
-                                                            ->implode(',');
-                                                    @endphp
-                                                    <div class="item">
-                                                        <p>Joined: <span style="color:green">{{$totalCompleted}}</span>
-                                                            / {{$countEventDetail}}
-                                                            sessions</p>
-                                                        <p>Lucky Code: <span
-                                                                class="fs-25">{{$codes ? $codes : '---'}}</span></p>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                        @if($travelBooths->isNotEmpty())
-                                            <hr>
-                                            <div class="booth" style="margin: 20px 0">
-                                                <div class="d-flex justify-content-between align-items-center mb-3"
-                                                     style="margin-bottom: 20px">
-                                                    <strong>Booth</strong>
-                                                    <a class="p-0" href="{{route('job.getTravelGame', $task_id)}}">See
-                                                        more</a>
-                                                </div>
-                                                @foreach($travelBooths as $k => $booth)
-                                                    @php
-                                                        $codesBooth = $userCode->where('user_id', $userId)
-                                                            ->where('travel_game_id', $booth->id)
-                                                            ->where('task_event_id', $booth_id)
-                                                            ->where('type', 1)
-                                                            ->pluck('number_code')
-                                                            ->implode(',');
-                                                    @endphp
-                                                    <div class="item">
-                                                        <p>Joined: <span
-                                                                style="color:green">{{$totalCompletedBooth}}</span>
-                                                            / {{$countEventDetailBooth}}
-                                                            booth</p>
-                                                        <p>Lucky Code: <span
-                                                                class="fs-25">{{$codesBooth ? $codesBooth : '---'}}</span>
-                                                        </p>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endif
                             </div>
+                            {{--                            <div class="post-author-widget">--}}
+                            {{--                                <a id="showModal" class="btn btn-info" href="#">Get Ticket</a>--}}
+                            {{--                                <hr>--}}
+
+                            {{--                                @if ($sponsor)--}}
+                            {{--                                    <div class="sponsor d-none">--}}
+                            {{--                                        <h3 style="font-size: 30px;">Sponsor</h3>--}}
+                            {{--                                        <h3 class="title" title="{{$sponsor->name}}">{{$sponsor->name}}</h3>--}}
+                            {{--                                        <p class="descs" title="{{$sponsor->description}}">{{$sponsor->description}}</p>--}}
+                            {{--                                        <div class="note">--}}
+                            {{--                                            <p class="price">Total Price: {{number_format($sponsor->price)}} ACA</p>--}}
+                            {{--                                            <p>Backers: 10+</p>--}}
+                            {{--                                            <p>Est delivery: {{dateFormat($sponsor->end_at)}}</p>--}}
+                            {{--                                        </div>--}}
+
+                            {{--                                        <h3>Support</h3>--}}
+                            {{--                                        --}}{{--Form--}}
+                            {{--                                        <form action="{{ route('web.createCrowdSponsor',['task_id' =>$event->id] ) }}"--}}
+                            {{--                                              method="post">--}}
+                            {{--                                            @csrf--}}
+                            {{--                                            @method('POST')--}}
+                            {{--                                            <div class="buget">--}}
+                            {{--                                                <h3>Make a pledge without a reward</h3>--}}
+                            {{--                                                <div class="row text-left">--}}
+                            {{--                                                    <div class="col-12 text-left">--}}
+                            {{--                                                        <label class="text-left" style="width: 100%; font-size: 12px;">Pledge--}}
+                            {{--                                                            amount</label>--}}
+                            {{--                                                    </div>--}}
+                            {{--                                                </div>--}}
+                            {{--                                                <div class="row">--}}
+                            {{--                                                    <div class="col-md-5" style="padding-top: 8px; padding-right: 0px;">--}}
+                            {{--                                                        ACA--}}
+                            {{--                                                    </div>--}}
+                            {{--                                                    <div class="col-md-7" style="padding-left: 2px">--}}
+                            {{--                                                        <input id="amount" class="form-control" type="text"--}}
+                            {{--                                                               name="price">--}}
+                            {{--                                                        <input id="sponsorId" type="hidden">--}}
+                            {{--                                                    </div>--}}
+                            {{--                                                </div>--}}
+                            {{--                                                @if (auth()->guest())--}}
+                            {{--                                                    <a class="guest"--}}
+                            {{--                                                       href="{{route('web.formLogin', ['type' => 'sponsor', 'id' => $event->id])}}">Continue</a>--}}
+                            {{--                                                @else--}}
+                            {{--                                                    <button--}}
+                            {{--                                                        type="submit"--}}
+                            {{--                                                        id="cSponsor2"--}}
+                            {{--                                                        data-type="sponsor2"--}}
+                            {{--                                                        data-id="{{$event->id}}"--}}
+                            {{--                                                        data-url="{{route('new.sponsor')}}">Continue--}}
+                            {{--                                                    </button>--}}
+                            {{--                                                @endif--}}
+                            {{--                                            </div>--}}
+                            {{--                                        </form>--}}
+
+                            {{--                                        <h3>Package</h3>--}}
+                            {{--                                        <div class="package-item">--}}
+                            {{--                                            @foreach($sponsor->sponsorDetails as $item)--}}
+                            {{--                                                <div class="item price-package"--}}
+                            {{--                                                     data-price="{{number_format($item->price)}}"--}}
+                            {{--                                                     data-id="{{$item->id}}">--}}
+                            {{--                                                    <p>{{$item->name}} <span class="price">{{$item->price}}</span> ACA--}}
+                            {{--                                                    </p>--}}
+                            {{--                                                    <p class="desc">{{$item->description}}</p>--}}
+                            {{--                                                    <hr>--}}
+                            {{--                                                </div>--}}
+                            {{--                                            @endforeach--}}
+                            {{--                                        </div>--}}
+                            {{--                                    </div>--}}
+                            {{--                                @endif--}}
+                            {{--                                @if(auth()->user() !== null)--}}
+                            {{--                                    <div class="box_gift" style="margin-top: 20px">--}}
+                            {{--                                        @if($travelSessions->isNotEmpty())--}}
+                            {{--                                            <div class="session" style="margin-bottom: 20px">--}}
+                            {{--                                                <div class="d-flex justify-content-between align-items-center mb-3"--}}
+                            {{--                                                     style="margin-bottom: 20px">--}}
+                            {{--                                                    <strong>Session</strong>--}}
+                            {{--                                                    <a class="p-0" href="{{route('job.getTravelGame', $task_id)}}">See--}}
+                            {{--                                                        more</a>--}}
+                            {{--                                                </div>--}}
+                            {{--                                                @foreach($travelSessions as $k => $session)--}}
+                            {{--                                                    @php--}}
+                            {{--                                                        $codes = $userCode->where('user_id', $userId)--}}
+                            {{--                                                            ->where('travel_game_id', $session->id)--}}
+                            {{--                                                            ->where('task_event_id', $session_id)--}}
+                            {{--                                                            ->where('type', 0)--}}
+                            {{--                                                            ->pluck('number_code')--}}
+                            {{--                                                            ->implode(',');--}}
+                            {{--                                                    @endphp--}}
+                            {{--                                                    <div class="item">--}}
+                            {{--                                                        <p>Joined: <span style="color:green">{{$totalCompleted}}</span>--}}
+                            {{--                                                            / {{$countEventDetail}}--}}
+                            {{--                                                            sessions</p>--}}
+                            {{--                                                        <p>Lucky Code: <span--}}
+                            {{--                                                                class="fs-25">{{$codes ? $codes : '---'}}</span></p>--}}
+                            {{--                                                    </div>--}}
+                            {{--                                                @endforeach--}}
+                            {{--                                            </div>--}}
+                            {{--                                        @endif--}}
+                            {{--                                        @if($travelBooths->isNotEmpty())--}}
+                            {{--                                            <hr>--}}
+                            {{--                                            <div class="booth" style="margin: 20px 0">--}}
+                            {{--                                                <div class="d-flex justify-content-between align-items-center mb-3"--}}
+                            {{--                                                     style="margin-bottom: 20px">--}}
+                            {{--                                                    <strong>Booth</strong>--}}
+                            {{--                                                    <a class="p-0" href="{{route('job.getTravelGame', $task_id)}}">See--}}
+                            {{--                                                        more</a>--}}
+                            {{--                                                </div>--}}
+                            {{--                                                @foreach($travelBooths as $k => $booth)--}}
+                            {{--                                                    @php--}}
+                            {{--                                                        $codesBooth = $userCode->where('user_id', $userId)--}}
+                            {{--                                                            ->where('travel_game_id', $booth->id)--}}
+                            {{--                                                            ->where('task_event_id', $booth_id)--}}
+                            {{--                                                            ->where('type', 1)--}}
+                            {{--                                                            ->pluck('number_code')--}}
+                            {{--                                                            ->implode(',');--}}
+                            {{--                                                    @endphp--}}
+                            {{--                                                    <div class="item">--}}
+                            {{--                                                        <p>Joined: <span--}}
+                            {{--                                                                style="color:green">{{$totalCompletedBooth}}</span>--}}
+                            {{--                                                            / {{$countEventDetailBooth}}--}}
+                            {{--                                                            booth</p>--}}
+                            {{--                                                        <p>Lucky Code: <span--}}
+                            {{--                                                                class="fs-25">{{$codesBooth ? $codesBooth : '---'}}</span>--}}
+                            {{--                                                        </p>--}}
+                            {{--                                                    </div>--}}
+                            {{--                                                @endforeach--}}
+                            {{--                                            </div>--}}
+                            {{--                                        @endif--}}
+                            {{--                                    </div>--}}
+                            {{--                                @endif--}}
+                            {{--                            </div>--}}
                         </div>
                     </div>
                 </div>
@@ -323,7 +338,11 @@
         window.open("{{$url_download_ticket}}");
         @endif
     </script>
-
+    @if ($checkMint)
+        <script>
+            alert('Claim is success.')
+        </script>
+    @endif
     {{--validate--}}
     <script>
         //https://yii2-cookbook-test.readthedocs.io/forms-activeform-js/

@@ -130,6 +130,11 @@
                     </div>
                 </div>
 
+                <div class="row justify-content-center">
+                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
+                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
+                </div>
+
                 <div class="tab-content">
                      <nav>
                         <ul class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -294,16 +299,18 @@
                             @endforeach
                         </div>
                     </div>
-
                 </div>
 
                 <div class="event-info" style="border-top: 0; margin-top: 15px;">
+<<<<<<< HEAD
                     <div class="infor-description mt-2">
                         Plats Event: Web3 Event Platform <br>
                         Latest event organization platform, supporting Travel game, Session game and fun prize drawing.
                         In addition, Plats Event also provides other services such as Creating and Distributing NFTs
                         during events, Creating and Performing traditional tasks such as Social Tasks or Onchain Tasks.
                     </div>
+=======
+>>>>>>> 148e57266a5f9a4e2af82e4553c6d29bf66a4d93
                     <div class="app text-center">
                         <a href="https://apps.apple.com/us/app/plats/id1672212885" style="padding-right: 20px;"
                            target="_blank">
@@ -375,3 +382,12 @@
         </div>
     </div>
 @endsection
+@push('custom-scripts')
+    <script>
+        $('#button-claim').click(function (){
+            alert('Claim is success.');
+            $('#button-claim').hide()
+            $('#button-claim-link').show();
+        })
+    </script>
+@endpush

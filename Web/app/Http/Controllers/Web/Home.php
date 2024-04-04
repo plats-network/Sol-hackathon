@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Jobs\SendTicket;
 use App\Mail\NFTNotification;
 use App\Mail\OrderCreated;
+use App\Mail\SendEmailLoginEvent;
 use App\Mail\SendNFTMail;
 use App\Mail\SendTicket as EmailSendTicket;
 use App\Services\UserService;
@@ -14,7 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Task as Event;
-use App\Models\{NFT\NFT, Task, User, TravelGame, Sponsor};
+use MagicAdmin\Resource\Token;
+use App\Models\{NFT\NFT, NFT\NFTMint, NFT\UserNft, Task, User, TravelGame, Sponsor};
 use Illuminate\Support\Str;
 use App\Models\Event\{EventUserTicket, TaskEvent, TaskEventDetail, UserCode, UserEventLike, UserJoinEvent};
 use App\Services\Admin\{
@@ -25,6 +27,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Magic;
+use MagicAdmin\Exception\DIDTokenException;
+use MagicAdmin\Exception\RequestException;
 
 class Home extends Controller
 {
@@ -784,12 +789,48 @@ class Home extends Controller
             ->whereTaskEventDetailId($eventDetailId)
             ->exists();
 
-        /* $status = $this->taskDone
-             ->whereUserId($userId)
-             ->whereTaskEventDetailId($eventDetailId)
-             ->count();
-         //dd($status);
-         return $status;*/
+       /* $status = $this->taskDone
+            ->whereUserId($userId)
+            ->whereTaskEventDetailId($eventDetailId)
+            ->count();
+        //dd($status);
+        return $status;*/
+    }
+
+    public function callbackLogin(Request $request)
+    {
+        if ($request->provider) {
+            $user = Magic::user()->get_metadata_by_token($request->magic_credential);
+            $userData = $user->content ? $user->content->data : [];
+            if ($userData) {
+                $existingUser = User::where('email', $userData->email)->first();
+                if ($existingUser) {
+                    Auth::login($existingUser);
+                } else {
+                    $newUser = new User();
+                    $newUser->name = $userData->email;
+                    $newUser->email = $userData->email;
+                    $newUser->wallet_address = $userData->public_address;
+                    $newUser->email_verified_at = now();
+                    $newUser->status = USER_ACTIVE;
+                    if($request->provider === 'facebook') {
+                        $newUser->facebook = $userData->issuer;
+                    } else if($request->provider === 'google') {
+                        $newUser->google = $userData->issuer;
+                    }
+                    $newUser->save();
+
+//                    $task = Task::where('status', ACTIVE_TASK)->orderBy('order', 'asc');
+//                    Mail::to($newUser->email)->send(new EmailSendTicket($task, $newUser));
+//
+                    Auth::login($newUser);
+                }
+
+            }
+
+        }
+
+        return redirect()->to('/');
     }
 
 }

@@ -46,12 +46,12 @@
                                 </li>
                             @endif
                             @if (auth()->guest())
-{{--                                <li>--}}
-{{--                                    <a href="{{route('web.formLogin')}}">Sign In</a>--}}
-{{--                                </li>--}}
-{{--                                <li class="btn-signup">--}}
-{{--                                    <a class="btn btn-info" href="{{route('web.formLogin')}}">Sign Up for Free</a>--}}
-{{--                                </li>--}}
+                                <li>
+                                    <a href="{{route('web.formLogin')}}">Sign In</a>
+                                </li>
+                                <li class="btn-signup">
+                                    <a class="btn btn-info" href="{{route('web.formLogin')}}">Sign Up for Free</a>
+                                </li>
                             @else
                                 <li class="pl-5">
                                     @php

@@ -730,7 +730,7 @@ class EventController extends Controller
 
         return view('cws.event.edit', $data);
     }
-  
+
     private function listUsers($id)
     {
         $users = [];

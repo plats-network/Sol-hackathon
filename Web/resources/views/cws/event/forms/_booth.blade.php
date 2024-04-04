@@ -40,7 +40,22 @@
             - If you do not have a booth, click "Next" to skip the step of creating a booth
         </p>
     </div>
-
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="mb-3">
+                <button
+                    type="button"
+                    class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
+                </button>
+            </div>
+            <div class="mb-3">
+                <button
+                    type="button"
+                    class="btn btn-primary w-sm ms-auto mint_nft" value="2" style="display: none">Mint NFT
+                </button>
+            </div>
+        </div>
+    </div>
     <div>
         <div class="row">
             <input type="hidden" name="booths[id]" id="booths[id]" value="{{$booths->id}}">
@@ -125,7 +140,7 @@
                             <th>Vip</th>
                             <th>Click</th>
                             <th>QR <span class="text-danger">(ON/OFF)</span></th>
-{{--                            <th>NFT</th>--}}
+                            <th>NFT</th>
                             <th>Sort</th>
                             <th>Edit</th>
                         </tr>
@@ -179,7 +194,7 @@
                                         data-off-label="Off">
                                     </label>
                                </td>
-{{--                               <td width="5%">{{$booth->nft_link ? 'Yes' : 'No'}}</td>--}}
+                               <td width="5%">{{$booth->nft_link ? 'Yes' : 'No'}}</td>
                                <td width="10%">
                                     <select
                                         name="sort"
@@ -227,6 +242,16 @@
                                             <option value="{{$game->id}}" @if($boothDetail->travel_game_id == $game->id) selected @endif>{{$game->name}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col-lg-4 d-flex align-items-end">
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary w-sm ms-auto mint_nft" value="1">
+                                        Mint NFT
+                                    </button>
+                                </div>
+                                <div class="mb-3 col-5">
+                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
                                 </div>
                             </div>
                             <div class="col-sm-4">

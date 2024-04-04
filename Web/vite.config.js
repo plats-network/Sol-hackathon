@@ -2,10 +2,27 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
 import path from "path";
+import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
+import nodePolyfills from 'vite-plugin-node-stdlib-browser'
 
 export default defineConfig({
+    optimizeDeps: {
+        esbuildOptions: {
+            // Node.js global to browser globalThis
+            define: {
+                global: 'globalThis'
+            },
+            // Enable esbuild polyfill plugins
+            plugins: [
+                NodeGlobalsPolyfillPlugin({
+                    buffer: true
+                })
+            ]
+        }
+    },
     plugins: [
         react(),
+        nodePolyfills(),
         laravel({
             input: [
                 // CSS
@@ -16,7 +33,10 @@ export default defineConfig({
                 'resources/sass/event-auth.scss',
                 'resources/sass/game.scss',
                 // JS
-                // 'resources/js/app.js',
+                'resources/js/claim.js',
+                'resources/js/mint.js',
+                // 'resources/js/mint_booth.js',
+                // 'resources/js/mint_session.js',
                 // 'resources/js/admin/adminapp.js',
                 'resources/js/admin.js',
                 'resources/js/event.js',
@@ -29,6 +49,9 @@ export default defineConfig({
                 'resources/js/ModalWallet.jsx',
                 'resources/js/connect-wallet-admin.jsx',
                 'resources/js/admin/pages/pass-addon.init.js',
+                'resources/js/app/layout.tsx',
+                'resources/js/app/provider.jsx',
+                'resources/js/views/solana.jsx',
             ],
             refresh: true,
         }),

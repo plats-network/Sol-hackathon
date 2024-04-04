@@ -14,6 +14,10 @@
 @endsection
 
 @section('name_page')
+    @viteReactRefresh
+    @vite([
+    'resources/js/mint.js',
+    ])
     <div class="page-title-box align-self-center d-none d-md-block">
         <h4 class="page-title mb-0">
             @if($isPreview)
@@ -53,6 +57,9 @@
     </style>
     <div class="container-fluid">
         <div class="row">
+            @if($event->id)
+                <input id="eventIdHidden" value="{{ $event->id }}" type="hidden">
+            @endif
             @if($isPreview)
                 <div class="col-md-10">
                     @if(true)
@@ -121,21 +128,21 @@
                                             <a class="nav-link navItemTab" id="navItemTab3" data-step="3" href="#">Check-in</a>
                                         </li>
                                     @endif
-                                    <li class="nav-item">
-                                        <a class="nav-link navItemTab " id="navItemTab{{$is_update? "4": "3"}}"
-                                           data-step="{{$is_update? "4": "3"}}">NFT</a>
-                                    </li>
-{{--                                    <li class="nav-item d-none">--}}
-{{--                                        <a class="nav-link navItemTab" id="navItemTab{{$is_update? "5": "4"}}"--}}
-{{--                                           data-step="{{$is_update? "5": "4"}}" href="#">CrowdSponsor</a>--}}
-{{--                                    </li>--}}
+                                    {{--                                    <li class="nav-item">--}}
+                                    {{--                                        <a class="nav-link navItemTab " id="navItemTab{{$is_update? "4": "3"}}"--}}
+                                    {{--                                           data-step="{{$is_update? "4": "3"}}">NFT</a>--}}
+                                    {{--                                    </li>--}}
+                                    {{--                                    <li class="nav-item d-none">--}}
+                                    {{--                                        <a class="nav-link navItemTab" id="navItemTab{{$is_update? "5": "4"}}"--}}
+                                    {{--                                           data-step="{{$is_update? "5": "4"}}" href="#">CrowdSponsor</a>--}}
+                                    {{--                                    </li>--}}
                                     @if($is_update)
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab5" data-step="5" href="#">Users
+                                            <a class="nav-link navItemTab" id="navItemTab4" data-step="4" href="#">Users
                                                 List</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab6" data-step="6" href="#">Dashboard</a>
+                                            <a class="nav-link navItemTab" id="navItemTab5" data-step="5" href="#">Dashboard</a>
                                         </li>
                                     @endif
 
@@ -252,16 +259,29 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-primary w-sm ms-auto"
-                                                            id="connect_wallet">Connect Wallet
-                                                        </button>
-                                                    </div>
+                                        <div class="col-lg-12 mt-4">
+                                            <div class="row align-items-center">
+
+                                                <div class="mb-3 col-1">
+                                                    <input class="mint_number form-control" type="number" name="quantity" min="1" max="1000" style="display: none">
+                                                </div>
+                                                <div class="mb-3 col-5">
+                                                    <input type="file" id="w0" class="mint-image"
+                                                           accept="image/png, image/gif, image/jpeg"
+                                                           name="_fileinput_nft" style="display: none"/>
+                                                </div>
+                                                <div class="mb-3 col-2 d-flex justify-content-end">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">Mint NFT
+                                                    </button>
+                                                </div>
+                                                <div class="mb-3 col-5">
+                                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -335,94 +355,94 @@
                             @endif
 
                             {{--NFT--}}
-                            <div id="tabwizard{{$is_update ? '4':'3'}}" class="wizard-tab">
-                                <div>
-                                    <div class="text-center mb-4">
-                                        <h5>NFT Setting</h5>
-                                        <p class="card-title-desc text-success">
-                                            - Create NFT
-                                        </p>
+                            {{--                            <div id="tabwizard{{$is_update ? '4':'3'}}" class="wizard-tab" style="display: none;">--}}
+                            {{--                                <div>--}}
+                            {{--                                    <div class="text-center mb-4">--}}
+                            {{--                                        <h5>NFT Setting</h5>--}}
+                            {{--                                        <p class="card-title-desc text-success">--}}
+                            {{--                                            - Create NFT--}}
+                            {{--                                        </p>--}}
 
-                                    </div>
+                            {{--                                    </div>--}}
 
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <div class="mb-3 field-name">
+                            {{--                                </div>--}}
+                            {{--                                <div class="row">--}}
+                            {{--                                    <div class="col-lg-8">--}}
+                            {{--                                        <div class="mb-3 field-name">--}}
 
-                                            <label for="nft[name]" class="form-label">Collection Name <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" value="{{$nftItem->name}}" sponsor class="form-control"
-                                                   placeholder="" id="nft[name]" name="nft[name]" aria-invalid="false">
-                                            <div class="valid-feedback"></div>
-                                        </div>
-                                        Collection Description
+                            {{--                                            <label for="nft[name]" class="form-label">Collection Name <span--}}
+                            {{--                                                    class="text-danger">*</span></label>--}}
+                            {{--                                            <input type="text" value="{{$nftItem->name}}" sponsor class="form-control"--}}
+                            {{--                                                   placeholder="" id="nft[name]" name="nft[name]" aria-invalid="false">--}}
+                            {{--                                            <div class="valid-feedback"></div>--}}
+                            {{--                                        </div>--}}
+                            {{--                                        Collection Description--}}
 
-                                        <div class="mb-3">
-                                            <label for="nft[description]" class="form-label">Collection
-                                                Description</label>
-                                            <textarea class="form-control" id="nft[description]" name="nft[description]"
-                                                      rows="3">{{$nftItem->description}}</textarea>
-                                        </div>
+                            {{--                                        <div class="mb-3">--}}
+                            {{--                                            <label for="nft[description]" class="form-label">Collection--}}
+                            {{--                                                Description</label>--}}
+                            {{--                                            <textarea class="form-control" id="nft[description]" name="nft[description]"--}}
+                            {{--                                                      rows="3">{{$nftItem->description}}</textarea>--}}
+                            {{--                                        </div>--}}
 
-                                        <div class="mb-3 field-name">
+                            {{--                                        <div class="mb-3 field-name">--}}
 
-                                            <label for="nft[size]" class="form-label">Collection Size <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" value="{{$nftItem->size}}" class="form-control"
-                                                   placeholder="" id="nft[size]" name="nft[size]"
-                                                   data-listener-added_7f51dd21="true" aria-invalid="false">
-                                            <div class="valid-feedback"></div>
-                                        </div>
+                            {{--                                            <label for="nft[size]" class="form-label">Collection Size <span--}}
+                            {{--                                                    class="text-danger">*</span></label>--}}
+                            {{--                                            <input type="text" value="{{$nftItem->size}}" class="form-control"--}}
+                            {{--                                                   placeholder="" id="nft[size]" name="nft[size]"--}}
+                            {{--                                                   data-listener-added_7f51dd21="true" aria-invalid="false">--}}
+                            {{--                                            <div class="valid-feedback"></div>--}}
+                            {{--                                        </div>--}}
 
-                                        <div class="mb-3 field-name">
+                            {{--                                        <div class="mb-3 field-name">--}}
 
-                                            <label for="nft[blockchain]" class="form-label">Blockchain <span
-                                                    class="text-danger">*</span></label>
-                                            <select class="form-select" id="nft[blockchain]" name="nft[blockchain]"
-                                                    aria-label="Default select example">
-                                                @foreach ($allNetwork as $key => $item)
-                                                    <option
-                                                        value="{{ $key }}" {{ ($nftItem->blockchain == $key) ? 'selected' : '' }}>{{ $item }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="valid-feedback"></div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="form-group field-article-thumbnail">
-                                                <label for="article-thumbnail" class="mb-3"><b>Image</b></label>
-                                                <div>
-                                                    <input type="hidden" id="article-thumbnail2" class="empty-value"
-                                                           name="thumbnail_nft">
-                                                    <input type="file" id="w2" accept="image/png, image/gif, image/jpeg"
-                                                           name="_fileinput_w2"></div>
-                                                <div class="invalid-feedback">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        Payment Button
-                                        @if($is_update)
-                                            <a target="_blank"
-                                               href="{{route('payment-link', ['nft_id' => $nftItem->id, 'event_id' => $event->id])}}"
-                                               class="btn btn-info">Send Create NFT</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+                            {{--                                            <label for="nft[blockchain]" class="form-label">Blockchain <span--}}
+                            {{--                                                    class="text-danger">*</span></label>--}}
+                            {{--                                            <select class="form-select" id="nft[blockchain]" name="nft[blockchain]"--}}
+                            {{--                                                    aria-label="Default select example">--}}
+                            {{--                                                @foreach ($allNetwork as $key => $item)--}}
+                            {{--                                                    <option--}}
+                            {{--                                                        value="{{ $key }}" {{ ($nftItem->blockchain == $key) ? 'selected' : '' }}>{{ $item }}</option>--}}
+                            {{--                                                @endforeach--}}
+                            {{--                                            </select>--}}
+                            {{--                                            <div class="valid-feedback"></div>--}}
+                            {{--                                        </div>--}}
+                            {{--                                        <div class="mb-3">--}}
+                            {{--                                            <div class="form-group field-article-thumbnail">--}}
+                            {{--                                                <label for="article-thumbnail" class="mb-3"><b>Image</b></label>--}}
+                            {{--                                                <div>--}}
+                            {{--                                                    <input type="hidden" id="article-thumbnail2" class="empty-value"--}}
+                            {{--                                                           name="thumbnail_nft">--}}
+                            {{--                                                    <input type="file" id="w2" accept="image/png, image/gif, image/jpeg"--}}
+                            {{--                                                           name="_fileinput_w2"></div>--}}
+                            {{--                                                <div class="invalid-feedback">--}}
+                            {{--                                                </div>--}}
+                            {{--                                            </div>--}}
+                            {{--                                        </div>--}}
+                            {{--                                    </div>--}}
+                            {{--                                    <div class="col-lg-4">--}}
+                            {{--                                        Payment Button--}}
+                            {{--                                        @if($is_update)--}}
+                            {{--                                            <a target="_blank"--}}
+                            {{--                                               href="{{route('payment-link', ['nft_id' => $nftItem->id, 'event_id' => $event->id])}}"--}}
+                            {{--                                               class="btn btn-info">Send Create NFT</a>--}}
+                            {{--                                        @endif--}}
+                            {{--                                    </div>--}}
+                            {{--                                </div>--}}
+                            {{--                            </div>--}}
 
-{{--                            <div id="tabwizard{{$is_update ? '5':'4'}}" class="wizard-tab" style="display: none">--}}
-{{--                                @include('cws.event.forms._sponsor', [--}}
-{{--                                   'sessions' => $sessions,--}}
-{{--                                   'isPreview' => $isPreview,--}}
-{{--                                   'event' => $event--}}
-{{--                               ])--}}
-{{--                            </div>--}}
+                            {{--                            <div id="tabwizard{{$is_update ? '5':'4'}}" class="wizard-tab" style="display: none">--}}
+                            {{--                                @include('cws.event.forms._sponsor', [--}}
+                            {{--                                   'sessions' => $sessions,--}}
+                            {{--                                   'isPreview' => $isPreview,--}}
+                            {{--                                   'event' => $event--}}
+                            {{--                               ])--}}
+                            {{--                            </div>--}}
                             @if($is_update)
 
                                 {{--User List--}}
-                                <div id="tabwizard5" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard4" class="wizard-tab" style="display: none;">
                                     <div>
                                         <div class="text-center mb-4">
                                             <h5>User List</h5>
@@ -505,7 +525,7 @@
                                 </div>
 
                                 {{--Dashboard--}}
-                                <div id="tabwizard6" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard5" class="wizard-tab" style="display: none;">
                                     <div>
 
                                         <div class="text-center mb-4">
@@ -548,7 +568,7 @@
                                                         @if(!$booths['detail']->isEmpty())
                                                             <h2>Booth</h2>                                               
                                                             <canvas class="my-4 w-100" id="boothChart" width="900"
-                                                                        height="380">
+                                                                    height="380">
                                                             </canvas>
                                                         @endif
                                                     </div>
@@ -556,7 +576,7 @@
                                                         @if(!$sessions['detail']->isEmpty())
                                                             <h2>Session</h2>
                                                             <canvas class="my-4 w-100" id="sessionChart" width="900"
-                                                                        height="380">
+                                                                    height="380">
                                                             </canvas>
                                                         @endif
                                                     </div>
@@ -1533,6 +1553,8 @@
         function showTab(n) {
             // This function will display the specified tab of the form...
             var x = document.getElementsByClassName("wizard-tab");
+            console.log(n);
+            console.log(x);
             x[n].style.display = "block";
 
             //navItemTab  add class active
@@ -1657,6 +1679,8 @@
             $(this).addClass('active');
             var id = $(this).attr('data-step');
             $('#currentTab').val(id);
+            //alert(id)
+            // alert(id);
             showTab(id);
             $('#tabwizard0').css('display', 'none');
 
@@ -1713,7 +1737,7 @@
                     }
                 }
             }
-      });
+        });
 
         // sessionChart
         const ctxSession = document.getElementById('sessionChart')
@@ -1874,19 +1898,4 @@
 @endsection
 @push('custom-scripts')
     <script src="{{ url('js/index.umd.js') }}"></script>
-    <script>
-        const solConnect = new window.SolanaConnect();
-
-        if (solConnect.getWallet()) {
-            $('#connect_wallet').hide()
-        }
-
-        $('#connect_wallet').click(function () {
-            solConnect.openMenu({
-                top: 100
-            });
-            $('#connect_wallet').text('Connected');
-        })
-
-    </script>
 @endpush
