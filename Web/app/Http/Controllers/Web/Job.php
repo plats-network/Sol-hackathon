@@ -331,6 +331,16 @@ class Job extends Controller
             //$checkUserGetCode = $this->checkUserGetCode($request, $taskId);
             //d($checkUserGetCode);
 
+            $inforSessions = TaskEvent::where('task_id', $taskId)
+                ->with('detail')
+                ->where('type', 0)
+                ->first();
+            
+            $inforBooths = TaskEvent::where('task_id', $taskId)
+                ->with('detail')
+                ->where('type', 1)
+                ->first();
+
             $travelSessions = [];
             $session = $this->taskEvent->whereTaskId($taskId)->whereType(TASK_SESSION)->first();
             $travelSessionIds = $this->eventDetail
@@ -536,7 +546,7 @@ class Job extends Controller
             array_splice($groupSessions[$item['travel_game_id']], 6, 0, [$tempArray[0]]);
             array_splice($groupSessions[$item['travel_game_id']], 7, 0, [$tempArray[1]]);
         }
-        return view('web.events.travel_game', [
+        $data = [
             'event' => $event,
             'totalCompleted' => $totalCompleted,
             'session_id' => $session->id,
@@ -546,9 +556,12 @@ class Job extends Controller
             'url' => $sessionNFT && $sessionNFT['url'] ? $sessionNFT['url'] : null,
             'nft' => $sessionNFT && $sessionNFT['nft'] ? 1 : 0,
             'flagU' => $flagU,
-
+            'sessions'=>$inforSessions,
+            'booths'=>$inforBooths,
             'groupSessions' => ($groupSessions),
-        ]);
+        ];
+        return view('web.events.travel_game', $data);
+    
     }
     //Check user get code when have attend 6/8 session in booth
     public function checkUserGetCode(Request $request, $taskId)

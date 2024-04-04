@@ -573,20 +573,30 @@ class EventController extends Controller
             ->with('detail')->where('type', 1)
             ->first();
 
-        foreach($booths['detail'] as $booth){
-            
-            $booth['totalUserJob']  = totalUserJob($booth['id']);
+        if(!empty($booths['detail'])){
+            foreach($booths['detail'] as $booth){
+
+                $booth['totalUserJob']  = totalUserJob($booth['id']);
+            }
         }
-        
+
         $sessions = TaskEvent::where('task_id', $id)->with('detail')
             ->where('type', 0)
             ->first();
 
-        foreach($sessions['detail'] as $session){
-            
-            $session['totalUserJob']  = totalUserJob($session['id']);
+        if(!empty($sessions['detail'])){
+        
+            foreach($sessions['detail'] as $session){
+
+                $session['totalUserJob']  = totalUserJob($session['id']);
+            }
         }
         
+        //không có sự kiện thì trả về 404
+        if(empty($task)){
+            
+            abort(404);
+        }
         $sponsor = $this->sponsor->whereTaskId($id)->first();
 
         $taskEventDiscords = $task->taskEventDiscords;
