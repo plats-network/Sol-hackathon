@@ -137,7 +137,7 @@
                                 <a class="nav-link active" data-toggle="tab" href="#sesion" id="nav-sesion-tab" data-toggle="tab" data-target="#nav-session"  role="tab" aria-controls="nav-session" aria-selected="true">Sessions Game</a>
                             </li>
                             <li>
-                                <a class="nav-link" data-toggle="tab" href="#booth" id="nav-booth-tab" data-toggle="tab" data-target="#nav-booth"  role="tab" aria-controls="nav-booth" aria-selected="true">Booth Game</a>
+                                <a class="nav-link" data-toggle="tab" href="#booth" id="nav-booth-tab" data-toggle="tab" data-target="#nav-booth"  role="tab" aria-controls="nav-booth" aria-selected="true">Booths Game</a>
                             </li>
                         </ul>
                     </nav>
