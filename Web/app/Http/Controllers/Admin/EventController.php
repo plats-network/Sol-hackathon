@@ -695,13 +695,10 @@ class EventController extends Controller
             ->value('id');
 
         //tổng user tham gia sự kiện
-        $countUserJoinEvent = UserJoinEvent::where('task_id', $id)->count();
+        $countUserJoinEvent = EventUserTicket::where('task_id', $id)->sum('is_checkin');
 
         //tổng user đăng kí sự kiện
         $countUserRegisterEvent = EventUserTicket::where('task_id', $id)->count();
-
-        //user vào sự kiện
-        $dataUserJoinEvent = UserJoinEvent::select('user_id','updated_at','type')->get();
         
         $data = [
             'eventId' => $eventId,

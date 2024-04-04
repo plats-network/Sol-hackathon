@@ -385,8 +385,15 @@ class Job extends Controller
                 //->orderBy('sort', 'asc')
                 ->orderBy('created_at', 'asc')
                 ->get();
+            
+            $booths = $this->eventDetail->whereTaskEventId($eventBooth->id)
+                //->orderBy('sort', 'asc')
+                ->orderBy('created_at', 'asc')
+                ->get();
 
-            $totalCompleted = 0;
+            $totalSessionCompleted = 0;
+
+            $totalBoothCompleted = 0;
 
             foreach ($sessions as $session) {
                 $travel = $this->travelGame->find($session->travel_game_id);
@@ -405,7 +412,7 @@ class Job extends Controller
                     ->count());*/
                 $isDoneTask = $this->checkDoneJob($session->id);
                 if ($isDoneTask) {
-                    $totalCompleted++;
+                    $totalSessionCompleted++;
                 }
                 $sessionDatas[] = [
                     'id' => $session->id,
@@ -421,16 +428,49 @@ class Job extends Controller
                     'flag' =>$isDoneTask ?? ''
                 ];
             }
+            
+            foreach ($booths as $booth) {
+                $travel = $this->travelGame->find($booth->travel_game_id);
+                $job = $this->taskDone
+                    ->whereUserId($user->id)
+                    ->whereTaskEventDetailId($booth->id)
+                    ->first();
 
+                $isDoneTask = $this->checkDoneJob($booth->id);
+                if ($isDoneTask) {
+                    $totalBoothCompleted++;
+                }
+                $boothDatas[] = [
+                    'id' => $booth->id,
+                    'travel_game_id' => $booth->travel_game_id ?? '',
+                    'travel_game_name' => $travel->name ?? '',
+                    'user_id' => $request->user()->id ?? '',
+                    'name' => $booth->name ?? '',
+                    'desc' => $booth->description ?? '',
+                    'date' => $job ? Carbon::parse($job->created_at)->format('Y-m-d') : '',
+                    'time' => $job ? Carbon::parse($job->created_at)->format('H:i') : '',
+                    'required' => $booth->is_required ?? '',
+                    'created_at' => $booth->created_at ?? '',
+                    'flag' =>$isDoneTask ?? ''
+                ];
+            }
+            
+            
             $groupSessions = [];
             $groupBooths = [];
             foreach ($sessionDatas as $item) {
                 $groupSessions[$item['travel_game_id']][] = $item;
             }
+
+            foreach ($boothDatas as $item) {
+                
+                $groupBooths[$item['travel_game_id']][] = $item;
+            }
             //Create code if $totalCompleted >=6
             $maxSession = 1;
+            $maxBooth = 1;
 
-            if ($totalCompleted >= $maxSession) {
+            if ($totalSessionCompleted >= $maxSession) {
                 //$this->taskService->genCodeByUser($user->id, $taskId, $travelSessionIds, $travelBootsIds, $session->id, $booth->id);
 
                 // $codes = $userCode->where('user_id', $userId)
@@ -480,7 +520,41 @@ class Job extends Controller
 
                 //Send Code to User Email
             }
+            
+            if ($totalBoothCompleted >= $maxBooth) {
 
+                //Check user code not exists
+                $checkCode = $this->userCode
+                    ->whereUserId($user->id)
+                    ->whereTaskEventId($booth->id)
+                    ->where('travel_game_id', $booth->travel_game_id)
+                    ->where('type', 0)
+                    ->exists();
+                if (!$checkCode) {
+                    $max = $this->userCode
+                        ->whereTaskEventId($booth->id)
+                        ->where('travel_game_id', $booth->travel_game_id)
+                        ->max('number_code');
+
+                    $maxCode =  $max + 1;
+                    //Check if  $maxCode < 100 then add 100
+                    if ($maxCode < 100) {
+                        $maxCode = $maxCode;
+                    }
+
+                    $this->userCode->create([
+                        'user_id' => $user->id,
+                        'task_event_id' => $booth->id,
+                        'travel_game_id' => $booth->travel_game_id,
+                        'type' => 0,
+                        'number_code' => $maxCode,
+                        'color_code' => randColor()
+                    ]);
+                }
+
+
+                //Send Code to User Email
+            }
         } catch (\Exception $e) {
             abort(404);
         }
@@ -548,7 +622,8 @@ class Job extends Controller
         }
         $data = [
             'event' => $event,
-            'totalCompleted' => $totalCompleted,
+            'totalSessionCompleted' => $totalSessionCompleted,
+            'totalBoothCompleted' => $totalBoothCompleted,
             'session_id' => $session->id,
             'booth_id' => $booth->id,
             'travelSessions' => $travelSessions,
@@ -559,6 +634,7 @@ class Job extends Controller
             'sessions'=>$inforSessions,
             'booths'=>$inforBooths,
             'groupSessions' => ($groupSessions),
+            'groupBooths' => ($groupBooths),
         ];
         return view('web.events.travel_game', $data);
     

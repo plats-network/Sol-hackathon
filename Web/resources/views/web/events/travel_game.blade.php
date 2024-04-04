@@ -35,7 +35,7 @@
             color: #000 !important;
         }
 
-        .aaa {
+        .infor-description {
             background-color: #fff8ea;
             padding: 7px 10px;
             border-radius: 10px;
@@ -123,7 +123,7 @@
                     <div class="text-center" style="margin: 5px auto;">
                         <img style="width: 100%;" src="{{$event->banner_url}}" alt="{{$event->name}}">
                     </div>
-                    <div class="aaa mt-2" style="margin-top: 15px; line-height: 20px;">
+                    <div class="infor-description mt-2" style="margin-top: 15px; line-height: 20px;">
                         
                         {!! $event['description'] !!}
                         {{--  <p class="text-center" id="see1" style="cursor: pointer;">Read more</p>  --}}
@@ -136,13 +136,18 @@
                             <li>
                                 <a class="nav-link active" data-toggle="tab" href="#sesion" id="nav-sesion-tab" data-toggle="tab" data-target="#nav-session"  role="tab" aria-controls="nav-session" aria-selected="true">Sessions Game</a>
                             </li>
-                            <!-- <li>
+                            <li>
                                 <a class="nav-link" data-toggle="tab" href="#booth" id="nav-booth-tab" data-toggle="tab" data-target="#nav-booth"  role="tab" aria-controls="nav-booth" aria-selected="true">Booth Game</a>
-                            </li> -->
+                            </li>
                         </ul>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-session" role="tabpanel" aria-labelledby="nav-sesion-tab">
+                            <div class="infor-description mt-2" >
+                        
+                                {!! $sessions['description'] !!}
+                                {{--  <p class="text-center" id="see1" style="cursor: pointer;">Read more</p>  --}}
+                            </div>
                             @foreach($travelSessions as $k => $session)
                                 @php
                                     $codes = $userCode->where('user_id', $userId)
@@ -156,16 +161,17 @@
                                         $sTests = explode('-', $session->note);
                                     }
                                 @endphp
-
+                             
                                 <div class="item">
                                     <h3 class="text-center">{{$session->name}}</h3>
+                                  
                                     <p>
                                         <strong>Missions: Scan the QR to receive a Lucky Draw Code.</strong>
                                     </p>
                                     <p><strong>Lucky Code:</strong> <span class="fs-25">{{$codes ? $codes : '---'}}</span>
                                     </p>
 
-                                    <p><strong>Joined: <span style="color:green">{{$totalCompleted}}</span> / {{  count($sessions['detail']) }}
+                                    <p><strong>Joined: <span style="color:green">{{ $totalSessionCompleted }}</span> / {{  count($sessions['detail']) }}
                                             sessions</strong></p>
                                     @if(false)
                                         <p><strong>Prize drawing time:</strong> {{dateFormat($session->prize_at)}}</p>
@@ -212,15 +218,87 @@
                             @endforeach
                         </div>
 
-                        <!-- <div class="tab-pane fade" id="nav-booth" role="tabpanel" aria-labelledby="nav-booth-tab">
-                            uuuu
-                        </div> -->
+                        <div class="tab-pane fade" id="nav-booth" role="tabpanel" aria-labelledby="nav-booth-tab">
+                            <div class="infor-description a-2">
+                        
+                                {!! $booths['description'] !!}
+                                {{--  <p class="text-center" id="see1" style="cursor: pointer;">Read more</p>  --}}
+                            </div>
+                            @foreach($travelBooths as $k => $booth)
+                                @php
+                                    $codes = $userCode->where('user_id', $userId)
+                                        ->where('travel_game_id', $booth->id)
+                                        ->where('task_event_id', $session_id)
+                                        ->where('type', 0)
+                                        ->pluck('number_code')
+                                        ->implode(',');
+                                    $sTests = [];
+                                    if ($booth->note) {
+                                        $sTests = explode('-', $booth->note);
+                                    }
+                                @endphp
+                             
+                                <div class="item">
+                                    <h3 class="text-center">{{$booth->name}}</h3>
+                                  
+                                    <p>
+                                        <strong>Missions: Scan the QR to receive a Lucky Draw Code.</strong>
+                                    </p>
+                                    <p><strong>Lucky Code:</strong> <span class="fs-25">{{$codes ? $codes : '---'}}</span>
+                                    </p>
+
+                                    <p><strong>Joined: <span style="color:green">{{ $totalBoothCompleted }}</span> / {{  count($booths['detail']) }}
+                                            sessions</strong></p>
+                                    @if(false)
+                                        <p><strong>Prize drawing time:</strong> {{dateFormat($booth->prize_at)}}</p>
+                                        <p><strong>Position:</strong> Main Stage</p>
+                                        <p><strong>Reward:</strong></p>
+
+                                        <p style="padding-left: 15px; line-height: 20px;">
+                                            @foreach($sTests as $item)
+                                                @if($item)
+                                                    {!! '➤ '.$item.'<br>' !!}
+                                                @endif
+                                            @endforeach
+                                        </p>
+                                    @endif
+                                </div>
+                                <div class="timeline-container">
+                                    @foreach($groupBooths as  $itemDatas)
+                                        <div id="day{{($loop->index+1)}}">&nbsp;</div>
+                                        @if(false)
+                                            <h3 class="step">{{$itemDatas && $itemDatas[0] ? $itemDatas[0]['travel_game_name'] : ''}}</h3>
+                                        @endif
+                                        <ul class="tl">
+                                            @foreach($itemDatas as $item)
+                                                <li class="tl-item {{ $item['flag'] ? '' : 'dashed'}}">
+                                                    <div class="item-icon {{ $item['flag'] ? '' : 'not__active'}}"></div>
+                                                    <div class="item-text">
+                                                        <div class="item-title {{$item['flag'] ? '' : 'not-active'}}">
+                                                            <p class="{{$item['flag'] ? 'ac-color' : ''}}">
+                                                                {{Str::limit($item['name'], 50)}}
+                                                            </p>
+                                                        </div>
+                                                        {{-- <div class="item-detail {{$item['flag'] ? 'ac-color' : ''}}">{{Str::limit($item['desc'], 20)}}</div> --}}
+                                                    </div>
+                                                    @if ($item['date'])
+                                                        <div class="item-timestamp">
+                                                            {{$item['date']}}<br> {{$item['time']}}
+                                                        </div>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
 
                 </div>
 
                 <div class="event-info" style="border-top: 0; margin-top: 15px;">
-                    <div class="aaa mt-2">
+                    <div class="infor-description mt-2">
                         Plats Event: Web3 Event Platform <br>
                         Latest event organization platform, supporting Travel game, Session game and fun prize drawing.
                         In addition, Plats Event also provides other services such as Creating and Distributing NFTs
