@@ -4,6 +4,21 @@
         Session {{$getInc}}<span class="text-danger" style="font-size: 11px;">(Note: Fields marked with * are required)</span>
     </label>
     <div class="row">
+        <div class="col-lg-4 mb-2">
+            <label class="col-form-label">Travel game</label>
+            <select class="form-select" name="sessions[detail][{{$indexImageItem}}][travel_game_id]">
+                @foreach($travelGames as $game)
+                    <option value="{{$game->id}}">{{$game->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-4 d-flex align-items-end mb-2">
+            <button
+                type="button"
+                class="btn btn-primary w-sm ms-auto mint_nft" value="2">
+                Mint NFT
+            </button>
+        </div>
         <div class="mb-3 col-5">
             <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
         </div>
@@ -13,7 +28,7 @@
     <div class="col-sm-4">
         <input
             type="text"
-            class="form-control name_session"
+            class="form-control"
             id="sessions[detail][{{$indexImageItem}}][name]"
             name="sessions[detail][{{$indexImageItem}}][name]"
             placeholder="Name session"
@@ -23,7 +38,7 @@
     <div class="col-sm-4">
         <input
             type="text"
-            class="form-control description_session"
+            class="form-control"
             id="sessions[detail][{{$indexImageItem}}][description]"
             name="sessions[detail][{{$indexImageItem}}][description]"
             placeholder="Description"

@@ -39,124 +39,130 @@ async function getMetadata(mint) {
     ))[0];
 };
 
-$('.page-content').on("click", ".submit-btn", async function () {
+$('.connect_wallet').click(function () {
     solConnect.openMenu({
         top: 100
     });
 
-    // console.log($('.itemSessionDetail').get(0).find('.name_session').val());
-
-    solConnect.onWalletChange( async (adapter) => {
+    solConnect.onWalletChange((adapter) => {
         walletOr = adapter.publicKey.toString();
         pub = adapter;
-        provider = new AnchorProvider(connection, adapter, {commitment: "confirmed"})
+        $('.connect_wallet').hide()
+        $('.mint_nft').show();
+        $('.mint_number').show();
+        $('.mint-image').show();
+        // $('.nft-image').show();
+        provider = new AnchorProvider(connection, adapter, { commitment: "confirmed" })
         program = new Program(idl, PROGRAM_ID, provider);
         setProvider(provider)
-
-        const type = $(this).val();
-        const {blockhash, lastValidBlockHeight} =
-            await connection.getLatestBlockhash('confirmed');
-        let mintNumber = $('#nft_amount').val();
-        var ownerWallet = new PublicKey(walletOr);
-        const classAppend = $(this).parent().parent().next();
-        if (mintNumber == undefined || mintNumber < 0) {
-            mintNumber = 1;
-        }
-
-        const nftName = $('#nft_name').val();
-        const nftSymbol = $('#nft_Description').val();
-        const nftUri = $('#nft_file').val();
-
-        let txs = [];
-        var mintAccount = [];
-        var deposits = [];
-        var seeds = [];
-        var names = [];
-        var symbols = [];
-        var uris = [];
-        var pools = [];
-        var types = [];
-
-        $('.loading').hide();
-
-        if ($('.itemSessionDetail').length > 0) {
-            $('.itemSessionDetail').each(async function (index) {
-                let sessionName = $(this).find('.name_session').val();
-                let description = $(this).find('.description_session').val();
-                txs.push(await createNftTx(sessionName, description, 'https://api.jquery.com/each/', blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                types.push(2);
-            });
-        }
-
-        if ($('.itemBoothDetail').length > 0) {
-            $('.itemBoothDetail').each(async function (index) {
-                let boothName = $(this).find('.name_booth').val();
-                let description = $(this).find('.description_booth').val();
-                txs.push(await createNftTx(boothName, description, 'https://api.jquery.com/each/', blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                types.push(3);
-            });
-        }
-
-        for (let i = 0; i < mintNumber; i++) {
-            txs.push(await createNftTx(nftName, nftSymbol, nftUri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-            types.push(1);
-        }
-
-        const signedTxs = await pub.signAllTransactions(txs);
-        for (const signedTx in signedTxs) {
-            console.log(signedTxs);
-
-            signedTxs[signedTx].partialSign(mintAccount[signedTx]);
-            console.log(mintAccount);
-            const signature = await connection.sendRawTransaction(
-                signedTxs[signedTx].serialize(),
-                {
-                    skipPreflight: true,
-                    preflightCommitment: 'confirmed',
-                    maxRetries: 50,
-                }
-            );
-            console.log(blockhash);
-            await connection.confirmTransaction(
-                {
-                    blockhash,
-                    lastValidBlockHeight,
-                    signature,
-                },
-                'confirmed'
-            );
-
-            deposits.push(await addToPool(mintAccount[signedTx], ownerWallet, blockhash, seeds, pools));
-        }
-
-        const signedDepositTxs = await pub.signAllTransactions(deposits);
-
-        for (const signedTx of signedDepositTxs) {
-            const signature = await connection.sendRawTransaction(
-                signedTx.serialize(),
-                {
-                    skipPreflight: true,
-                    preflightCommitment: 'confirmed',
-                    maxRetries: 50,
-                }
-            );
-        }
-
-        // append
-        for (const index in names) {
-            const classNe = $('.nft-div-append');
-            appendValueNft(names[index], symbols[index], uris[index], seeds[index], pools[index],
-                mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classNe, types[index])
-        }
-
-        alert('Mint NFT is success. Please see on https://explorer.solana.com/')
-        $(this).parent().next().find('#mint-sol').attr('href', 'https://explorer.solana.com/address/' + provider.wallet.publicKey.toString() + '=devnet')
-        $(this).parent().next().find('#mint-sol').show();
-        $(this).text('Minted');
-        $('.loading').hide();
-        $('#post_form').submit();
     });
+})
 
+$('.page-content').on("click", ".mint_nft", async function () {
+    const type = $(this).val();
+    const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash('confirmed');
+    let mintNumber = $(this).parent().parent().find('.mint_number').val();
+    var ownerWallet = new PublicKey(walletOr);
+    const classAppend = $(this).parent().parent().next();
+    if (mintNumber == undefined || mintNumber < 0) {
+        mintNumber = 1;
+    }
+
+    let txs = [];
+    var mintAccount = [];
+    var deposits = [];
+    var seeds = [];
+    var names = [];
+    var symbols = [];
+    var uris = [];
+    var pools = [];
+
+    for (let i = 0; i < mintNumber; i++) {
+        txs.push(await createNftTx(blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+    }
+
+    $('.loading').show();
+
+    const signedTxs = await pub.signAllTransactions(txs);
+    for (const signedTx in signedTxs) {
+        console.log(signedTxs);
+
+        signedTxs[signedTx].partialSign(mintAccount[signedTx]);
+        console.log(mintAccount);
+        const signature = await connection.sendRawTransaction(
+            signedTxs[signedTx].serialize(),
+            {
+                skipPreflight: true,
+                preflightCommitment: 'confirmed',
+                maxRetries: 50,
+            }
+        );
+        console.log(blockhash);
+        await connection.confirmTransaction(
+            {
+                blockhash,
+                lastValidBlockHeight,
+                signature,
+            },
+            'confirmed'
+        );
+
+        deposits.push(await addToPool(mintAccount[signedTx], ownerWallet, blockhash, seeds, pools));
+    }
+
+    const signedDepositTxs = await pub.signAllTransactions(deposits);
+
+    for (const signedTx of signedDepositTxs) {
+        const signature = await connection.sendRawTransaction(
+            signedTx.serialize(),
+            {
+                skipPreflight: true,
+                preflightCommitment: 'confirmed',
+                maxRetries: 50,
+            }
+        );
+    }
+
+    // append
+    for (const index in names) {
+        const classNe = $('.nft-div-append');
+        if (type == 2) classNe
+        appendValueNft(names[index], symbols[index], uris[index], seeds[index], pools[index],
+            mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classAppend, type)
+    }
+
+    alert('Mint NFT is success. Please see on https://explorer.solana.com/')
+    $(this).parent().next().find('#mint-sol').attr('href', 'https://explorer.solana.com/address/'+ provider.wallet.publicKey.toString() +'=devnet')
+    $(this).parent().next().find('#mint-sol').show();
+    $(this).text('Minted');
+    $('.loading').hide();
+
+    // try {
+    //     const eventId = $('#eventIdHidden').val();
+    //     const body = {
+    //         name,
+    //         symbol,
+    //         uri,
+    //         seed: seed + '',
+    //         pool,
+    //         address_nft: mintKeypair.publicKey.toString(),
+    //         address_organizer: provider.wallet.publicKey.toString(),
+    //         secret_key: mintKeypair.secret_key,
+    //         type,
+    //         task_id: eventId
+    //     }
+    //     console.log(body);
+    //
+    //     const res = await axios.post("/create-nft-claim", body);
+    //     alert('Mint NFT is success. Please see on https://explorer.solana.com/')
+    //     $(this).parent().next().find('#mint-sol').attr('href', 'https://explorer.solana.com/address/'+ provider.wallet.publicKey.toString() +'=devnet')
+    //     $(this).parent().next().find('#mint-sol').show();
+    //     $(this).text('Minted');
+    //     $('.loading').hide();
+    // } catch (error) {
+    //     throw new Error(error.message)
+    // }
 })
 
 function appendValueNft(name, symbol, uri, seed, pool, addressNft, secret, classAppend, type) {
@@ -172,12 +178,6 @@ function appendValueNft(name, symbol, uri, seed, pool, addressNft, secret, class
     classAppend.append('<input type="hidden" name="nft-ticket-secret-key-'+classA+'[]" value="'+secret+'"/>')
     classAppend.append('<input type="hidden" name="nft-ticket-address-organizer-'+classA+'[]" value="'+provider.wallet.publicKey.toString()+'"/>')
 }
-
-$('.mint-nft-append').click(function () {
-    if (confirm("Are you sure to mint NFT Ticket") == true) {
-        $('.amount-nft-ticket').text($('#nft_amount').val());
-    }
-})
 
 async function addToPool(mintNftKey, ownerWallet, blockhash, seeds, pools) {
     const seed = new BN(randomBytes(8));
@@ -227,7 +227,7 @@ async function addToPool(mintNftKey, ownerWallet, blockhash, seeds, pools) {
     return tx;
 }
 
-async function createNftTx(nftName, nftSymbol, nftUri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris) {
+async function createNftTx(blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris) {
     const mintKeypair = await web3.Keypair.generate();
     mintAccount.push(mintKeypair);
     const nftTokenAccount = await getAssociatedTokenAddress(
@@ -250,9 +250,9 @@ async function createNftTx(nftName, nftSymbol, nftUri, blockhash, ownerWallet, l
         TOKEN_METADATA_PROGRAM_ID
     ))[0];
 
-    const name = nftName;
-    const symbol = nftSymbol;
-    const uri = nftUri;
+    const name = (Math.random() + 1).toString(36).substring(7);
+    const symbol = 'fee';
+    const uri = 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
 
     names.push(name);
     symbols.push(symbol);
