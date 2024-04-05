@@ -1,6 +1,7 @@
 @extends('web.layouts.event_app')
 
 @section('content')
+    @vite('resources/js/claim.js')
     @php
         if (auth()->user() !== null){
             $userId = auth()->user()->id;
@@ -76,7 +77,26 @@
                                         Solana Explorer Link
                                     </a>
                                 @else
-                                    <a id="showModal" class="btn btn-info" href="{{ route('web.events.register', ['id' => $event->id]) }}">Register event</a>
+                                    @if ($nft)
+                                        <input id="address_organizer" value="{{ $nft->address_organizer }}" type="hidden">
+                                        <input id="address_nft" value="{{ $nft->address_nft }}" type="hidden">
+                                        <input id="seed" value="{{ $nft->seed }}" type="hidden">
+                                        <input id="user_address" value="{{ auth()->user()->wallet_address }}" type="hidden">
+                                        <input id="nft_id" value="{{ $nft->id }}" type="hidden">
+                                        <input id="email_login" value="{{ auth()->user()->email }}" type="hidden">
+                                        <a class="btn btn-info {{$nft ? 'btn-claim-id' : ''}}" href="#">Register event</a>
+                                        <a style="display:none;" class="btn btn-info claim-success" href="#">Claim already</a>
+                                        <a style="
+    border: none;
+    display:none;
+    background: none;
+    color: blue;
+" class="link-primary sol-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">
+                                            Solana Explorer Link
+                                        </a>
+                                    @else
+                                        <a id="showModal" class="btn btn-info {{$nft ? 'btn-claim-id' : ''}}" href="{{ route('web.events.register', ['id' => $event->id]) }}">Register event</a>
+                                    @endif
                                 @endif
                                 <hr>
                             </div>
@@ -414,3 +434,8 @@
         });
     </script>
 @endsection
+@push('custom-scripts')
+    <script src="{{ url('js/index.umd.js') }}"></script>
+    <script src="https://auth.magic.link/sdk"></script>
+    <script type="text/javascript" src="https://auth.magic.link/sdk/extension/solana"></script>
+@endpush

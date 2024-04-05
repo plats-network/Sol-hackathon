@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\NFT\NFTMint;
 
 class EventService extends BaseService
 {
@@ -87,15 +88,32 @@ class EventService extends BaseService
                 }
             }
 
+            // create nft free
+            if (isset($data['nft-ticket-name-'])) {
+                foreach ($data['nft-ticket-name-'] as $key => $nftFree) {
+                    $nft = new NFTMint();
+                    $nft->nft_title = $nftFree ?? '';
+                    $nft->nft_symbol = $data['nft-ticket-symbol-'][$key] ?? '';
+                    $nft->nft_uri = $data['nft-ticket-uri-'][$key] ?? '';
+                    $nft->seed = $data['nft-ticket-seed-'][$key] ?? '';
+                    $nft->address_nft = $data['nft-ticket-address-nft-'][$key] ?? '';
+                    $nft->address_organizer = $data['nft-ticket-address-organizer-'][$key] ?? '';
+                    $nft->secret_key = $data['nft-ticket-secret-key-'][$key] ?? '';
+                    $nft->type = 1;
+                    $nft->task_id = $dataBaseTask->id;
+                    $nft->save();
+                }
+            }
+
 
             // Update Session
             if ($sessions && !empty($sessions['name'])) {
-                $this->saveSession($dataBaseTask, $sessions);
+                $this->saveSession($dataBaseTask, $sessions, $request);
             }
 
             // Booth
             if ($booths && !empty($booths['name'])){
-                $this->saveBooth($dataBaseTask, $booths);
+                $this->saveBooth($dataBaseTask, $booths, $request);
             }
 
             // Update Quiz
@@ -184,16 +202,33 @@ class EventService extends BaseService
                 ]);
             }
 
+            // create nft free
+            if (isset($data['nft-ticket-name-'])) {
+                foreach ($data['nft-ticket-name-'] as $key => $nftFree) {
+                    $nft = new NFTMint();
+                    $nft->nft_title = $nftFree ?? '';
+                    $nft->nft_symbol = $data['nft-ticket-symbol-'][$key] ?? '';
+                    $nft->nft_uri = $data['nft-ticket-uri-'][$key] ?? '';
+                    $nft->seed = $data['nft-ticket-seed-'][$key] ?? '';
+                    $nft->address_nft = $data['nft-ticket-address-nft-'][$key] ?? '';
+                    $nft->address_organizer = $data['nft-ticket-address-organizer-'][$key] ?? '';
+                    $nft->secret_key = $data['nft-ticket-secret-key-'][$key] ?? '';
+                    $nft->type = 1;
+                    $nft->task_id = $dataBaseTask->id;
+                    $nft->save();
+                }
+            }
+
             // Save session
             if ($sessions && !empty($sessions['name'])){
                 unset($sessions['id']);
-                $this->saveSession($dataBaseTask, $sessions);
+                $this->saveSession($dataBaseTask, $sessions, $data);
             }
 
             // Save booth
             if ($booths && !empty($booths['name'])){
                 unset($booths['id']);
-                $this->saveBooth($dataBaseTask, $booths);
+                $this->saveBooth($dataBaseTask, $booths, $data);
             }
 
             // Save social
@@ -305,7 +340,8 @@ class EventService extends BaseService
         }
     }
 
-    private function saveSession($task, $sessions) {
+    private function saveSession($task, $sessions, $dataParam) {
+        $index = 0;
         if (isset($sessions['id']) && $sessions['id']) {
             $event = TaskEvent::where('id', $sessions['id'])->first();
             if (!$event) {
@@ -317,9 +353,11 @@ class EventService extends BaseService
                 'max_job' => $sessions['max_job'] ?? 1,
                 'description' => $sessions['description']
             ]);
+
+
             if (isset($sessions['detail']) && $sessions['detail']) {
 
-                foreach ($sessions['detail'] as $item) {
+                foreach ($sessions['detail'] as $key => $item) {
                     if (isset($item['id']) &&
                         $item['id'] &&
                         isset($item['is_delete']) &&
@@ -340,7 +378,7 @@ class EventService extends BaseService
                         if (empty($item['name'])) {
                             continue;
                         } elseif (isset($item['id']) && $item['id']) {
-                            TaskEventDetail::where('id', $item['id'])->update([
+                            $sessionTask = TaskEventDetail::where('id', $item['id'])->update([
                                 'name' => $item['name'],
                                 'description' => $item['description'],
                                 'travel_game_id' => isset($item['travel_game_id'])? $item['travel_game_id'] : null,
@@ -357,7 +395,7 @@ class EventService extends BaseService
                                 'is_a4' => $is_a4
                             ]);
                         } else {
-                            TaskEventDetail::create([
+                            $sessionTask = TaskEventDetail::create([
                                 'task_event_id' => $event->id,
                                 'name' => $item['name'],
                                 'description' => $item['description'],
@@ -376,7 +414,23 @@ class EventService extends BaseService
                                 'is_a4' => $is_a4
                             ]);
                         }
+
+                        if (isset($dataParam['nft-ticket-name-session'])) {
+                            $nft = new NFTMint();
+                            $nft->nft_title = $dataParam['nft-ticket-name-session'][$index] ?? '';
+                            $nft->nft_symbol = $dataParam['nft-ticket-symbol-session'][$index] ?? '';
+                            $nft->nft_uri = $dataParam['nft-ticket-uri-session'][$index] ?? '';
+                            $nft->seed = $dataParam['nft-ticket-seed-session'][$index] ?? '';
+                            $nft->address_nft = $dataParam['nft-ticket-address-nft-session'][$index] ?? '';
+                            $nft->address_organizer = $dataParam['nft-ticket-address-organizer-session'][$key] ?? '';
+                            $nft->secret_key = $dataParam['nft-ticket-secret-key-session'][$index] ?? '';
+                            $nft->type = 2;
+                            $nft->task_id = $task->id;
+                            $nft->session_id = $sessionTask->id;
+                            $nft->save();
+                        }
                     }
+                    $index++;
                 }
             }
         } else {
@@ -391,44 +445,62 @@ class EventService extends BaseService
 
             if (isset($sessions['detail']) && $sessions['detail']){
 
-              foreach($sessions['detail'] as $item) {
-                if (isset($item['is_delete']) && $item['is_delete'] == 1) {
-                    continue;
-                } else {
-                    if (empty($item['name'])) {
+                foreach($sessions['detail'] as $key => $item) {
+                    if (isset($item['is_delete']) && $item['is_delete'] == 1) {
                         continue;
                     } else {
-                        TaskEventDetail::create([
-                            'task_event_id' => $event->id,
-                            'name' => $item['name'],
-                            'description' => $item['description'],
-                            'code' => Str::random(35),
-                            'travel_game_id' => isset($item['travel_game_id']) ? $item['travel_game_id'] : null,
-                            'is_required' => false,
-                            'is_question' => isset($item['is_question']) && $item['is_question'] == '1' ? true : false,
-                            'question' => isset($item['question']) ? $item['question'] : null,
-                            'a1' => isset($item['a1']) ? $item['a1'] : null,
-                            'a2' => isset($item['a2']) ? $item['a2'] : null,
-                            'a3' => isset($item['a3']) ? $item['a3'] : null,
-                            'a4' => isset($item['a4']) ? $item['a4'] : null,
-                            'is_a1' => isset($item['is_a1']) && $item['is_a1'] == '1' ? true : false,
-                            'is_a2' => isset($item['is_a2']) && $item['is_a2'] == '1' ? true : false,
-                            'is_a3' => isset($item['is_a3']) && $item['is_a3'] == '1' ? true : false,
-                            'is_a4' => isset($item['is_a4']) && $item['is_a4'] == '1' ? true : false
-                        ]);
+                        if (empty($item['name'])) {
+                            continue;
+                        } else {
+                            $sessionTask = TaskEventDetail::create([
+                                'task_event_id' => $event->id,
+                                'name' => $item['name'],
+                                'description' => $item['description'],
+                                'code' => Str::random(35),
+                                'travel_game_id' => isset($item['travel_game_id']) ? $item['travel_game_id'] : null,
+                                'is_required' => false,
+                                'is_question' => isset($item['is_question']) && $item['is_question'] == '1' ? true : false,
+                                'question' => isset($item['question']) ? $item['question'] : null,
+                                'a1' => isset($item['a1']) ? $item['a1'] : null,
+                                'a2' => isset($item['a2']) ? $item['a2'] : null,
+                                'a3' => isset($item['a3']) ? $item['a3'] : null,
+                                'a4' => isset($item['a4']) ? $item['a4'] : null,
+                                'is_a1' => isset($item['is_a1']) && $item['is_a1'] == '1' ? true : false,
+                                'is_a2' => isset($item['is_a2']) && $item['is_a2'] == '1' ? true : false,
+                                'is_a3' => isset($item['is_a3']) && $item['is_a3'] == '1' ? true : false,
+                                'is_a4' => isset($item['is_a4']) && $item['is_a4'] == '1' ? true : false
+                            ]);
+                        }
                     }
+
+                    if (isset($dataParam['nft-ticket-name-session'])) {
+                        $nft = new NFTMint();
+                        $nft->nft_title = $dataParam['nft-ticket-name-session'][$index] ?? '';
+                        $nft->nft_symbol = $dataParam['nft-ticket-symbol-session'][$index] ?? '';
+                        $nft->nft_uri = $dataParam['nft-ticket-uri-session'][$index] ?? '';
+                        $nft->seed = $dataParam['nft-ticket-seed-session'][$index] ?? '';
+                        $nft->address_nft = $dataParam['nft-ticket-address-nft-session'][$index] ?? '';
+                        $nft->address_organizer = $dataParam['nft-ticket-address-organizer-session'][$index] ?? '';
+                        $nft->secret_key = $dataParam['nft-ticket-secret-key-session'][$index] ?? '';
+                        $nft->type = 2;
+                        $nft->task_id = $task->id;
+                        $nft->session_id = $sessionTask->id;
+                        $nft->save();
+                    }
+                    $index++;
                 }
             }
-            }
         }
+
     }
 
-    private function saveBooth($task, $booths)
+    private function saveBooth($task, $booths, $data)
     {
         // dd($booths);
         // https://use.tekuno.app/claim/d5b24e31-0a08-4314-9a1c-6dcaf394f42f
         // https://use.tekuno.app/claim/a057e74e-5d5a-4d2b-81b2-c22c28e043d8
         // https://use.tekuno.app/claim/9e186e9e-49cb-4885-971d-933f1da16540
+        $index = 0;
         if (isset($booths['id']) && $booths['id']) {
             $event = TaskEvent::where('id', $booths['id'])->first();
 
@@ -441,7 +513,7 @@ class EventService extends BaseService
             ]);
 
             if (isset($booths['detail']) && $booths['detail']) {
-                foreach ($booths['detail'] as $item) {
+                foreach ($booths['detail'] as $key => $item) {
                     if (isset($item['id']) &&
                         $item['id'] &&
                         isset($item['is_delete']) &&
@@ -451,7 +523,7 @@ class EventService extends BaseService
                         if (empty($item['name'])) {
                             continue;
                         } elseif (isset($item['id']) && $item['id']) {
-                            TaskEventDetail::where('id', $item['id'])->update([
+                            $sessionTask = TaskEventDetail::where('id', $item['id'])->update([
                                 'name' => $item['name'],
                                 'description' => $item['description'],
                                 'nft_link' => $item['nft_link'] ?? null,
@@ -460,7 +532,7 @@ class EventService extends BaseService
                                 'is_required' => isset($item['is_required']) && $item['is_required'] == '1' ? true : false
                             ]);
                         } else {
-                            TaskEventDetail::create([
+                            $sessionTask = TaskEventDetail::create([
                                 'task_event_id' => $event->id,
                                 'name' => $item['name'],
                                 'description' => $item['description'],
@@ -471,7 +543,23 @@ class EventService extends BaseService
                                 'is_required' => isset($item['is_required']) && $item['is_required'] == '1' ? true : false
                             ]);
                         }
+
+                        if (isset($data['nft-ticket-name-booth'])) {
+                            $nft = new NFTMint();
+                            $nft->nft_title = $data['nft-ticket-name-booth'][$index] ?? '';
+                            $nft->nft_symbol = $data['nft-ticket-symbol-booth'][$index] ?? '';
+                            $nft->nft_uri = $data['nft-ticket-uri-booth'][$index] ?? '';
+                            $nft->seed = $data['nft-ticket-seed-booth'][$index] ?? '';
+                            $nft->address_nft = $data['nft-ticket-address-nft-booth'][$index] ?? '';
+                            $nft->address_organizer = $data['nft-ticket-address-organizer-booth'][$index] ?? '';
+                            $nft->secret_key = $data['nft-ticket-secret-key-booth'][$index] ?? '';
+                            $nft->type = 3;
+                            $nft->task_id = $task->id;
+                            $nft->session_id = $sessionTask->id;
+                            $nft->save();
+                        }
                     }
+                    $index++;
                 }
             }
         } else {
@@ -485,14 +573,14 @@ class EventService extends BaseService
             ]);
 
             if (isset($booths['detail']) && $booths['detail']) {
-                foreach ($booths['detail'] as $item) {
+                foreach ($booths['detail'] as $key => $item) {
                     if (isset($item['is_delete']) && $item['is_delete'] == 1) {
                         continue;
                     } else {
                         if (empty($item['name'])) {
                             continue;
                         } else {
-                            TaskEventDetail::create([
+                            $sessionTask = TaskEventDetail::create([
                                 'task_event_id' => $event->id,
                                 'name' => $item['name'],
                                 'nft_link' => $item['nft_link'] ?? null,
@@ -502,6 +590,22 @@ class EventService extends BaseService
                                 'is_question' => false,
                                 'is_required' => isset($item['is_required']) && $item['is_required'] == '1' ? true : false
                             ]);
+
+                            if (isset($data['nft-ticket-name-booth'])) {
+                                $nft = new NFTMint();
+                                $nft->nft_title = $data['nft-ticket-name-booth'][$index] ?? '';
+                                $nft->nft_symbol = $data['nft-ticket-symbol-booth'][$index] ?? '';
+                                $nft->nft_uri = $data['nft-ticket-uri-booth'][$index] ?? '';
+                                $nft->seed = $data['nft-ticket-seed-booth'][$index] ?? '';
+                                $nft->address_nft = $data['nft-ticket-address-nft-booth'][$index] ?? '';
+                                $nft->address_organizer = $data['nft-ticket-address-organizer-booth'][$index] ?? '';
+                                $nft->secret_key = $data['nft-ticket-secret-key-booth'][$index] ?? '';
+                                $nft->type = 3;
+                                $nft->task_id = $task->id;
+                                $nft->session_id = $sessionTask->id;
+                                $nft->save();
+                            }
+                            $index;
                         }
                     }
                 }

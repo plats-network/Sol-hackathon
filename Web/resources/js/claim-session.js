@@ -30,7 +30,7 @@ const PROGRAM_ID = new PublicKey("D5GK8Kye78gjuDMMjRnkWH5a6KfNEXzex5mekXL3HLR2")
 let provider = new AnchorProvider(connection, solConnect.getWallet(), {commitment: "confirmed"})
 let program = new Program(idl, PROGRAM_ID, provider);
 
-$('.btn-claim-id').click(async function () {
+$('#button-claim').click(async function () {
     $('.loading').show();
 
 
@@ -102,9 +102,8 @@ $('.btn-claim-id').click(async function () {
         const res = await axios.post("/update_nft_status", body);
         alert('Claim NFT is success. Please see on https://explorer.solana.com/')
         $('.loading').hide();
-        $('.claim-success').show();
-        $('.sol-link').show();
-        $('.btn-claim-id').hide();
+        $('#button-claim').hide()
+        $('#button-claim-link').show();
     } catch (error) {
         alert(error.message);
     }

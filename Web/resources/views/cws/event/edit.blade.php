@@ -284,6 +284,8 @@
                                                     <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
                                                 </div>
                                             </div>
+                                            <div class="row nft-div-append">
+                                            </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="row">
@@ -1197,6 +1199,8 @@
             if (isPreview) {
                 //Disable all input
                 $('input').attr('disabled', 'disabled');
+                $('.mint_nft').attr('disabled', 'disabled');
+                $('.connect_wallet').attr('disabled', 'disabled');
                 $('textarea').attr('disabled', 'disabled');
                 $('select').attr('disabled', 'disabled');
                 $('input[type=checkbox]').removeAttr('disabled');

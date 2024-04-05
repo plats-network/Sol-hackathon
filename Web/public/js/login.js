@@ -1,5 +1,5 @@
 import { Magic } from 'magic-sdk';
-import { OAuthExtension } from "@magic-ext/oauth";
+// import { OAuthExtension } from "@magic-ext/oauth";
 import { Connection } from '@solana/web3.js';
 
 let magic;
@@ -28,3 +28,5 @@ $('#btn-google-login').click(function () {
         redirectURI: new URL("/", window.location.origin).href,
     });
 })
+
+
