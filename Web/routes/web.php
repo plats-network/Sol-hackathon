@@ -97,17 +97,19 @@ Route::middleware(['user_event'])->group(function ($r) {
     // scan QR
     $r->get('nft/claim/{id}', [\App\Http\Controllers\Web\ClaimNftController::class, 'claim'])->name('nft.claim');
     $r->get('nft/claim-action/{id}', [\App\Http\Controllers\Web\ClaimNftController::class, 'claimAction'])->name('nft.claimAction');
-//    $r->get('event/{id}', [Home::class, 'show'])->name('web.events.show');
     $r->get('event-register/{id}', [EventController::class, 'register'])->name('web.events.register');
     $r->get('events/code', [Job::class, 'index'])->name('web.eventCode');
 
 });
 
 // Các route không yêu cầu middleware
+Route::get('event/{id}', [Home::class, 'show'])->name('web.events.show');
+// mint nft
+Route::post('update_nft_status', [\App\Http\Controllers\Admin\NFTController::class, 'updateNftClaim'])->name('api.updateStatusNftClaim');
+
 Route::get('/', [Home::class, 'index'])->name('web.home');
 Route::get('event-lists', [Home::class, 'events'])->name('web.events');
-Route::get('event/{id}', [Home::class, 'show'])->name('web.events.show');
-Route::get('events/code', [Job::class, 'index'])->name('web.eventCode');
+//Route::get('event/{id}', [Home::class, 'show'])->name('web.events.show');
 Route::get('solution', [PagesController::class, 'solution'])->name('web.solution');
 Route::get('template', [PagesController::class, 'template'])->name('web.template');
 Route::get('pricing', [PagesController::class, 'pricing'])->name('web.pricing');
@@ -167,7 +169,7 @@ Route::get('pleb/thanks_checkin_nft', function () {
     $member = User::query()->first();
     $options = array(
         'verify_url' => 'http://gotohere.com',
-         'image_url' => '',
+        'image_url' => '',
         'event_name' => 'Event Name',
         'event_location' => 'Event Name',
         'invoice_id' => '10087866',

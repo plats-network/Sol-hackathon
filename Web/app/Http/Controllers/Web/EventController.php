@@ -54,7 +54,14 @@ class EventController extends Controller
 //            $userNft->task_id = $id;
 //            $userNft->save();
 
-        $nft = NFTMint::orderBy('id', 'desc')->first();
+        $nft = NFTMint::where([
+            'task_id' => $id,
+            'status' => 1
+        ])->first();
+
+        if ($nft) {
+            dd($nft);
+        }
 
         // fake to demo
         $userNft = new UserNft();

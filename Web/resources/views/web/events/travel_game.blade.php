@@ -1,6 +1,7 @@
 @extends('web.layouts.event_app')
 
 @section('content')
+    @vite('resources/js/claim-session.js')
     @php
         $userId = auth()->user()->id;
         $email = auth()->user()->email;
@@ -96,7 +97,6 @@
             z-index: 99999;
         }
     </style>
-
     <section class="travel" id="flagU" data-flag="{{$flagU}}">
         <div class="container">
             <div class="travel-content">
@@ -126,8 +126,39 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
-                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
+                    @if($groupSessions)
+                        @foreach($groupSessions as $groupSession)
+                            @if($groupSession[0]['id'])
+                                @php
+                                    $nft = \App\Models\NFT\NFTMint::where([
+                                        'session_id' => $groupSession[0]['id'],
+                                        'status' => 1,
+                                        'type' => 2,
+                                    ])->first();
+                                    if ($nft) {
+                                            $userNft = new \App\Models\NFT\UserNft();
+                                            $userNft->user_id = \auth()->user()->id;
+                                            $userNft->nft_mint_id = $nft->id;
+                                            $userNft->type = $nft->type;
+                                            $userNft->session_id = $nft->session_id;
+                                            $userNft->task_id = $nft->task_id;
+                                            $userNft->save();
+                                    }
+                                @endphp
+                                @if ($nft && $nft->status < 3)
+                                    <input id="address_organizer" value="{{ $nft->address_organizer }}" type="hidden">
+                                    <input id="address_nft" value="{{ $nft->address_nft }}" type="hidden">
+                                    <input id="seed" value="{{ $nft->seed }}" type="hidden">
+                                    <input id="user_address" value="{{ auth()->user()->wallet_address }}" type="hidden">
+                                    <input id="nft_id" value="{{ $nft->id }}" type="hidden">
+                                    <input id="email_login" value="{{ auth()->user()->email }}" type="hidden">
+                                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
+
+                                @endif
+                                <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
 
                 <ul class="nav nav-tabs">
@@ -137,6 +168,7 @@
                 <div class="tab-content">
                     <div id="sesion" class="tab-pane fade in active">
                         @foreach($travelSessions as $k => $session)
+
                             @php
                                 $codes = $userCode->where('user_id', $userId)
                                     ->where('travel_game_id', $session->id)
@@ -177,6 +209,7 @@
                             </div>
                             <div class="timeline-container">
                                 @foreach($groupSessions as  $itemDatas)
+
                                     <div id="day{{($loop->index+1)}}">&nbsp;</div>
                                     @if(false)
                                         <h3 class="step">{{$itemDatas && $itemDatas[0] ? $itemDatas[0]['travel_game_name'] : ''}}</h3>
@@ -280,11 +313,7 @@
     </div>
 @endsection
 @push('custom-scripts')
-    <script>
-        $('#button-claim').click(function (){
-            alert('Claim is success.');
-            $('#button-claim').hide()
-            $('#button-claim-link').show();
-        })
-    </script>
+    <script src="{{ url('js/index.umd.js') }}"></script>
+    <script src="https://auth.magic.link/sdk"></script>
+    <script type="text/javascript" src="https://auth.magic.link/sdk/extension/solana"></script>
 @endpush
