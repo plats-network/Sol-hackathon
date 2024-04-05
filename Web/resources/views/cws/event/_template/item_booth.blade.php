@@ -4,6 +4,21 @@
         Booth {{$getInc}}<span class="text-danger" style="font-size: 11px;">(Note: Fields marked with * are required)</span>
     </label>
     <div class="row">
+        <div class="col-lg-4 mb-2">
+            <label class="col-form-label">Travel game</label>
+            <select class="form-select" name="booths[detail][{{$indexImageItem}}][travel_game_id]">
+                @foreach($travelGames as $game)
+                    <option value="{{$game->id}}">{{$game->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-4 d-flex align-items-end mb-2">
+            <button
+                type="button"
+                class="btn btn-primary w-sm ms-auto mint_nft" value="3">
+                Mint NFT
+            </button>
+        </div>
         <div class="mb-3 col-5">
             <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
         </div>
@@ -14,7 +29,7 @@
         <label class="col-form-label">Name <span class="text-danger fs-11">(*)</span></label>
         <input
             type="text"
-            class="form-control name_booth"
+            class="form-control"
             id="booths[detail][{{$indexImageItem}}][name]"
             name="booths[detail][{{$indexImageItem}}][name]"
             placeholder="Name {{$getInc}}"
@@ -24,7 +39,7 @@
         <label class="col-form-label">Description <span class="text-danger fs-11">(optional)</span></label>
         <input
             type="text"
-            class="form-control description_booth"
+            class="form-control"
             id="booths[detail][{{$indexImageItem}}][description]"
             name="booths[detail][{{$indexImageItem}}][description]"
             placeholder="Describe {{$getInc}}"

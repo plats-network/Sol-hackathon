@@ -31,7 +31,7 @@
     ];
 @endphp
 
-<div id="tabwizard3" class="wizard-tab">
+<div id="tabwizard2" class="wizard-tab">
     <div class="text-center mb-4">
         <h5>Booths</h5>
         <p class="card-title-desc text-danger">
@@ -226,6 +226,13 @@
                                             <option value="{{$game->id}}" @if($boothDetail->travel_game_id == $game->id) selected @endif>{{$game->name}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col-lg-4 d-flex align-items-end">
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary w-sm ms-auto mint_nft" value="3">
+                                        Mint NFT
+                                    </button>
                                 </div>
                                 <div class="mb-3 col-5">
                                     <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
