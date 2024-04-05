@@ -423,7 +423,7 @@
                                         <tr class="append-nft">
                                             <th scope="col">Standard</th>
                                             <th scope="col" class="image-nft-ticket">Link</th>
-                                            <th scope="col" class="amount-nft-ticket">0</th>
+                                            <th scope="col" class="amount-nft-ticket">{{ $countNFT ?? 0 }}</th>
                                             <th scope="col" class="sol-nft">Link</th>
                                         </tr>
                                         <tr class="append-nft">
