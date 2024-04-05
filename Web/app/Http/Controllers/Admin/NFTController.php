@@ -113,4 +113,15 @@ class NFTController extends Controller
 
         return null;
     }
+
+    public function updateNftClaim(Request $request)
+    {
+        $nft = NFT\NFTMint::find($request->nft_id);
+        $nft->status = 3;
+        $nft->save();
+
+        return [
+            "code" => 200
+        ];
+    }
 }

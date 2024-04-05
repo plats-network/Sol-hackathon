@@ -15,13 +15,15 @@
         <div class="col-lg-4 d-flex align-items-end mb-2">
             <button
                 type="button"
-                class="btn btn-primary w-sm ms-auto mint_nft" value="1">
+                class="btn btn-primary w-sm ms-auto mint_nft" value="3">
                 Mint NFT
             </button>
         </div>
         <div class="mb-3 col-5">
             <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
         </div>
+    </div>
+    <div class="row nft-div-append-booth">
     </div>
     <div class="col-sm-4">
         <label class="col-form-label">Name <span class="text-danger fs-11">(*)</span></label>
@@ -57,10 +59,10 @@
         </label>
     </div>
     <div class="row">
-{{--        <div class="col-sm-8">--}}
-{{--            <label class="col-form-label">Link NFT <span class="text-danger fs-11">(optional)</span></label>--}}
-{{--            <input class="form-control" type="" name="booths[detail][{{$indexImageItem}}][nft_link]">--}}
-{{--        </div>--}}
+        {{--        <div class="col-sm-8">--}}
+        {{--            <label class="col-form-label">Link NFT <span class="text-danger fs-11">(optional)</span></label>--}}
+        {{--            <input class="form-control" type="" name="booths[detail][{{$indexImageItem}}][nft_link]">--}}
+        {{--        </div>--}}
         <div class="col-sm-4">
             <label class="col-form-label">&nbsp;</label>
             <div class="col-auto">

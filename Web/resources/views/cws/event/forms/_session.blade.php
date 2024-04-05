@@ -36,22 +36,6 @@
             - If you do not have a session, click "Next" to skip the step of creating a session
         </p>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="mb-3">
-                <button
-                    type="button"
-                    class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
-                </button>
-            </div>
-            <div class="mb-3">
-                <button
-                    type="button"
-                    class="btn btn-primary w-sm ms-auto mint_nft" value="3" style="display: none">Mint NFT
-                </button>
-            </div>
-        </div>
-    </div>
     <div>
         <input type="hidden" name="sessions[id]" id="sessions[id]" value="{{$sessions->id}}">
         <input type="hidden" name="sessions[task_id]" id="sessions[task_id]" value="{{$event->id}}">
@@ -193,13 +177,15 @@
                                 <div class="col-lg-4 d-flex align-items-end">
                                     <button
                                         type="button"
-                                        class="btn btn-primary w-sm ms-auto mint_nft" value="1">
+                                        class="btn btn-primary w-sm ms-auto mint_nft" value="2">
                                         Mint NFT
                                     </button>
                                 </div>
                                 <div class="mb-3 col-5">
                                     <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
                                 </div>
+                            </div>
+                            <div class="row nft-div-append-session">
                             </div>
                             <div class="col-sm-4">
                                 <label class="col-form-label">Name <span class="text-danger" style="font-size: 11px;">(*)</span></label>

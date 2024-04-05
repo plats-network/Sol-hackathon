@@ -85,12 +85,12 @@ class Home extends Controller
             Log::error('Errors: ' . $e->getMessage());
         }
 
-        $data = [
+        $data =  [
             'events' => $events,
-            'eventsPendings' => $eventsPendings
+            'eventsPendings'=>$eventsPendings
         ];
 
-        return view('web.home', $data);
+        return view('web.home',$data);
     }
 
     //createCrowdSponsor
@@ -285,13 +285,11 @@ class Home extends Controller
                     'event_location' => $event->address,
                     'invoice_id' => '10087866',
                     'invoice_total' => '100.07',
-                    //'download_link' => 'https://platsevent.web.app/reward-nft?id='.$event->id,
-                    'download_link' => 'https://platsevent.web.app/claim-nft?id=' . $event->id,
+                    'download_link' => 'https://platsevent.web.app/claim-nft?id='.$event->id,
                 );
 
 
                 Mail::to($user)->send(new \App\Mail\ThankYouCheckInNFT($user, $options));
-
 
                 //Mail::to($user)->send(new OrderCreated());
                 $recipientEmail = $user->email;
@@ -371,7 +369,7 @@ class Home extends Controller
             // lay session
             $travelSessions = [];
             $session = $this->eventModel->whereTaskId($id)->whereType(TASK_SESSION)->first();
-            $countEventDetail = TaskEventDetail::where('task_event_id', $session->id)->count();
+            $countEventDetail = TaskEventDetail::where('task_event_id',$session->id)->count();
 
             $travelSessionIds = $this->eventDetail
                 ->select('travel_game_id')
@@ -405,7 +403,7 @@ class Home extends Controller
             //lay booth
             $travelBoots = [];
             $booth = $this->eventModel->whereTaskId($id)->whereType(TASK_BOOTH)->first();
-            $countEventDetailBooth = TaskEventDetail::where('task_event_id', $booth->id)->count();
+            $countEventDetailBooth = TaskEventDetail::where('task_event_id',$booth->id)->count();
             $travelBootsIds = $this->eventDetail
                 ->select('travel_game_id')
                 ->distinct()
@@ -431,10 +429,38 @@ class Home extends Controller
                 }
             }
 
+            // check claim nft
+            $check = false;
+            if (\auth()->user()) {
+                $check = UserNft::where([
+                    'user_id' => \auth()->user()->id,
+                    'task_id' => $id
+                ])->count();
+
+                if (!$check) {
+                    $nft = NFTMint::where([
+                        'task_id' => $id,
+                        'status' => 1,
+                        'type' => 1,
+                    ])->first();
+
+                    if ($nft) {
+                        $userNft = new UserNft();
+                        $userNft->user_id = \auth()->user()->id;
+                        $userNft->nft_mint_id = $nft->id;
+                        $userNft->type = $nft->type;
+                        $userNft->booth_id = $nft->booth_id;
+                        $userNft->task_id = $nft->task_id;
+                        $userNft->save();
+                    }
+                }
+            }
+
         } catch (\Exception $e) {
-            dd($e->getMessage());
+//            dd($e->getMessage());
             notify()->error('Error show event');
         }
+
         return view('web.events.show', [
             'event' => $event,
             'user' => $user,
@@ -443,14 +469,16 @@ class Home extends Controller
             'url_download_ticket' => $url_download_ticket,
             'show_message' => $show_message,
             'travelSessions' => $travelSessions,
-            'travelBooths' => $travelBooths,
+            'travelBooths' => $travelBooths ?? [],
             'task_id' => $id,
             'session_id' => $session->id,
             'totalCompleted' => $totalCompleted,
             'countEventDetail' => $countEventDetail,
-            'booth_id' => $booth->id,
+            'booth_id' => $booth->id ?? '',
             'totalCompletedBooth' => $totalCompletedBooth,
             'countEventDetailBooth' => $countEventDetailBooth,
+            'checkMint' => $check,
+            'nft' => $nft ?? [],
         ]);
     }
 
@@ -498,7 +526,7 @@ class Home extends Controller
     // Get ticket
     public function orderTicket(Request $request)
     {
-//        DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             $user = Auth::user();
@@ -525,8 +553,8 @@ class Home extends Controller
                         'status' => USER_CONFIRM
                     ]);
                 }
-                return redirect(route('web.formLogin'));
-//                Auth::login($user);
+
+                Auth::login($user);
             }
 
             $check = $this->eventUserTicket
@@ -581,10 +609,10 @@ class Home extends Controller
                 //Mail::to($user->email)->send(new EmailSendTicket($userTicket, $user));
             }
 
-//            DB::commit();
+            DB::commit();
         } catch (\Exception $e) {
             dd($e->getMessage());
-//            DB::rollBack();
+            DB::rollBack();
             notify()->error('Error submit ticket');
             return redirect()->route('web.home');
         }
@@ -601,7 +629,7 @@ class Home extends Controller
     public function ticketPdf(Request $request, $id = null)
     {
         try {
-            if (!$id) {
+            if (!$id){
                 $id = $request->get('id');
             }
             $user = Auth::user();
@@ -658,11 +686,11 @@ class Home extends Controller
             if (!empty($user)) {
 
                 // Sử dụng mối quan hệ để lấy thông tin
-                $eventsPendings = Task::where(['tasks.status' => 1])
-                    ->join('user_events', 'tasks.id', '=', 'user_events.task_id')
+                $eventsPendings = Task::where(['tasks.status'=>1])
+                    ->join('user_events','tasks.id','=','user_events.task_id')
                     ->whereNotNull('tasks.name')
                     ->whereNotNull('tasks.description')
-                    ->where(['user_events.user_id' => $user['id']])
+                    ->where(['user_events.user_id'=>$user['id']])
                     ->orderBy('tasks.id', 'DESC')
                     ->paginate(10);
 
@@ -674,7 +702,7 @@ class Home extends Controller
 
         $data = [
             'events' => $events,
-            'eventsPending' => $eventsPendings
+            'eventsPending'=> $eventsPendings
         ];
 
         return view('web.events.index', $data);
@@ -781,7 +809,7 @@ class Home extends Controller
     private function checkDoneJob($eventDetailId)
     {
         $userId = Auth::user() !== null ? Auth::user()->id : null;
-        if (empty($userId)) {
+        if (empty($userId)){
             return null;
         }
         return $this->taskDone
@@ -789,12 +817,12 @@ class Home extends Controller
             ->whereTaskEventDetailId($eventDetailId)
             ->exists();
 
-       /* $status = $this->taskDone
-            ->whereUserId($userId)
-            ->whereTaskEventDetailId($eventDetailId)
-            ->count();
-        //dd($status);
-        return $status;*/
+        /* $status = $this->taskDone
+             ->whereUserId($userId)
+             ->whereTaskEventDetailId($eventDetailId)
+             ->count();
+         //dd($status);
+         return $status;*/
     }
 
     public function callbackLogin(Request $request)
@@ -820,9 +848,6 @@ class Home extends Controller
                     }
                     $newUser->save();
 
-//                    $task = Task::where('status', ACTIVE_TASK)->orderBy('order', 'asc');
-//                    Mail::to($newUser->email)->send(new EmailSendTicket($task, $newUser));
-//
                     Auth::login($newUser);
                 }
 

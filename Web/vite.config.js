@@ -32,6 +32,7 @@ export default defineConfig({
                 'resources/sass/game.scss',
                 // JS
                 'resources/js/claim.js',
+                'resources/js/claim-session.js',
                 'resources/js/mint.js',
                 'resources/js/mint_booth.js',
                 'resources/js/mint_session.js',
