@@ -833,7 +833,7 @@
                                 @if($isPreview == false)
                                     <div id="subForm" class="w-sm ms-auto d-none">
                                         <a class="btn btn-secondary w-sm ms-auto" href="{{route('cws.eventList')}}">Cancel</a>
-                                        <button type="button" class="submit-btn btn btn-primary w-sm ms-auto">Save</button>
+                                        <button type="button" class="submit-btn btn btn-primary w-sm ms-auto">Mint</button>
                                     </div>
                                 @endif
                             </div>
