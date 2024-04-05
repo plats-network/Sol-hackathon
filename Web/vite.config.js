@@ -3,6 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
 import path from "path";
 import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
+import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 
 export default defineConfig({
     optimizeDeps: {
@@ -21,6 +22,7 @@ export default defineConfig({
     },
     plugins: [
         react(),
+        nodePolyfills(),
         laravel({
             input: [
                 // CSS
@@ -33,8 +35,8 @@ export default defineConfig({
                 // JS
                 'resources/js/claim.js',
                 'resources/js/mint.js',
-                'resources/js/mint_booth.js',
-                'resources/js/mint_session.js',
+                // 'resources/js/mint_booth.js',
+                // 'resources/js/mint_session.js',
                 // 'resources/js/admin/adminapp.js',
                 'resources/js/admin.js',
                 'resources/js/event.js',

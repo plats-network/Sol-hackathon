@@ -76,6 +76,7 @@
         "metismenujs": "^1.4.0",
         "moment": "^2.29.4",
         "near-api-js": "^0.44.2",
+        "node-stdlib-browser": "^1.2.0",
         "overlayscrollbars": "^1.13.1",
         "pageres": "^8.0.0",
         "path": "^0.12.7",
