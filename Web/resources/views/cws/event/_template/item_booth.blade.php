@@ -10,7 +10,7 @@
     </div>
     <div class="row nft-div-append-booth">
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <label class="col-form-label">Name <span class="text-danger fs-11">(*)</span></label>
         <input
             type="text"
@@ -20,7 +20,7 @@
             placeholder="Name {{$getInc}}"
             value="">
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <label class="col-form-label">Description <span class="text-danger fs-11">(optional)</span></label>
         <input
             type="text"
@@ -30,8 +30,13 @@
             placeholder="Describe {{$getInc}}"
             value="">
     </div>
+    <div class="col-sm-3">
+        <label class="col-form-label">Image <span class="text-danger fs-11">(optional)</span></label>
+        <input type="file" class="nft_file_booth"
+               accept="image/png, image/gif, image/jpeg">
+    </div>
 
-    <div class="col-sm-4 mt-5">
+    <div class="col-sm-3 mt-5">
         <input type="hidden" name="booths[detail][{{$indexImageItem}}][is_question]" value="0">
         <input
             class="form-check-input"
