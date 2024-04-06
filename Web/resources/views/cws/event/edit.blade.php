@@ -394,17 +394,12 @@
                                                             <span class="text-danger">*</span></label>
                                                         <input type="number" required
                                                                class="form-control"
-                                                               value="1"
+                                                               value="0"
                                                                id="nft_amount" name="nft_amount">
                                                         <div class="valid-feedback"></div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-2">
-                                            <button type="button" class="mint-nft-append btn btn-primary w-sm ms-auto">Mint</button>
                                         </div>
                                     </div>
                                 </div>
@@ -833,7 +828,11 @@
                                 @if($isPreview == false)
                                     <div id="subForm" class="w-sm ms-auto d-none">
                                         <a class="btn btn-secondary w-sm ms-auto" href="{{route('cws.eventList')}}">Cancel</a>
-                                        <button type="button" class="submit-btn btn btn-primary w-sm ms-auto">Mint</button>
+                                        @if($event->id)
+                                            <button type="button" class="min-edit-btn btn btn-primary w-sm ms-auto">Save</button>
+                                        @else
+                                            <button type="button" class="submit-btn btn btn-primary w-sm ms-auto">Mint</button>
+                                        @endif
                                     </div>
                                 @endif
                             </div>
