@@ -31,7 +31,7 @@
     ];
 @endphp
 
-<div id="tabwizard2" class="wizard-tab">
+<div id="tabwizard3" class="wizard-tab">
     <div class="text-center mb-4">
         <h5>Booths</h5>
         <p class="card-title-desc text-danger">
@@ -218,26 +218,6 @@
                                 id="boothFlagDelete{{$boothDetail->id}}"
                                 value="0">
                             <label class="col-sm-12 col-form-label">Booth {{$k+1}} <span class="text-danger" style="font-size: 11px;">(Note: Fields marked with * are required)</span></label>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <label class="col-form-label">Travel game</label>
-                                    <select class="form-select" name="booths[detail][{{$boothDetail->id}}][travel_game_id]">
-                                        @foreach($travelGames as $game)
-                                            <option value="{{$game->id}}" @if($boothDetail->travel_game_id == $game->id) selected @endif>{{$game->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-4 d-flex align-items-end">
-                                    <button
-                                        type="button"
-                                        class="btn btn-primary w-sm ms-auto mint_nft" value="3">
-                                        Mint NFT
-                                    </button>
-                                </div>
-                                <div class="mb-3 col-5">
-                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
-                                </div>
-                            </div>
                             <div class="row nft-div-append-booth">
                             </div>
                             <div class="col-sm-4">

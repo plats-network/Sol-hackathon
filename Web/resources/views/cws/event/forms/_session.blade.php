@@ -27,7 +27,7 @@
     ];
 @endphp
 
-<div id="tabwizard1" class="wizard-tab">
+<div id="tabwizard2" class="wizard-tab">
     <div class="text-center mb-4">
         <h5>Sessions</h5>
         <p class="card-title-desc text-danger">
@@ -174,15 +174,8 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-lg-4 d-flex align-items-end">
-                                    <button
-                                        type="button"
-                                        class="btn btn-primary w-sm ms-auto mint_nft" value="2">
-                                        Mint NFT
-                                    </button>
-                                </div>
                                 <div class="mb-3 col-5">
-                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
+                                    <a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? 'https://explorer.solana.com/address/'. $countNFTBooth[0]['address_organizer'] .'?cluster=devnet' : '' }}" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
                                 </div>
                             </div>
                             <div class="row nft-div-append-session">
