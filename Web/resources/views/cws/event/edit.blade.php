@@ -424,19 +424,19 @@
                                             <th scope="col">Standard</th>
                                             <th scope="col" class="image-nft-ticket"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? $countNFT[0]['nft_url'] : '' }}">Image</a></th>
                                             <th scope="col" class="amount-nft-ticket">{{ isset($countNFT[0]) ? count($countNFT) : 0 }}</th>
-                                            <th scope="col" class="sol-nft"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? 'https://explorer.solana.com/address/'. $countNFT[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Exlorer</a></th>
+                                            <th scope="col" class="sol-nft"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? 'https://explorer.solana.com/address/'. $countNFT[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Explorer</a></th>
                                         </tr>
                                         <tr class="append-nft">
                                             <th scope="col">Session</th>
                                             <th scope="col" class="image-nft-session"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? $countNFTBooth[0]['nft_url'] : '' }}">Image</a></th>
                                             <th scope="col" class="amount-nft-session">{{ isset($countNFTBooth[0]) ? count($countNFTBooth) : 0 }}</th>
-                                            <th scope="col"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? 'https://explorer.solana.com/address/'. $countNFTBooth[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Exlorer</a></th>
+                                            <th scope="col"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? 'https://explorer.solana.com/address/'. $countNFTBooth[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Explorer</a></th>
                                         </tr>
                                         <tr class="append-nft">
                                             <th scope="col">Booth</th>
                                             <th scope="col" class="image-nft-booth"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? $countNFTSession[0]['nft_url'] : '' }}">Image</a></th>
                                             <th scope="col" class="amount-nft-booth">{{isset($countNFTSession[0]) ? count($countNFTSession) : 0 }}</th>
-                                            <th scope="col"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? 'https://explorer.solana.com/address/'. $countNFTSession[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Exlorer</a></th>
+                                            <th scope="col"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? 'https://explorer.solana.com/address/'. $countNFTSession[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Explorer</a></th>
                                         </tr>
                                         </tbody>
                                     </table>
