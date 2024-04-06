@@ -124,4 +124,33 @@ class NFTController extends Controller
             "code" => 200
         ];
     }
+
+    public function uploadImageNft(Request $request)
+    {
+        $path = \Storage::disk('s3')->put('images/originals', $request->file, 'public');
+//        $fullPath = $this->getFullPath();
+//        $imageRequest = $request->file;
+//        $filenameWithExt = $imageRequest->getClientOriginalName();
+//        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+//        $extension = $imageRequest->getClientOriginalExtension();
+//        $fileNameToStore = $filename.'_'.str_shuffle(time()).'.'.$extension;
+//        $image = $imageRequest->storeAs($fullPath, $fileNameToStore, 's3');
+        $path = $path != false ? $path : 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
+        return [
+            "code" => 200,
+            'path' => $path
+        ];
+    }
+
+    public function getFullPath()
+    {
+        /*Path Date Year*/
+        $pathDateYear = date('Y');
+        /*Path Date Month*/
+        $pathDateMonth = date('m');
+        /*Path Date Day*/
+        $pathDateDay = date('d');
+
+        return 'public/images/'.$pathDateYear.$pathDateMonth;
+    }
 }

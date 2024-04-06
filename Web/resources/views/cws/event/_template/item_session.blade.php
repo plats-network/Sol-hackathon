@@ -25,7 +25,7 @@
     </div>
     <div class="row nft-div-append-session">
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <input
             type="text"
             class="form-control"
@@ -35,7 +35,7 @@
             value="">
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <input
             type="text"
             class="form-control"
@@ -45,7 +45,8 @@
             value="">
     </div>
 
-    <div class="col-sm-4 mt-2 d-none">
+
+    <div class="col-sm-3 mt-2 d-none">
         <input type="hidden" name="sessions[detail][{{$indexImageItem}}][is_required]" value="0">
         <input
             class="form-check-input sCheck"
@@ -57,6 +58,12 @@
         <label class="form-check-label" for="q_{{$getInc}}">
             Quiz <span class="text-danger fs-11">(Yes/No)</span>
         </label>
+    </div>
+
+    <div class="col-sm-3">
+        <label class="col-form-label">Image <span class="text-danger fs-11">(optional)</span></label>
+        <input type="file" class="nft_file_session"
+               accept="image/png, image/gif, image/jpeg">
     </div>
 
     {{-- And question --}}

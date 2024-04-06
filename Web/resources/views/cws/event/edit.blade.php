@@ -118,14 +118,17 @@
                                            aria-current="page" href="#">Overview</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link navItemTab " id="navItemTab1" data-step="1">Session</a>
+                                        <a class="nav-link navItemTab " id="navItemTab1" data-step="1">NFT Ticket</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link navItemTab " id="navItemTab2" data-step="2">Booth</a>
+                                        <a class="nav-link navItemTab " id="navItemTab2" data-step="2">Session</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link navItemTab " id="navItemTab3" data-step="3">Booth</a>
                                     </li>
                                     @if($is_update)
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab3" data-step="3" href="#">Check-in</a>
+                                            <a class="nav-link navItemTab" id="navItemTab4" data-step="4" href="#">Check-in</a>
                                         </li>
                                     @endif
                                     {{--                                    <li class="nav-item">--}}
@@ -138,11 +141,11 @@
                                     {{--                                    </li>--}}
                                     @if($is_update)
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab4" data-step="4" href="#">Users
+                                            <a class="nav-link navItemTab" id="navItemTab5" data-step="5" href="#">Users
                                                 List</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link navItemTab" id="navItemTab5" data-step="5" href="#">Dashboard</a>
+                                            <a class="nav-link navItemTab" id="navItemTab6" data-step="6" href="#">Dashboard</a>
                                         </li>
                                     @endif
 
@@ -239,6 +242,22 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {{--                                            <div class="row">--}}
+                                            {{--                                                <div class="col-lg-6">--}}
+                                            {{--                                                    <div class="mb-3 field-end_at">--}}
+                                            {{--                                                        <label for="basicpill-email-input"--}}
+                                            {{--                                                               class="form-label">Ticket Class <span--}}
+                                            {{--                                                                class="text-danger">*</span></label>--}}
+                                            {{--                                                        <input--}}
+                                            {{--                                                            type="text"--}}
+                                            {{--                                                            class="form-control ticket_class"--}}
+                                            {{--                                                            value="Free"--}}
+                                            {{--                                                            placeholder="The Ticket that what you want!!!"--}}
+                                            {{--                                                            name="ticket_class">--}}
+                                            {{--                                                        <div class="valid-feedback"></div>--}}
+                                            {{--                                                    </div>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
                                         </div>
                                         <div class="col-md-4">
                                             <div class="row">
@@ -261,28 +280,27 @@
                                         </div>
                                         <div class="col-lg-12 mt-4">
                                             <div class="row align-items-center">
-
                                                 <div class="mb-3 col-1">
                                                     <input class="mint_number form-control" type="number" name="quantity" min="1" max="1000" style="display: none">
                                                 </div>
-                                                <div class="mb-3 col-5">
-                                                    <input type="file" id="w0" class="mint-image"
-                                                           accept="image/png, image/gif, image/jpeg"
-                                                           name="_fileinput_nft" style="display: none"/>
-                                                </div>
-                                                <div class="mb-3 col-2 d-flex justify-content-end">
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">Mint NFT
-                                                    </button>
-                                                </div>
-                                                <div class="mb-3 col-5">
-                                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
-                                                </div>
+                                                {{--                                                <div class="mb-3 col-5">--}}
+                                                {{--                                                    <input type="file" id="w0" class="mint-image"--}}
+                                                {{--                                                           accept="image/png, image/gif, image/jpeg"--}}
+                                                {{--                                                           name="_fileinput_nft" style="display: none"/>--}}
+                                                {{--                                                </div>--}}
+                                                {{--                                                <div class="mb-3 col-2 d-flex justify-content-end">--}}
+                                                {{--                                                    <button--}}
+                                                {{--                                                        type="button"--}}
+                                                {{--                                                        class="btn btn-primary w-sm ms-auto connect_wallet">Connect Wallet--}}
+                                                {{--                                                    </button>--}}
+                                                {{--                                                    <button--}}
+                                                {{--                                                        type="button"--}}
+                                                {{--                                                        class="btn btn-primary w-sm ms-auto mint_nft" value="1" style="display: none">Mint NFT--}}
+                                                {{--                                                    </button>--}}
+                                                {{--                                                </div>--}}
+                                                {{--                                                <div class="mb-3 col-5">--}}
+                                                {{--                                                    <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>--}}
+                                                {{--                                                </div>--}}
                                             </div>
                                             <div class="row nft-div-append">
                                             </div>
@@ -304,7 +322,126 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="tabwizard1" class="wizard-tab"  style="display: none;">
+                                <div class="text-center mb-4">
+                                    <h5>NFT Ticket</h5>
+                                    <p class="card-title-desc text-danger">(Please enter all marked cells *)</p>
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3 field-name">
+                                                        {{-- <x-label>Name</x-label> --}}
+                                                        <label for="basicpill-firstname-input" class="form-label">Title
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="text" required
+                                                               class="form-control"
+                                                               placeholder="NFT Title"
+                                                               id="nft_name" name="nft_name">
+                                                        <div class="valid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3 field-name">
+                                                        {{-- <x-label>Name</x-label> --}}
+                                                        <label for="basicpill-firstname-input" class="form-label">Description
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="text" required
+                                                               class="form-control"
+                                                               placeholder="NFT Description"
+                                                               id="nft_Description" name="nft_Description">
+                                                        <div class="valid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3 field-name">
+                                                        {{-- <x-label>Name</x-label> --}}
+                                                        <label for="basicpill-firstname-input" class="form-label">Ticket Class
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="text" disabled
+                                                               class="form-control"
+                                                               value="Standard"
+                                                               id="nft_class" name="nft_class">
+                                                        <div class="valid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3 field-name">
+                                                        {{-- <x-label>Name</x-label> --}}
+                                                        <label for="basicpill-firstname-input" class="form-label">Image Ticket Class
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="file" id="nft_file"
+                                                               accept="image/png, image/gif, image/jpeg"
+                                                               name="nft_image">
 
+                                                        <div class="valid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3 field-name">
+                                                        {{-- <x-label>Name</x-label> --}}
+                                                        <label for="basicpill-firstname-input" class="form-label">Amount Ticket
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="number" required
+                                                               class="form-control"
+                                                               value="1"
+                                                               id="nft_amount" name="nft_amount">
+                                                        <div class="valid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-2">
+                                            <button type="button" class="mint-nft-append btn btn-primary w-sm ms-auto">Mint</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" style="color: blue">Ticket Class</th>
+                                            <th scope="col" style="color: blue">Image</th>
+                                            <th scope="col" style="color: blue">Amount</th>
+                                            <th scope="col" style="color: blue">Sol</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="append-nft">
+                                            <th scope="col">Standard</th>
+                                            <th scope="col" class="image-nft-ticket"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? $countNFT[0]['nft_url'] : '' }}">Image</a></th>
+                                            <th scope="col" class="amount-nft-ticket">{{ isset($countNFT[0]) ? count($countNFT) : 0 }}</th>
+                                            <th scope="col" class="sol-nft"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? 'https://explorer.solana.com/address/'. $countNFT[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Exlorer</a></th>
+                                        </tr>
+                                        <tr class="append-nft">
+                                            <th scope="col">Session</th>
+                                            <th scope="col" class="image-nft-session"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? $countNFTBooth[0]['nft_url'] : '' }}">Image</a></th>
+                                            <th scope="col" class="amount-nft-session">{{ isset($countNFTBooth[0]) ? count($countNFTBooth) : 0 }}</th>
+                                            <th scope="col"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? 'https://explorer.solana.com/address/'. $countNFTBooth[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Exlorer</a></th>
+                                        </tr>
+                                        <tr class="append-nft">
+                                            <th scope="col">Booth</th>
+                                            <th scope="col" class="image-nft-booth"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? $countNFTSession[0]['nft_url'] : '' }}">Image</a></th>
+                                            <th scope="col" class="amount-nft-booth">{{isset($countNFTSession[0]) ? count($countNFTSession) : 0 }}</th>
+                                            <th scope="col"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? 'https://explorer.solana.com/address/'. $countNFTSession[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Exlorer</a></th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <!-- Sessiom -->
                             @include('cws.event.forms._session', [
                                 'sessions' => $sessions,
@@ -318,9 +455,11 @@
                                 'isPreview' => $isPreview,
                                 'event' => $event
                             ])
+                            {{--                            NFT--}}
+
                             {{--CheckIn--}}
                             @if($is_update)
-                                <div id="tabwizard3" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard4" class="wizard-tab" style="display: none;">
                                     <div>
                                         <div class="text-center mb-4">
                                             <h5>Checkin</h5>
@@ -444,7 +583,7 @@
                             @if($is_update)
 
                                 {{--User List--}}
-                                <div id="tabwizard4" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard5" class="wizard-tab" style="display: none;">
                                     <div>
                                         <div class="text-center mb-4">
                                             <h5>User List</h5>
@@ -527,7 +666,7 @@
                                 </div>
 
                                 {{--Dashboard--}}
-                                <div id="tabwizard5" class="wizard-tab" style="display: none;">
+                                <div id="tabwizard6" class="wizard-tab" style="display: none;">
                                     <div>
 
                                         <div class="text-center mb-4">
@@ -694,7 +833,7 @@
                                 @if($isPreview == false)
                                     <div id="subForm" class="w-sm ms-auto d-none">
                                         <a class="btn btn-secondary w-sm ms-auto" href="{{route('cws.eventList')}}">Cancel</a>
-                                        <button type="submit" class="btn btn-primary w-sm ms-auto">Save</button>
+                                        <button type="button" class="submit-btn btn btn-primary w-sm ms-auto">Mint</button>
                                     </div>
                                 @endif
                             </div>

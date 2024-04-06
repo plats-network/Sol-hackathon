@@ -18,9 +18,9 @@ use App\Models\Event\{
 };
 use App\Models\Quiz\Quiz;
 use App\Models\Game\{MiniGame};
-
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\{NFT\NFT,
+    NFT\NFTMint,
     Task,
     TaskGallery,
     TaskGroup,
@@ -30,8 +30,7 @@ use App\Models\{NFT\NFT,
     SponsorDetail,
     Url,
     UserSponsor,
-    User
-};
+    User};
 use App\Services\Admin\{EventService, TaskService};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,23 +39,22 @@ use Illuminate\Support\Str;
 class EventController extends Controller
 {
     public function __construct(
-        private TaskEvent         $eventModel,
-        private EventService      $eventService,
-        private TaskService       $taskService,
-        private UserService       $userService,
-        private Task              $task,
-        private User              $user,
-        private Sponsor           $sponsor,
-        private SponsorDetail     $sponsorDetail,
-        private UserSponsor       $userSponsor,
-        private TravelGame        $travelGame,
-        private TaskEventDetail   $taskEventDetail,
-        private EventUserTicket   $eventUserTicket,
+        private TaskEvent $eventModel,
+        private EventService $eventService,
+        private TaskService $taskService,
+        private UserService $userService,
+        private Task $task,
+        private User $user,
+        private Sponsor $sponsor,
+        private SponsorDetail $sponsorDetail,
+        private UserSponsor $userSponsor,
+        private TravelGame $travelGame,
+        private TaskEventDetail $taskEventDetail,
+        private EventUserTicket $eventUserTicket,
         private TaskGenerateLinks $eventShare,
-        private MiniGame          $miniGame,
-        private UserCode          $userCode,
-    )
-    {
+        private MiniGame $miniGame,
+        private UserCode $userCode,
+    ) {
         // code
     }
 
@@ -73,7 +71,7 @@ class EventController extends Controller
             'limit' => $limit,
             'type' => EVENT,
         ];
-        if (Auth::user()->role != ADMIN_ROLE){
+        if (Auth::user()->role != ADMIN_ROLE) {
             $condition['creator_id'] = $clientUser->id;
         }
         $events = $this->taskService->search($condition);
@@ -105,7 +103,6 @@ class EventController extends Controller
                     'nft_link' => $request->input('nft')
                 ]);
             }
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error'
@@ -124,7 +121,6 @@ class EventController extends Controller
             if ($detail) {
                 $detail->update(['is_required' => $detail->is_required ? false : true]);
             }
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error'
@@ -144,7 +140,6 @@ class EventController extends Controller
             if ($detail) {
                 $detail->update(['sort' => $request->input('sort')]);
             }
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error'
@@ -483,7 +478,6 @@ class EventController extends Controller
         $nftItem = new NFT();
         $allNetwork = NFT::getAllNetworkName();
 
-
         $data = [
             'nftItem' => $nftItem,
             'allNetwork' => $allNetwork,
@@ -573,19 +567,22 @@ class EventController extends Controller
             ->with('detail')->where('type', 1)
             ->first();
 
-        foreach($booths['detail'] as $booth){
-
-            $booth['totalUserJob']  = totalUserJob($booth['id']);
+        if ($booths) {
+            foreach ($booths['detail'] as $booth) {
+                $booth['totalUserJob']  = totalUserJob($booth['id']);
+            }
         }
 
         $sessions = TaskEvent::where('task_id', $id)->with('detail')
             ->where('type', 0)
             ->first();
 
-        foreach($sessions['detail'] as $session){
-
-            $session['totalUserJob']  = totalUserJob($session['id']);
+        if ($sessions) {
+            foreach ($sessions['detail'] as $session) {
+                $session['totalUserJob']  = totalUserJob($session['id']);
+            }
         }
+
 
         $sponsor = $this->sponsor->whereTaskId($id)->first();
 
@@ -691,7 +688,22 @@ class EventController extends Controller
         $countUserRegisterEvent = EventUserTicket::where('task_id', $id)->count();
 
         //user vào sự kiện
-        $dataUserJoinEvent = UserJoinEvent::select('user_id','updated_at','type')->get();
+        $dataUserJoinEvent = UserJoinEvent::select('user_id', 'updated_at', 'type')->get();
+
+        $countNFT = NFTMint::where([
+            'task_id' => $task->id,
+            'type' => 1
+        ])->get();
+
+        $countNFTBooth = NFTMint::where([
+            'task_id' => $task->id,
+            'type' => 3
+        ])->get();
+
+        $countNFTSession = NFTMint::where([
+            'task_id' => $task->id,
+            'type' => 2
+        ])->get();
 
         $data = [
             'eventId' => $eventId,
@@ -715,10 +727,13 @@ class EventController extends Controller
             'is_update' => 1,
             'isPreview' => $isPreview,
             'travelGames' => $travelGames,
-            'countUser'=>[
-                'userJoinEvent'=>$countUserJoinEvent,
-                'userRegisterEvent'=>$countUserRegisterEvent
-            ]
+            'countUser' => [
+                'userJoinEvent' => $countUserJoinEvent,
+                'userRegisterEvent' => $countUserRegisterEvent
+            ],
+            'countNFT' => $countNFT,
+            'countNFTBooth' => $countNFTBooth,
+            'countNFTSession' => $countNFTSession,
         ];
 
         return view('cws.event.edit', $data);
@@ -737,7 +752,6 @@ class EventController extends Controller
                 'userIds' => $userIds
             ]);
         } catch (\Exception $e) {
-
         }
 
         return $users;
@@ -760,7 +774,6 @@ class EventController extends Controller
             $request->validate(['name' => 'required']);
             $this->eventService->store($request);
             notify()->success('Update successful!');
-
         } catch (\Exception $e) {
             notify()->error('Update fail!');
             Log::error('Update Event Cws: ' . $e->getMessage());
@@ -886,7 +899,6 @@ class EventController extends Controller
     public function getPrizeList(Request $request, $id)
     {
         try {
-
             $miniGame = $this->miniGame->find($id);
             $eventTask = $this->eventModel->find($miniGame->task_event_id);
 
@@ -959,7 +971,6 @@ class EventController extends Controller
                     $miniGame->update(['status' => $miniGame->status ? false : true]);
                 }
             }
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Errors'
