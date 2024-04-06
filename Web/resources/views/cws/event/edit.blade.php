@@ -54,6 +54,34 @@
             color: black;
             font-weight: bold;
         }
+        .tab-disabled {
+            pointer-events:none; //This makes it not clickable
+            opacity:0.6;         //This grays it out to look disabled
+        }
+
+        .img-preview {
+            width: 150px;
+            min-height: 150px;
+            max-height: auto;
+            float: left;
+            margin: 3px;
+            padding: 3px;
+            user-select: none;
+            cursor: pointer;
+            transition: all 1s;
+        }
+
+        .img-preview:hover{
+            color: #18ac1c;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mt-25 {
+            margin-top: 35px;
+        }
     </style>
     <div class="container-fluid">
         <div class="row">
@@ -120,10 +148,10 @@
                                     <li class="nav-item">
                                         <a class="nav-link navItemTab " id="navItemTab1" data-step="1">NFT Ticket</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item tab-disabled">
                                         <a class="nav-link navItemTab " id="navItemTab2" data-step="2">Session</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item tab-disabled">
                                         <a class="nav-link navItemTab " id="navItemTab3" data-step="3">Booth</a>
                                     </li>
                                     @if($is_update)
@@ -325,116 +353,91 @@
                             <div id="tabwizard1" class="wizard-tab"  style="display: none;">
                                 <div class="text-center mb-4">
                                     <h5>NFT Ticket</h5>
-                                    <p class="card-title-desc text-danger">(Please enter all marked cells *)</p>
                                 </div>
-                                <div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3 field-name">
-                                                        {{-- <x-label>Name</x-label> --}}
-                                                        <label for="basicpill-firstname-input" class="form-label">Title
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="text" required
-                                                               class="form-control"
-                                                               placeholder="NFT Title"
-                                                               id="nft_name" name="nft_name">
-                                                        <div class="valid-feedback"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3 field-name">
-                                                        {{-- <x-label>Name</x-label> --}}
-                                                        <label for="basicpill-firstname-input" class="form-label">Description
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="text" required
-                                                               class="form-control"
-                                                               placeholder="NFT Description"
-                                                               id="nft_Description" name="nft_Description">
-                                                        <div class="valid-feedback"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3 field-name">
-                                                        {{-- <x-label>Name</x-label> --}}
-                                                        <label for="basicpill-firstname-input" class="form-label">Ticket Class
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="text" disabled
-                                                               class="form-control"
-                                                               value="Standard"
-                                                               id="nft_class" name="nft_class">
-                                                        <div class="valid-feedback"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3 field-name">
-                                                        {{-- <x-label>Name</x-label> --}}
-                                                        <label for="basicpill-firstname-input" class="form-label">Image Ticket Class
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="file" id="nft_file"
-                                                               accept="image/png, image/gif, image/jpeg"
-                                                               name="nft_image">
 
-                                                        <div class="valid-feedback"></div>
-                                                    </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                    </div>
+                                    <div class="col-6">
+                                        <p>Generated NFT Ticket</p>
+                                    </div>
+                                </div>
+                                <div class="row" style="height: auto; min-height: 400px">
+                                    <div class="col-6 append-nft-ticket" style="border-left: 1px;border-right: 1px solid;">
+                                        <div class="row mb-3 nft-ticket-div">
+                                            <div class="col-4">
+                                                <input type="file"
+                                                       accept="image/x-png, image/jpeg"
+                                                       style="display: none"
+                                                       class="image-file"
+                                                       id="image-file"
+                                                       name="file-image-nft"
+                                                />
+                                                <label for="image-file">
+                                                    <img class="image-label img-preview" src="https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg">
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="col-10 mt-20">
+                                                    <input type="text" required
+                                                           class="form-control nft_symbol"
+                                                           value="Standard">
+                                                </div>
+                                                <div class="col-10 mt-20">
+                                                    <input type="text" required
+                                                           class="form-control nft_name"
+                                                           placeholder="NFT Title"
+                                                           name="nft_name">
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3 field-name">
-                                                        {{-- <x-label>Name</x-label> --}}
-                                                        <label for="basicpill-firstname-input" class="form-label">Amount Ticket
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="number" required
-                                                               class="form-control"
-                                                               value="0"
-                                                               id="nft_amount" name="nft_amount">
-                                                        <div class="valid-feedback"></div>
-                                                    </div>
-                                                </div>
+                                            <div class="col-2" style="margin-top: 50px">
+                                                <input type="number" required
+                                                       class="form-control nft_amount"
+                                                       value="1"
+                                                       name="nft_amount">
+                                            </div>
+                                            <div class="col-2" style="margin-top: 50px">
+                                                <button type="button" class="btn-delete-nft-ticket btn btn-danger">Delete</button>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-6 append-nft-detail">
+                                        {{--                                        <div class="row mb-3">--}}
+                                        {{--                                            <div class="col-4">--}}
+                                        {{--                                                <label for="image-file">--}}
+                                        {{--                                                    <img class="img-preview img-preview-nft" src="https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg">--}}
+                                        {{--                                                </label>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            <div class="col-4">--}}
+                                        {{--                                                <div class="col-10 mt-25">--}}
+                                        {{--                                                    <p class="class-ticket">Standard</p>--}}
+                                        {{--                                                </div>--}}
+                                        {{--                                                <div class="col-10 mt-20">--}}
+                                        {{--                                                    <p class="class-ticket">NFT Title</p>--}}
+                                        {{--                                                </div>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            <div class="col-2" style="margin-top: 50px">--}}
+                                        {{--                                                <p class="class-ticket">Amount</p>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            <div class="col-2" style="margin-top: 50px">--}}
+                                        {{--                                                <p class="class-ticket">TxHash</p>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
+                                    </div>
                                 </div>
-                                <hr>
-                                <div>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col" style="color: blue">Ticket Class</th>
-                                            <th scope="col" style="color: blue">Image</th>
-                                            <th scope="col" style="color: blue">Amount</th>
-                                            <th scope="col" style="color: blue">Sol</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr class="append-nft">
-                                            <th scope="col">Standard</th>
-                                            <th scope="col" class="image-nft-ticket"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? $countNFT[0]['nft_url'] : '' }}">Image</a></th>
-                                            <th scope="col" class="amount-nft-ticket">{{ isset($countNFT[0]) ? count($countNFT) : 0 }}</th>
-                                            <th scope="col" class="sol-nft"><a href="{{ isset($countNFT[0]) && $countNFT[0] ? 'https://explorer.solana.com/address/'. $countNFT[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Explorer</a></th>
-                                        </tr>
-                                        <tr class="append-nft">
-                                            <th scope="col">Session</th>
-                                            <th scope="col" class="image-nft-session"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? $countNFTBooth[0]['nft_url'] : '' }}">Image</a></th>
-                                            <th scope="col" class="amount-nft-session">{{ isset($countNFTBooth[0]) ? count($countNFTBooth) : 0 }}</th>
-                                            <th scope="col"><a href="{{ isset($countNFTBooth[0]) && $countNFTBooth[0] ? 'https://explorer.solana.com/address/'. $countNFTBooth[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Explorer</a></th>
-                                        </tr>
-                                        <tr class="append-nft">
-                                            <th scope="col">Booth</th>
-                                            <th scope="col" class="image-nft-booth"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? $countNFTSession[0]['nft_url'] : '' }}">Image</a></th>
-                                            <th scope="col" class="amount-nft-booth">{{isset($countNFTSession[0]) ? count($countNFTSession) : 0 }}</th>
-                                            <th scope="col"><a href="{{ isset($countNFTSession[0]) && $countNFTSession[0] ? 'https://explorer.solana.com/address/'. $countNFTSession[0]['address_organizer'] .'?cluster=devnet' : '' }}">Solana Explorer</a></th>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">
+                                        <div class="p-2">
+                                            <button id="btnAddItemNft" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i class="mdi mdi-plus me-1"></i> Add More</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">
+                                        <div class="p-2">
+                                            <button id="btnGenItemNft" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2">Generate NFT Ticket</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Sessiom -->
@@ -809,7 +812,7 @@
                             {{--                                'isPreview' => $isPreview--}}
                             {{--                            ])--}}
 
-                            <div class="d-flex align-items-start gap-3 mt-4">
+                            <div class="d-flex justify-content-end gap-3 mt-4">
                                 <div>
                                     <button
                                         type="button"
@@ -822,11 +825,15 @@
                                         class="btn btn-primary w-sm ms-auto"
                                         id="nextBtn" onclick="nextPrev(1)">Next
                                     </button>
+                                    <button
+                                        type="submit"
+                                        class="min-save-btn btn btn-primary w-sm ms-auto" style="display:none;">Save
+                                    </button>
                                 </div>
 
 
                                 @if($isPreview == false)
-                                    <div id="subForm" class="w-sm ms-auto d-none">
+                                    <div id="subForm" class="w-sm ms-auto" style="display: none">
                                         <a class="btn btn-secondary w-sm ms-auto" href="{{route('cws.eventList')}}">Cancel</a>
                                         @if($event->id)
                                             <button type="button" class="min-edit-btn btn btn-primary w-sm ms-auto">Save</button>
@@ -968,7 +975,7 @@
             previewStyle: 'vertical',
             language: 'en-US',
             initialEditType: 'wysiwyg', //markdown, wysiwyg
-            height: '380px',
+            height: '120px',
             initialValue: contentEditor2,
             hooks: {
                 addImageBlobHook(imgeBlob, callback) {
@@ -1003,7 +1010,7 @@
             previewStyle: 'vertical',
             language: 'en-US',
             initialEditType: 'wysiwyg', //markdown, wysiwyg
-            height: '380px',
+            height: '120px',
             initialValue: contentEditor3,
             hooks: {
                 addImageBlobHook(imgeBlob, callback) {
@@ -1109,7 +1116,7 @@
             }];
 
             fileAvatarInit10 = [{
-                "path": "{{$nftItem->image_url}}",
+                "path": "{{$nftItem->image_url ?? ''}}",
                 "base_url": "",
                 "type": null,
                 "size": null,
@@ -1731,6 +1738,7 @@
             } else {
                 var x = document.getElementsByClassName("wizard-tab");
                 let currentTab = Number($('#currentTab').val());
+                console.log(currentTab);
                 x[currentTab].style.display = "none";
                 currentTab = currentTab + n;
                 $('#currentTab').val(currentTab);

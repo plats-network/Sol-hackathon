@@ -1,54 +1,38 @@
 <div class="mb-3 row itemSessionDetail itemSessionDetailMint" id="itemSession{{$indexImageItem}}">
-    <hr>
-    <label for="inputPassword" class="col-sm-12 col-form-label">
-        Session {{$getInc}}<span class="text-danger" style="font-size: 11px;">(Note: Fields marked with * are required)</span>
-    </label>
-    <div class="row">
-        <div class="mb-3 col-5">
-            <a href="#" style="display: none" id="mint-sol" class="link-primary">Solana Explorer</a>
-        </div>
-    </div>
-    <div class="row nft-div-append-session">
-    </div>
-    <div class="col-sm-3">
-        <input
-            type="text"
-            class="form-control name_session"
-            id="sessions[detail][{{$indexImageItem}}][name]"
-            name="sessions[detail][{{$indexImageItem}}][name]"
-            placeholder="Name session"
-            value="">
-    </div>
-
-    <div class="col-sm-3">
-        <input
-            type="text"
-            class="form-control description_session"
-            id="sessions[detail][{{$indexImageItem}}][description]"
-            name="sessions[detail][{{$indexImageItem}}][description]"
-            placeholder="Description"
-            value="">
-    </div>
-
-
-    <div class="col-sm-3 mt-2 d-none">
-        <input type="hidden" name="sessions[detail][{{$indexImageItem}}][is_required]" value="0">
-        <input
-            class="form-check-input sCheck"
-            data-id="{{$indexImageItem}}"
-            type="checkbox"
-            value="1"
-            name="sessions[detail][{{$indexImageItem}}][is_question]"
-            id="q_{{$getInc}}">
-        <label class="form-check-label" for="q_{{$getInc}}">
-            Quiz <span class="text-danger fs-11">(Yes/No)</span>
+    <div class="col-4">
+        <input type="file"
+               accept="image/x-png, image/jpeg"
+               style="display: none"
+               class="image-file"
+               id="image-file{{$indexImageItem}}"
+               name="file-image-nft"
+        />
+        <label for="image-file{{$indexImageItem}}">
+            <img class="image-label img-preview" src="https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg">
         </label>
     </div>
-
-    <div class="col-sm-3">
-        <label class="col-form-label">Image <span class="text-danger fs-11">(optional)</span></label>
-        <input type="file" class="nft_file_session"
-               accept="image/png, image/gif, image/jpeg">
+    <div class="col-6">
+        <div class="col-10 mt-20">
+            <input
+                type="text"
+                class="form-control name_session"
+                id="sessions[detail][{{$indexImageItem}}][name]"
+                name="sessions[detail][{{$indexImageItem}}][name]"
+                placeholder="Name session"
+                value="">
+        </div>
+        <div class="col-10 mt-20">
+            <input
+                type="text"
+                class="form-control description_session"
+                id="sessions[detail][{{$indexImageItem}}][description]"
+                name="sessions[detail][{{$indexImageItem}}][description]"
+                placeholder="Description"
+                value="">
+        </div>
+    </div>
+    <div class="col-2" style="margin-top: 50px">
+        <button type="button" class="btn-delete-nft-ticket-session btn btn-danger">Delete</button>
     </div>
 
     {{-- And question --}}
@@ -156,9 +140,4 @@
         </div>
     </div>
 
-    <div class="col-sm-12 text-right">
-        <div class="col-auto">
-            <button type="button" data-id="{{$indexImageItem}}" class="btn btn-danger mb-3 sRemove">Remove</button>
-        </div>
-    </div>
 </div>
