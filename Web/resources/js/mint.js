@@ -29,6 +29,148 @@ const PROGRAM_ID = new PublicKey( "D5GK8Kye78gjuDMMjRnkWH5a6KfNEXzex5mekXL3HLR2"
 let provider = new AnchorProvider(connection, solConnect.getWallet(), { commitment: "confirmed" })
 let program = new Program(idl, PROGRAM_ID, provider);
 
+// const input_file = document.getElementById('image-file');
+// const input_label = document.getElementById('image-label')
+
+const convert_to_base64 = file => new Promise((response) => {
+    const file_reader = new FileReader();
+    file_reader.readAsDataURL(file);
+    file_reader.onload = () => response(file_reader.result);
+});
+
+$('.page-content').on("change", ".image-file", async function () {
+    console.log(1);
+    const input = $(this).parent().find('.image-label')
+    let file = $(this).prop('files');
+    const my_image = await convert_to_base64(file[0]);
+    input.attr('src', my_image);
+    // input.css('backgroundImage', `url(${my_image})`);
+});
+
+$('.page-content').on("click", ".btn-delete-nft-ticket", async function () {
+    $(this).parents('.nft-ticket-div').remove()
+})
+
+$('.page-content').on("click", ".btn-delete-nft-ticket-session", async function () {
+    $(this).parents('.itemSessionDetail').remove()
+})
+
+$('.page-content').on("click", ".btn-delete-nft-ticket-booth", async function () {
+    $(this).parents('.itemBoothDetail').remove()
+})
+
+
+$('.page-content').on("click", "#btnAddItemNft", async function () {
+    let random = Math.floor(Math.random() * 100);
+    $('.append-nft-ticket').append(
+        '<div class="row nft-ticket-div mb-3">\n' +
+        '                                            <div class="col-4">\n' +
+        '                                                <input type="file"\n' +
+        '                                                       id="file-image-'+random+'" name="file-image-nft" class="image-file"\n'+
+        '                                                       accept="image/x-png, image/jpeg"\n' +
+        '                                                       style="display: none"\n' +
+        '                                                />\n' +
+        '                                                <label for="file-image-'+random+'">\n' +
+        '                                                    <img class="image-label img-preview" src="https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg">\n' +
+        '                                                </label>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-4">\n' +
+        '                                                <div class="col-10 mt-20">\n' +
+        '                                                    <input type="text" required\n' +
+        '                                                           class="form-control nft_symbol"\n' +
+        '                                                           placeholder="Ticket Class">\n' +
+        '                                                </div>\n' +
+        '                                                <div class="col-10 mt-20">\n' +
+        '                                                    <input type="text" required\n' +
+        '                                                           class="form-control nft_name"\n' +
+        '                                                           placeholder="NFT Title">\n' +
+        '                                                </div>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-2" style="margin-top: 50px">\n' +
+        '                                                <input type="number" required\n' +
+        '                                                       class="form-control nft_amount"\n' +
+        '                                                       value="1"\n' +
+        '                                                       >\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-2" style="margin-top: 50px">\n' +
+        '                                                <button type="button" class="btn btn-danger btn-delete-nft-ticket">Delete</button>\n' +
+        '                                            </div>\n' +
+        '                                        </div>'
+    );
+});
+
+function appendNftDetail(style, symbol, title, amount, txhash) {
+    $('.append-nft-detail').append(
+        '<div class="row mb-3">\n' +
+        '                                            <div class="col-4">\n' +
+        '                                                <label for="image-file">\n' +
+        '                                                    <img class="img-preview img-preview-nft" src="'+style+'">\n' +
+        '                                                </label>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-4">\n' +
+        '                                                <div class="col-10 mt-25">\n' +
+        '                                                    <p class="class-ticket">'+symbol+'</p>\n' +
+        '                                                </div>\n' +
+        '                                                <div class="col-10 mt-20">\n' +
+        '                                                    <p class="class-ticket">'+title+'</p>\n' +
+        '                                                </div>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-2" style="margin-top: 50px">\n' +
+        '                                                <p class="class-ticket">'+amount+'</p>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-2" style="margin-top: 50px">\n' +
+        '                                                <p class="class-ticket"><a href="'+txhash+'">txhash</a></p>\n' +
+        '                                            </div>\n' +
+        '                                        </div>'
+    )
+}
+
+function appendNftSessionDetail(style, name, des, txhash) {
+    $('.append-nft-session-detail').append(
+        '<div class="row mb-3">\n' +
+        '                                            <div class="col-4">\n' +
+        '                                                <label for="image-file">\n' +
+        '                                                    <img class="img-preview img-preview-nft" src="'+style+'">\n' +
+        '                                                </label>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-6">\n' +
+        '                                                <div class="col-10 mt-25">\n' +
+        '                                                    <p class="class-ticket">'+name+'</p>\n' +
+        '                                                </div>\n' +
+        '                                                <div class="col-10 mt-20">\n' +
+        '                                                    <p class="class-ticket">'+des+'</p>\n' +
+        '                                                </div>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-2" style="margin-top: 50px">\n' +
+        '                                                <p class="class-ticket"><a href="'+txhash+'">txhash</a></p>\n' +
+        '                                            </div>\n' +
+        '                                        </div>'
+    )
+}
+
+function appendNftBoothDetail(style, name, des, txhash) {
+    $('.append-nft-booth-detail').append(
+        '<div class="row mb-3">\n' +
+        '                                            <div class="col-4">\n' +
+        '                                                <label for="image-file">\n' +
+        '                                                    <img class="img-preview img-preview-nft" src="'+style+'">\n' +
+        '                                                </label>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-6">\n' +
+        '                                                <div class="col-10 mt-25">\n' +
+        '                                                    <p class="class-ticket">'+name+'</p>\n' +
+        '                                                </div>\n' +
+        '                                                <div class="col-10 mt-20">\n' +
+        '                                                    <p class="class-ticket">'+des+'</p>\n' +
+        '                                                </div>\n' +
+        '                                            </div>\n' +
+        '                                            <div class="col-2" style="margin-top: 50px">\n' +
+        '                                                <p class="class-ticket"><a href="'+txhash+'">txhash</a></p>\n' +
+        '                                            </div>\n' +
+        '                                        </div>'
+    )
+}
+
 async function getMetadata(mint) {
     return (await web3.PublicKey.findProgramAddress(
         [
@@ -39,215 +181,30 @@ async function getMetadata(mint) {
         TOKEN_METADATA_PROGRAM_ID
     ))[0];
 };
-$('.page-content').on("click", ".min-edit-btn", async function () {
-    let mintNumber = $('#nft_amount').val();
 
-    if ($('.itemSessionDetailMint').length > 0 || mintNumber > 0 || $('.itemBoothDetailMint') > 0) {
-        let data = new FormData();
-        let file = $('#nft_file').prop('files');
-        $('.loading').show();
-
-        data.append('file', file[0], file[0].name);
-
-        axios.post('/upload-image-nft', data, {
-            headers: {
-                'accept': 'application/json',
-                'Accept-Language': 'en-US,en;q=0.8',
-                'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-            }
-        }).then((response) => {
-            console.log(response.data.path);
+$('.page-content').on("click", "#btnGenItemNft", async function () {
+    $('.loading').show();
+    const btnClick = $(this);
+    if ($('.nft-ticket-div').length > 0) {
+        if (!solConnect.activeWallet) {
             solConnect.openMenu({
                 top: 100
             });
 
             solConnect.onWalletChange( async (adapter) => {
-                walletOr = adapter.publicKey.toString();
+                walletOr = await adapter.publicKey.toString();
                 pub = adapter;
                 provider = new AnchorProvider(connection, adapter, {commitment: "confirmed"})
                 program = new Program(idl, PROGRAM_ID, provider);
-                setProvider(provider)
-
-                const type = $(this).val();
-                const {blockhash, lastValidBlockHeight} =
-                    await connection.getLatestBlockhash('confirmed');
-                let mintNumber = $('#nft_amount').val();
-                var ownerWallet = new PublicKey(walletOr);
-                const classAppend = $(this).parent().parent().next();
-                if (mintNumber == undefined || mintNumber < 0) {
-                    mintNumber = 1;
-                }
-
-                const nftName = $('#nft_name').val();
-                const nftSymbol = $('#nft_Description').val();
-                const nftUri = $('#nft_file').val();
-
-                let txs = [];
-                var mintAccount = [];
-                var deposits = [];
-                var seeds = [];
-                var names = [];
-                var symbols = [];
-                var uris = [];
-                var pools = [];
-                var types = [];
-
-                if ($('.itemSessionDetailMint').length > 0) {
-                    await $('.itemSessionDetailMint').each(async function (index) {
-                        let data = new FormData();
-                        let file = $(this).find('.nft_file_session').prop('files');
-                        data.append('file', file[0], file[0].name);
-
-                        const response1 = await axios.post('/upload-image-nft', data, {
-                            headers: {
-                                'accept': 'application/json',
-                                'Accept-Language': 'en-US,en;q=0.8',
-                                'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-                            }
-                        });
-                        let sessionName = $(this).find('.name_session').val();
-                        let description = $(this).find('.description_session').val();
-                        txs.push(await createNftTx(sessionName, description, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                        types.push(2);
-                    });
-                }
-
-                if ($('.itemBoothDetailMint').length > 0) {
-                    await $('.itemBoothDetailMint').each(async function (index) {
-                        let data = new FormData();
-                        let file = $(this).find('.nft_file_booth').prop('files');
-                        data.append('file', file[0], file[0].name);
-
-                        await axios.post('/upload-image-nft', data, {
-                            headers: {
-                                'accept': 'application/json',
-                                'Accept-Language': 'en-US,en;q=0.8',
-                                'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-                            }
-                        }).then(async (response2) => {
-                            let boothName = $(this).find('.name_booth').val();
-                            let description = $(this).find('.description_booth').val();
-                            txs.push(await createNftTx(boothName, description, response2.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                            types.push(3);
-                        });
-                    });
-                }
-
-                for (let i = 0; i < mintNumber; i++) {
-                    txs.push(await createNftTx(nftName, nftSymbol, response.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                    types.push(1);
-                }
-
-                setTimeout(async () => {
-                    const signedTxs = await pub.signAllTransactions(txs);
-                    for (const signedTx in signedTxs) {
-
-                        signedTxs[signedTx].partialSign(mintAccount[signedTx]);
-                        console.log(mintAccount);
-                        const signature = await connection.sendRawTransaction(
-                            signedTxs[signedTx].serialize(),
-                            {
-                                skipPreflight: true,
-                                preflightCommitment: 'confirmed',
-                                maxRetries: 50,
-                            }
-                        );
-                        console.log(blockhash);
-                        await connection.confirmTransaction(
-                            {
-                                blockhash,
-                                lastValidBlockHeight,
-                                signature,
-                            },
-                            'confirmed'
-                        );
-
-                        deposits.push(await addToPool(mintAccount[signedTx], ownerWallet, blockhash, seeds, pools));
-                    }
-
-                    const signedDepositTxs = await pub.signAllTransactions(deposits);
-
-                    for (const signedTx of signedDepositTxs) {
-                        const signature = await connection.sendRawTransaction(
-                            signedTx.serialize(),
-                            {
-                                skipPreflight: true,
-                                preflightCommitment: 'confirmed',
-                                maxRetries: 50,
-                            }
-                        );
-                    }
-
-                    // append
-                    for (const index in names) {
-                        const classNe = $('.nft-div-append');
-                        appendValueNft(names[index], symbols[index], uris[index], seeds[index], pools[index],
-                            mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classNe, types[index])
-                    }
-
-                    alert('Mint NFT is success. Please see on https://explorer.solana.com/')
-                    $(this).parent().next().find('#mint-sol').attr('href', 'https://explorer.solana.com/address/' + provider.wallet.publicKey.toString() + '=devnet')
-                    $(this).parent().next().find('#mint-sol').show();
-                    $(this).text('Minted');
-                    $('.loading').hide();
-                    $('#post_form').submit();
-                }, 5000);
-
-
-                console.log(txs);
-
-
+                setProvider(provider);
+                btnClick.click();
             });
-        }).catch((error) => {
-            alert(error)
-        });
-    } else {
-        $('#post_form').submit();
-    }
-});
-
-
-$('.page-content').on("click", ".submit-btn", async function () {
-    // upload image
-    let data = new FormData();
-    let file = $('#nft_file').prop('files');
-    $('.loading').show();
-
-    data.append('file', file[0], file[0].name);
-
-    axios.post('/upload-image-nft', data, {
-        headers: {
-            'accept': 'application/json',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
         }
-    }).then((response) => {
-        console.log(response.data.path);
-        solConnect.openMenu({
-            top: 100
-        });
 
-        solConnect.onWalletChange( async (adapter) => {
-            walletOr = adapter.publicKey.toString();
-            pub = adapter;
-            provider = new AnchorProvider(connection, adapter, {commitment: "confirmed"})
-            program = new Program(idl, PROGRAM_ID, provider);
-            setProvider(provider)
-
-            const type = $(this).val();
+        if (walletOr) {
             const {blockhash, lastValidBlockHeight} =
                 await connection.getLatestBlockhash('confirmed');
-            let mintNumber = $('#nft_amount').val();
             var ownerWallet = new PublicKey(walletOr);
-            const classAppend = $(this).parent().parent().next();
-            if (mintNumber == undefined || mintNumber < 0) {
-                mintNumber = 1;
-            }
-
-            const nftName = $('#nft_name').val();
-            const nftSymbol = $('#nft_Description').val();
-            const nftUri = $('#nft_file').val();
-
             let txs = [];
             var mintAccount = [];
             var deposits = [];
@@ -256,13 +213,14 @@ $('.page-content').on("click", ".submit-btn", async function () {
             var symbols = [];
             var uris = [];
             var pools = [];
-            var types = [];
+            console.log($('.nft-ticket-div'));
 
-            if ($('.itemSessionDetailMint').length > 0) {
-                await $('.itemSessionDetailMint').each(async function (index) {
-                    let data = new FormData();
-                    let file = $(this).find('.nft_file_session').prop('files');
-                    data.append('file', file[0], file[0].name);
+            $('.nft-ticket-div').each(async function (index) {
+                let data = new FormData();
+                let file = $(this).find('.image-file').prop('files');
+                let uri = '';
+                if (file) {
+                    data.append('file', file[0], 'file-image-nft');
 
                     const response1 = await axios.post('/upload-image-nft', data, {
                         headers: {
@@ -271,45 +229,26 @@ $('.page-content').on("click", ".submit-btn", async function () {
                             'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                         }
                     });
-                    let sessionName = $(this).find('.name_session').val();
-                    let description = $(this).find('.description_session').val();
-                    txs.push(await createNftTx(sessionName, description, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                    types.push(2);
-                });
-            }
+                    uri = response1.data.path;
+                }
+                let amount = $(this).find('.nft_amount').val()
 
-            if ($('.itemBoothDetailMint').length > 0) {
-                await $('.itemBoothDetailMint').each(async function (index) {
-                    let data = new FormData();
-                    let file = $(this).find('.nft_file_booth').prop('files');
-                    data.append('file', file[0], file[0].name);
+                let nftName = $(this).find('.nft_name').val();
+                let nftSymbol = $(this).find('.nft_symbol').val();
+                for (let i = 0; i < amount; i++) {
+                    txs.push(await createNftTx(nftName, nftSymbol, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                }
 
-                    await axios.post('/upload-image-nft', data, {
-                        headers: {
-                            'accept': 'application/json',
-                            'Accept-Language': 'en-US,en;q=0.8',
-                            'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-                        }
-                    }).then(async (response2) => {
-                        let boothName = $(this).find('.name_booth').val();
-                        let description = $(this).find('.description_booth').val();
-                        txs.push(await createNftTx(boothName, description, response2.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                        types.push(3);
-                    });
-                });
-            }
-
-            for (let i = 0; i < mintNumber; i++) {
-                txs.push(await createNftTx(nftName, nftSymbol, response.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-                types.push(1);
-            }
+                // appendNftDetail
+                appendNftDetail(await convert_to_base64(file ? file[0] : ''), nftSymbol, nftName, amount, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
+                // empty
+                $(this).empty();
+            })
 
             setTimeout(async () => {
                 const signedTxs = await pub.signAllTransactions(txs);
                 for (const signedTx in signedTxs) {
-
                     signedTxs[signedTx].partialSign(mintAccount[signedTx]);
-                    console.log(mintAccount);
                     const signature = await connection.sendRawTransaction(
                         signedTxs[signedTx].serialize(),
                         {
@@ -318,7 +257,6 @@ $('.page-content').on("click", ".submit-btn", async function () {
                             maxRetries: 50,
                         }
                     );
-                    console.log(blockhash);
                     await connection.confirmTransaction(
                         {
                             blockhash,
@@ -348,26 +286,212 @@ $('.page-content').on("click", ".submit-btn", async function () {
                 for (const index in names) {
                     const classNe = $('.nft-div-append');
                     appendValueNft(names[index], symbols[index], uris[index], seeds[index], pools[index],
-                        mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classNe, types[index])
+                        mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classNe, 1)
                 }
 
-                alert('Mint NFT is success. Please see on https://explorer.solana.com/')
-                $(this).parent().next().find('#mint-sol').attr('href', 'https://explorer.solana.com/address/' + provider.wallet.publicKey.toString() + '=devnet')
-                $(this).parent().next().find('#mint-sol').show();
-                $(this).text('Minted');
+                alert('Mint NFT is success. Please see on https://explorer.solana.com/');
+                $('#navItemTab2').parent().removeClass('tab-disabled')
+                $('#navItemTab3').parent().removeClass('tab-disabled')
                 $('.loading').hide();
-                $('#post_form').submit();
-            }, 5000);
+                $('#btnAddItemSession').click();
+            }, 2000);
+        }
+    } else {
+        alert('Please add nft to mint!!!')
+        $('.loading').hide();
+    }
+});
 
+$('.page-content').on("click", "#btnGenItemSession", async function () {
+    $('.loading').show();
+    if ($('.itemSessionDetailMint').length > 0) {
+        const {blockhash, lastValidBlockHeight} =
+            await connection.getLatestBlockhash('confirmed');
+        var ownerWallet = new PublicKey(walletOr);
+        let txs = [];
+        var mintAccount = [];
+        var deposits = [];
+        var seeds = [];
+        var names = [];
+        var symbols = [];
+        var uris = [];
+        var pools = [];
 
-            console.log(txs);
+        await $('.itemSessionDetailMint').each(async function (index) {
+            let data = new FormData();
+            let file = $(this).find('.image-file').prop('files');
+            let uri = '';
+            if (file) {
+                data.append('file', file[0], file[0].name);
 
-
+                const response1 = await axios.post('/upload-image-nft', data, {
+                    headers: {
+                        'accept': 'application/json',
+                        'Accept-Language': 'en-US,en;q=0.8',
+                        'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+                    }
+                });
+                uri = response1.data.path;
+            }
+            let sessionName = $(this).find('.name_session').val();
+            let description = $(this).find('.description_session').val();
+            txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+            // appendNftDetail
+            appendNftSessionDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
+            // empty
+            $(this).hide();
+            $(this).removeClass('itemSessionDetailMint');
         });
-    }).catch((error) => {
-        alert(error)
-    });
-})
+
+        setTimeout(async () => {
+            const signedTxs = await pub.signAllTransactions(txs);
+            for (const signedTx in signedTxs) {
+                signedTxs[signedTx].partialSign(mintAccount[signedTx]);
+                const signature = await connection.sendRawTransaction(
+                    signedTxs[signedTx].serialize(),
+                    {
+                        skipPreflight: true,
+                        preflightCommitment: 'confirmed',
+                        maxRetries: 50,
+                    }
+                );
+                await connection.confirmTransaction(
+                    {
+                        blockhash,
+                        lastValidBlockHeight,
+                        signature,
+                    },
+                    'confirmed'
+                );
+
+                deposits.push(await addToPool(mintAccount[signedTx], ownerWallet, blockhash, seeds, pools));
+            }
+
+            const signedDepositTxs = await pub.signAllTransactions(deposits);
+
+            for (const signedTx of signedDepositTxs) {
+                const signature = await connection.sendRawTransaction(
+                    signedTx.serialize(),
+                    {
+                        skipPreflight: true,
+                        preflightCommitment: 'confirmed',
+                        maxRetries: 50,
+                    }
+                );
+            }
+
+            // append
+            for (const index in names) {
+                const classNe = $('.nft-div-append');
+                appendValueNft(names[index], symbols[index], uris[index], seeds[index], pools[index],
+                    mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classNe, 2)
+            }
+
+            alert('Mint NFT is success. Please see on https://explorer.solana.com/');
+            $('.loading').hide();
+            $('#btnAddItemBooth').click();
+        }, 2000);
+    } else {
+        alert('Please add nft to mint!!!')
+        $('.loading').hide();
+    }
+});
+
+$('.page-content').on("click", "#btnGenItemBooth", async function () {
+    $('.loading').show();
+    if ($('.itemBoothDetailMint').length > 0) {
+        const {blockhash, lastValidBlockHeight} =
+            await connection.getLatestBlockhash('confirmed');
+        var ownerWallet = new PublicKey(walletOr);
+        let txs = [];
+        var mintAccount = [];
+        var deposits = [];
+        var seeds = [];
+        var names = [];
+        var symbols = [];
+        var uris = [];
+        var pools = [];
+
+        await $('.itemBoothDetailMint').each(async function (index) {
+            let data = new FormData();
+            let file = $(this).find('.image-file').prop('files');
+            let uri = '';
+            if (file) {
+                data.append('file', file[0], file[0].name);
+
+                const response1 = await axios.post('/upload-image-nft', data, {
+                    headers: {
+                        'accept': 'application/json',
+                        'Accept-Language': 'en-US,en;q=0.8',
+                        'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+                    }
+                });
+                uri = response1.data.path;
+            }
+            let sessionName = $(this).find('.name_booth').val();
+            let description = $(this).find('.description_booth').val();
+            txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+            // appendNftDetail
+            appendNftBoothDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
+            // empty
+            $(this).hide();
+            $(this).removeClass('itemBoothDetailMint');
+        });
+
+        setTimeout(async () => {
+            const signedTxs = await pub.signAllTransactions(txs);
+            for (const signedTx in signedTxs) {
+                signedTxs[signedTx].partialSign(mintAccount[signedTx]);
+                const signature = await connection.sendRawTransaction(
+                    signedTxs[signedTx].serialize(),
+                    {
+                        skipPreflight: true,
+                        preflightCommitment: 'confirmed',
+                        maxRetries: 50,
+                    }
+                );
+                await connection.confirmTransaction(
+                    {
+                        blockhash,
+                        lastValidBlockHeight,
+                        signature,
+                    },
+                    'confirmed'
+                );
+
+                deposits.push(await addToPool(mintAccount[signedTx], ownerWallet, blockhash, seeds, pools));
+            }
+
+            const signedDepositTxs = await pub.signAllTransactions(deposits);
+
+            for (const signedTx of signedDepositTxs) {
+                const signature = await connection.sendRawTransaction(
+                    signedTx.serialize(),
+                    {
+                        skipPreflight: true,
+                        preflightCommitment: 'confirmed',
+                        maxRetries: 50,
+                    }
+                );
+            }
+
+            // append
+            for (const index in names) {
+                const classNe = $('.nft-div-append');
+                appendValueNft(names[index], symbols[index], uris[index], seeds[index], pools[index],
+                    mintAccount[index].publicKey.toString(), provider.wallet.publicKey.toString(), classNe, 3)
+            }
+
+            alert('Mint NFT is success. Please see on https://explorer.solana.com/');
+            $('.loading').hide();
+            $('.min-save-btn').show();
+
+        }, 2000);
+    } else {
+        alert('Please add nft to mint!!!')
+        $('.loading').hide();
+    }
+});
 
 function appendValueNft(name, symbol, uri, seed, pool, addressNft, secret, classAppend, type) {
     let classA = '';
