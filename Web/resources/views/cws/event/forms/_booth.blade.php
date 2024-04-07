@@ -73,7 +73,7 @@
     <div class="row">
         <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">
             <div class="p-2">
-                <button id="btnGenItemBooth" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2">Generate Session</button>
+                <button id="btnGenItemBooth" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2">Generate Booth</button>
             </div>
         </div>
     </div>
