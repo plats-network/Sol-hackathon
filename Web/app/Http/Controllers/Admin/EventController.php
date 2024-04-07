@@ -692,7 +692,8 @@ class EventController extends Controller
 
         $countNFT = NFTMint::where([
             'task_id' => $task->id,
-            'type' => 1
+            'type' => 1,
+            'nft_symbol' => 'Standard'
         ])->get();
 
         $countNFTBooth = NFTMint::where([
@@ -736,7 +737,7 @@ class EventController extends Controller
             'countNFTSession' => $countNFTSession,
         ];
 
-        return view('cws.event.edit', $data);
+        return view('cws.event.edit-custom', $data);
     }
 
     private function listUsers($id)
