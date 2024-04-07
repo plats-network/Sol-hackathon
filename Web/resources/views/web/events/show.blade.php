@@ -37,6 +37,20 @@
                             </div>
                             {!! $event->description !!}
                         </div>
+                        @if (request()->hasAny('check-in'))
+                            @if($session)
+                                <div class="post-details-content">
+                                    <h4 class="post-title">Session: {{$session->name}}</h4>
+                                    {!! $session->description !!}
+                                </div>
+                            @endif
+                            @if($booth)
+                                <div class="post-details-content">
+                                    <h4 class="post-title">Session: {{$booth->name}}</h4>
+                                    {!! $booth->description !!}
+                                </div>
+                            @endif
+                        @endif
 
                         <div class="post-tags-social-area mt-30 pb-5 d-flex flex-wrap align-items-center">
                             <div class="popular-tags d-flex align-items-center">

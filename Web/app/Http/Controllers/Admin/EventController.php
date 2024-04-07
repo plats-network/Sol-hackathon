@@ -17,6 +17,7 @@ use App\Models\Event\{
     UserEvent
 };
 use App\Models\Quiz\Quiz;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Game\{MiniGame};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\{NFT\NFT,
@@ -652,7 +653,7 @@ class EventController extends Controller
         $userCheckIn = $this->listUsers($id); //List user check in event
 
         //$urlAnswers = route('quiz-name.answers', $eventId);
-        $urlAnswersFull = route('web.events.show', ['id' => $eventId, 'check_in' => true]);
+        $urlAnswersFull = 'https://colosseum.plats.network/event/' . $eventId . '?check_in=true';
         //Shorten url
         $urlAnswers = Url::shortenUrl($urlAnswersFull);
 

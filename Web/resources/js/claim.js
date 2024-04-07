@@ -40,10 +40,10 @@ $('.claim-btn').click(async function () {
         $('.loading').show();
         const didToken = await magic?.auth.loginWithEmailOTP({email: email});
         const metadata = await magic.user.getMetadata();
-        console.log(metadata);
         const adapter = new PublicKey(metadata.publicAddress);
-        console.log(adapter)
         walletOr = metadata.publicAddress;
+        let balance = await connection.getBalance(new PublicKey(adapter));
+        console.log(balance)
         const mintKeypairId = $('#address_nft').val();
         const feeW = $('#address_organizer').val();
         const seedP = $('#seed').val();
@@ -55,60 +55,66 @@ $('.claim-btn').click(async function () {
         const wallet0 = adapter
         console.log(mintKeypair);
 
-        const buyTokenAddress = await getAssociatedTokenAddress(
-            mintKeypair,
-            adapter
-        );
-
-        const seed = new BN(seedP); // TODO: enter seed
-        const pool = web3.PublicKey.findProgramAddressSync(
-            [
-                Buffer.from("state"),
-                seed.toArrayLike(Buffer, "le", 8)
-            ],
-            program.programId
-        )[0];
-
-        const poolTokenAddress = await getAssociatedTokenAddressSync(
-            mintKeypair,
-            pool,
-            true
-        );
-
-        const feeWallet = new PublicKey(feeW);
-
-        const claimTx = await program.methods
-            .claim()
-            .accounts(
-                {
-                    mint: mintKeypair,
-                    poolTokenAccount: poolTokenAddress,
-                    pool: pool,
-                    buyerTokenAccount: buyTokenAddress,
-                    buyerAuthority: adapter,
-                    feeWallet: feeWallet,
-                }
-            ).instruction();
-
-        await confirmSign(adapter, claimTx, mintKeypair, feeWallet);
-
-        try {
-            const body = {
-                nft_id: nftId,
-                email: email,
-                address: wallet0
-            }
-            console.log(body);
-
-            const res = await axios.post("/update_nft_status", body);
-            alert('Claim NFT is success. Please see on https://explorer.solana.com/')
+        // check wallet
+        if (balance/LAMPORTS_PER_SOL <= 0) {
             $('.loading').hide();
-            $('.claim-success').show();
-            $('.sol-link').show();
-            $('.btn-claim-id').hide();
-            $(this).hide();
-        } catch (error) {
-            alert(error.message);
+            alert('Balance is empty, please deposit Sol to claim nft !!!')
+        } else {
+            const buyTokenAddress = await getAssociatedTokenAddress(
+                mintKeypair,
+                adapter
+            );
+
+            const seed = new BN(seedP); // TODO: enter seed
+            const pool = web3.PublicKey.findProgramAddressSync(
+                [
+                    Buffer.from("state"),
+                    seed.toArrayLike(Buffer, "le", 8)
+                ],
+                program.programId
+            )[0];
+
+            const poolTokenAddress = await getAssociatedTokenAddressSync(
+                mintKeypair,
+                pool,
+                true
+            );
+
+            const feeWallet = new PublicKey(feeW);
+
+            const claimTx = await program.methods
+                .claim()
+                .accounts(
+                    {
+                        mint: mintKeypair,
+                        poolTokenAccount: poolTokenAddress,
+                        pool: pool,
+                        buyerTokenAccount: buyTokenAddress,
+                        buyerAuthority: adapter,
+                        feeWallet: feeWallet,
+                    }
+                ).instruction();
+
+            await confirmSign(adapter, claimTx, mintKeypair, feeWallet);
+
+            try {
+                const body = {
+                    nft_id: nftId,
+                    email: email,
+                    address: wallet0
+                }
+                console.log(body);
+
+                const res = await axios.post("/update_nft_status", body);
+                alert('Claim NFT is success. Please see on https://explorer.solana.com/')
+                $('.loading').hide();
+                $('.claim-success').show();
+                $('.sol-link').show();
+                $('.btn-claim-id').hide();
+                $(this).hide();
+            } catch (error) {
+                alert(error.message);
+            }
         }
     }
 });

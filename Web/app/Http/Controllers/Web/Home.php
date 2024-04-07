@@ -449,6 +449,13 @@ class Home extends Controller
             notify()->error('Error show event');
         }
 
+//        if ($request->check_in) {
+//            $taskDetail = TaskEventDetail::where([
+//                'task_event_id' => $event->id
+//            ])->get();
+//            dd($taskDetail);
+//        }
+
         return view('web.events.show', [
             'event' => $event,
             'user' => $user,
@@ -456,16 +463,18 @@ class Home extends Controller
             'download_ticket' => $download_ticket,
             'url_download_ticket' => $url_download_ticket,
             'show_message' => $show_message,
-            'travelSessions' => $travelSessions ?? [],
+            'travelSessions' => $travelSessions,
             'travelBooths' => $travelBooths ?? [],
             'task_id' => $id,
-            'session_id' => $session->id ?? '',
-            'totalCompleted' => $totalCompleted ?? '',
-            'countEventDetail' => $countEventDetail ?? '',
+            'session_id' => $session->id,
+            'session' => $session,
+            'booth' => $booth,
+            'totalCompleted' => $totalCompleted,
+            'countEventDetail' => $countEventDetail,
             'booth_id' => $booth->id ?? '',
-            'totalCompletedBooth' => $totalCompletedBooth ?? '',
-            'countEventDetailBooth' => $countEventDetailBooth ?? '',
-            'checkMint' => $check ?? '',
+            'totalCompletedBooth' => $totalCompletedBooth,
+            'countEventDetailBooth' => $countEventDetailBooth,
+            'checkMint' => $check,
             'nft' => $nft ?? [],
         ]);
     }

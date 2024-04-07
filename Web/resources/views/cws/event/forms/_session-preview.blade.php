@@ -88,7 +88,7 @@
                     <th>Description</th>
                     <th>QR</th>
                     <th>Total</th>
-                    <th>Quiz</th>
+                    {{--                    <th>Quiz</th>--}}
                     <th>Click</th>
                     <th>QR <span class="text-danger">(ON/OFF)</span></th>
                     <th>Sort</th>
@@ -111,7 +111,7 @@
                             <a class="se-donw mt-3" data-id="{{$session->id}}" data-num="{{$k+1}}" data-name="session">Download</a>
                         </td>
                         <td width="5%">{{totalUserJob($session->id)}}</td>
-                        <td width="5%">{{$session->is_question ? 'Yes' : 'No'}}</td>
+                        {{--                        <td width="5%">{{$session->is_question ? 'Yes' : 'No'}}</td>--}}
                         <td width="5%"><a href="{{$qr}}" target="_blank">link</a></td>
                         <td width="10%">
                             <input
