@@ -1,6 +1,12 @@
 @extends('web.layouts.event_app')
 
 @section('content')
+    <style>
+        .disabled {
+            pointer-events: none;
+            cursor: default;
+        }
+    </style>
     @vite('resources/js/claim.js')
     @php
         if (auth()->user() !== null){
@@ -81,22 +87,21 @@
                                         <input id="address_organizer" value="{{ $nft->address_organizer }}" type="hidden">
                                         <input id="address_nft" value="{{ $nft->address_nft }}" type="hidden">
                                         <input id="seed" value="{{ $nft->seed }}" type="hidden">
-                                        <input id="user_address" value="{{ auth()->user()->wallet_address }}" type="hidden">
+                                        <input id="user_address" value="{{ auth()->user() ? auth()->user()->wallet_address : '' }}" type="hidden">
                                         <input id="nft_id" value="{{ $nft->id }}" type="hidden">
-                                        <input id="email_login" value="{{ auth()->user()->email }}" type="hidden">
-                                        <a class="btn btn-info {{$nft ? 'btn-claim-id' : ''}}" href="#">Register event</a>
+                                        <input id="email_login" value="{{ auth()->user() ? auth()->user()->email : '' }}" type="hidden">
                                         <a style="display:none;" class="btn btn-info claim-success" href="#">Claim already</a>
                                         <a style="
-    border: none;
-    display:none;
-    background: none;
-    color: blue;
+border: none;
+display:none;
+background: none;
+color: blue;
 " class="link-primary sol-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">
                                             Solana Explorer Link
                                         </a>
-                                    @else
-                                        <a id="showModal" class="btn btn-info {{$nft ? 'btn-claim-id' : ''}}" href="{{ route('web.events.register', ['id' => $event->id]) }}">Register event</a>
                                     @endif
+                                    <a class="btn btn-info {{auth()->user() != null ? 'btn-claim-id' : 'showModal'}} {{ !$nft ? 'disabled' : '' }}" href="#" >Register event</a>
+
                                 @endif
                                 <hr>
                             </div>
@@ -237,22 +242,6 @@
             </div>
         </div>
     </section>
-
-    {{--Model success--}}
-    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <i class="bx bx-check-circle"></i>
-                    <h3>Success Checkin</h3>
-                    <p>Thank you for your interest in our event. We will contact you as soon as possible.</p>
-                    <button type="button" class="btn" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="myModal" class="modal fade" data-backdrop="static" data-keyboard="false">
         <style type="text/css">
             .text-danger {
@@ -316,13 +305,29 @@
                             </div>
                         </div>
                         <div class="text-center" style="margin-top: 20px;">
-                            <button type="submit" class="btn btn-primary btn--order">Submit</button>
+                            <button type="button" class="claim-btn btn btn-primary btn--order">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    {{--Model success--}}
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <i class="bx bx-check-circle"></i>
+                    <h3>Success Checkin</h3>
+                    <p>Thank you for your interest in our event. We will contact you as soon as possible.</p>
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     @include('web.layouts.subscribe')
     <a href="#" class="btn btn-primary ticket--sp">Get ticket</a>
@@ -432,6 +437,18 @@
 
             ], []);
         });
+
+        if ($('.showModal').length > 0) {
+            $('.showModal').on('click', function() {
+                $('#myModal').modal();
+                $('.modal-backdrop').css('z-index', '1');
+            });
+
+            $('.ticket--sp').on('click', function() {
+                $('#myModal').modal();
+                $('#successModal').modal();
+            });
+        }
     </script>
 @endsection
 @push('custom-scripts')
