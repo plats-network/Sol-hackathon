@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NFT;
+use App\Models\NFT\UserNft;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class NFTController extends Controller
@@ -116,6 +119,36 @@ class NFTController extends Controller
 
     public function updateNftClaim(Request $request)
     {
+        if (auth()->user() == null) {
+            // check login and auth
+            $existingUser = User::where('email', $request->email)->first();
+            if ($existingUser) {
+                Auth::login($existingUser);
+            } else {
+                $newUser = new User();
+                $newUser->name = $request->email;
+                $newUser->email = $request->email;
+                $newUser->wallet_address = $request->address;
+                $newUser->email_verified_at = now();
+                $newUser->status = USER_ACTIVE;
+                $newUser->save();
+
+                Auth::login($newUser);
+            }
+
+            $nft = NFT\NFTMint::find($request->nft_id);
+            $nft->status = 3;
+            $nft->save();
+        }
+
+        $userNft = new UserNft();
+        $userNft->user_id = \auth()->user()->id;
+        $userNft->nft_mint_id = $nft->id;
+        $userNft->type = $nft->type;
+        $userNft->booth_id = $nft->booth_id;
+        $userNft->task_id = $nft->task_id;
+        $userNft->save();
+
         $nft = NFT\NFTMint::find($request->nft_id);
         $nft->status = 3;
         $nft->save();

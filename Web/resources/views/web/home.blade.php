@@ -2,7 +2,7 @@
 
 @section('content')
     @include('web.layouts.event')
-    @vite(['resources/js/claim.js'])
+    @vite(['resources/js/profile-nft.js'])
     <section class="home-top section-padding-100-0">
         <div class="container">
             <div class="row align-items-center">
@@ -31,105 +31,105 @@
         <div class="container">
             <div class="row">
                 @if(!empty($eventsPendings))
-                <div class="col-12">
+                    <div class="col-12">
 
-                    <!-- sự kiện bạn tham gia -->
-                    @if(!empty(auth()->user()))
-                        <div class="section-heading-2 mt-2">
-                            <p class="color-white">Your events pending!</p>
-                        </div>
-                    @else
-                        <div class="section-heading-2 mt-2">
-                            <p class="color-white">The event is taking place!</p>
-                        </div>
-                    @endif
+                        <!-- sự kiện bạn tham gia -->
+                        @if(!empty(auth()->user()))
+                            <div class="section-heading-2 mt-2">
+                                <p class="color-white">Your events pending!</p>
+                            </div>
+                        @else
+                            <div class="section-heading-2 mt-2">
+                                <p class="color-white">The event is taking place!</p>
+                            </div>
+                        @endif
 
-                    <div class="tab-content" id="conferScheduleTabContent">
-                        <div class="tab-pane fade show active" id="step-one" role="tabpanel" aria-labelledby="monday-tab">
-                            <div class="row">
-                                @foreach($eventsPendings as $eventsPending)
-                                    <div class="col-12 col-md-6 col-xl-3 item-event">
-                                        <div class="single-blog-area style-2">
-                                            <div class="single-blog-thumb">
-                                                <a href="{{route('web.events.show', $eventsPending->id)}}">
-                                                    <img src="{{$eventsPending->banner_url}}">
-                                                </a>
-                                            </div>
-                                            <div class="single-blog-text">
-                                                <a class="blog-title" href="{{route('web.events.show', $eventsPending->id)}}">{{$eventsPending->name}}</a>
-                                                <div class="post-meta">
-                                                    <a class="post-date" href="{{route('web.events.show', $eventsPending->id)}}">
-                                                        <i class="zmdi zmdi-alarm-check"></i> {{ dateFormat($eventsPending->created_at)}}
+                        <div class="tab-content" id="conferScheduleTabContent">
+                            <div class="tab-pane fade show active" id="step-one" role="tabpanel" aria-labelledby="monday-tab">
+                                <div class="row">
+                                    @foreach($eventsPendings as $eventsPending)
+                                        <div class="col-12 col-md-6 col-xl-3 item-event">
+                                            <div class="single-blog-area style-2">
+                                                <div class="single-blog-thumb">
+                                                    <a href="{{route('web.events.show', $eventsPending->id)}}">
+                                                        <img src="{{$eventsPending->banner_url}}">
                                                     </a>
+                                                </div>
+                                                <div class="single-blog-text">
+                                                    <a class="blog-title" href="{{route('web.events.show', $eventsPending->id)}}">{{$eventsPending->name}}</a>
+                                                    <div class="post-meta">
+                                                        <a class="post-date" href="{{route('web.events.show', $eventsPending->id)}}">
+                                                            <i class="zmdi zmdi-alarm-check"></i> {{ dateFormat($eventsPending->created_at)}}
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="step-two" role="tabpanel" aria-labelledby="tuesday-tab">
-                            <div class="row">
-                                <div class="col-12 col-md-6 col-xl-3 item-event">
-                                    <div class="single-blog-area style-2">
-                                        <div class="single-blog-thumb">
-                                            <a href="#"><img src="{{url('events/event/event-1.png')}}"></a>
-                                        </div>
-                                        <div class="single-blog-text">
-                                            <a class="blog-title" href="#">Street Food Convention</a>
-                                            <div class="post-meta">
-                                                <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i> 2023-04-20 21:00:00</a>
+                            <div class="tab-pane fade" id="step-two" role="tabpanel" aria-labelledby="tuesday-tab">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-xl-3 item-event">
+                                        <div class="single-blog-area style-2">
+                                            <div class="single-blog-thumb">
+                                                <a href="#"><img src="{{url('events/event/event-1.png')}}"></a>
                                             </div>
-                                            <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            <div class="single-blog-text">
+                                                <a class="blog-title" href="#">Street Food Convention</a>
+                                                <div class="post-meta">
+                                                    <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i> 2023-04-20 21:00:00</a>
+                                                </div>
+                                                <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3 item-event">
-                                    <div class="single-blog-area style-2">
-                                        <div class="single-blog-thumb">
-                                            <img src="{{url('events/event/event-2.png')}}">
-                                        </div>
-                                        <div class="single-blog-text">
-                                            <a class="blog-title" href="#">Street Food Convention</a>
-                                            <div class="post-meta">
-                                                <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i> 2023-04-20 21:00:00</a>
+                                    <div class="col-12 col-md-6 col-xl-3 item-event">
+                                        <div class="single-blog-area style-2">
+                                            <div class="single-blog-thumb">
+                                                <img src="{{url('events/event/event-2.png')}}">
                                             </div>
-                                            <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            <div class="single-blog-text">
+                                                <a class="blog-title" href="#">Street Food Convention</a>
+                                                <div class="post-meta">
+                                                    <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i> 2023-04-20 21:00:00</a>
+                                                </div>
+                                                <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3 item-event">
-                                    <div class="single-blog-area style-2">
-                                        <div class="single-blog-thumb">
-                                            <img src="{{url('events/event/event-3.png')}}">
-                                        </div>
-                                        <div class="single-blog-text">
-                                            <a class="blog-title" href="#">Tedx Moscow Conference</a>
-                                            <div class="post-meta">
-                                                <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i>2023-04-20 21:00:00</a>
+                                    <div class="col-12 col-md-6 col-xl-3 item-event">
+                                        <div class="single-blog-area style-2">
+                                            <div class="single-blog-thumb">
+                                                <img src="{{url('events/event/event-3.png')}}">
                                             </div>
-                                            <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            <div class="single-blog-text">
+                                                <a class="blog-title" href="#">Tedx Moscow Conference</a>
+                                                <div class="post-meta">
+                                                    <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i>2023-04-20 21:00:00</a>
+                                                </div>
+                                                <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3 item-event">
-                                    <div class="single-blog-area style-2">
-                                        <div class="single-blog-thumb">
-                                            <img src="{{url('events/event/event-4.png')}}">
-                                        </div>
-                                        <div class="single-blog-text">
-                                            <a class="blog-title" href="#">Los Angeles Institute</a>
-                                            <div class="post-meta">
-                                                <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i>2023-04-20 21:00:00</a>
+                                    <div class="col-12 col-md-6 col-xl-3 item-event">
+                                        <div class="single-blog-area style-2">
+                                            <div class="single-blog-thumb">
+                                                <img src="{{url('events/event/event-4.png')}}">
                                             </div>
-                                            <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            <div class="single-blog-text">
+                                                <a class="blog-title" href="#">Los Angeles Institute</a>
+                                                <div class="post-meta">
+                                                    <a class="post-date" href="#"><i class="zmdi zmdi-alarm-check"></i>2023-04-20 21:00:00</a>
+                                                </div>
+                                                <p>International Curriculum Conference 2023: Vietnam ...</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endif
                 <div class="col-12">
                     <div class="section-heading-2 ">
@@ -394,6 +394,12 @@
             </div>
         </div>
     </section>
+    <input value="{{auth()->user() != null ? auth()->user()->email : ''}}" hidden id="email_nft">
 
     @include('web.layouts.subscribe')
 @endsection
+@push('custom-scripts')
+    <script src="{{ url('js/index.umd.js') }}"></script>
+    <script src="https://auth.magic.link/sdk"></script>
+    <script type="text/javascript" src="https://auth.magic.link/sdk/extension/solana"></script>
+@endpush

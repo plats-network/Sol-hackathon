@@ -431,29 +431,17 @@ class Home extends Controller
 
             // check claim nft
             $check = false;
+            $nft = NFTMint::where([
+                'task_id' => $id,
+                'status' => 1,
+                'type' => 1,
+            ])->first();
+
             if (\auth()->user()) {
                 $check = UserNft::where([
                     'user_id' => \auth()->user()->id,
                     'task_id' => $id
                 ])->count();
-
-                if (!$check) {
-                    $nft = NFTMint::where([
-                        'task_id' => $id,
-                        'status' => 1,
-                        'type' => 1,
-                    ])->first();
-
-                    if ($nft) {
-                        $userNft = new UserNft();
-                        $userNft->user_id = \auth()->user()->id;
-                        $userNft->nft_mint_id = $nft->id;
-                        $userNft->type = $nft->type;
-                        $userNft->booth_id = $nft->booth_id;
-                        $userNft->task_id = $nft->task_id;
-                        $userNft->save();
-                    }
-                }
             }
 
         } catch (\Exception $e) {
