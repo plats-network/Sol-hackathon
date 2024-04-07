@@ -693,8 +693,8 @@ class EventController extends Controller
         $countNFT = NFTMint::where([
             'task_id' => $task->id,
             'type' => 1,
-            'nft_symbol' => 'Standard'
-        ])->get();
+//            'nft_symbol' => 'Standard'
+        ])->pluck('nft_symbol');
 
         $countNFTBooth = NFTMint::where([
             'task_id' => $task->id,

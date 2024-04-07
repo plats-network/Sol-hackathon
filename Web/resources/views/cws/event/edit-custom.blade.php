@@ -360,83 +360,94 @@
                                 </div>
                                 <div class="row" style="height: auto; min-height: 400px">
                                     <div class="col-6 append-nft-ticket" style="border-left: 1px;border-right: 1px solid;">
-{{--                                        <div class="row mb-3 nft-ticket-div">--}}
-{{--                                            <div class="col-4">--}}
-{{--                                                <input type="file"--}}
-{{--                                                       accept="image/x-png, image/jpeg"--}}
-{{--                                                       style="display: none"--}}
-{{--                                                       class="image-file"--}}
-{{--                                                       id="image-file"--}}
-{{--                                                       name="file-image-nft"--}}
-{{--                                                />--}}
-{{--                                                <label for="image-file">--}}
-{{--                                                    <img class="image-label img-preview" src="https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg">--}}
-{{--                                                </label>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-4">--}}
-{{--                                                <div class="col-10 mt-20">--}}
-{{--                                                    <input type="text" required--}}
-{{--                                                           class="form-control nft_symbol"--}}
-{{--                                                           value="Standard">--}}
-{{--                                                </div>--}}
-{{--                                                <div class="col-10 mt-20">--}}
-{{--                                                    <input type="text" required--}}
-{{--                                                           class="form-control nft_name"--}}
-{{--                                                           placeholder="NFT Title"--}}
-{{--                                                           name="nft_name">--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-2" style="margin-top: 50px">--}}
-{{--                                                <input type="number" required--}}
-{{--                                                       class="form-control nft_amount"--}}
-{{--                                                       value="1"--}}
-{{--                                                       name="nft_amount">--}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-2" style="margin-top: 50px">--}}
-{{--                                                <button type="button" class="btn-delete-nft-ticket btn btn-danger">Delete</button>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
+                                        {{--                                        <div class="row mb-3 nft-ticket-div">--}}
+                                        {{--                                            <div class="col-4">--}}
+                                        {{--                                                <input type="file"--}}
+                                        {{--                                                       accept="image/x-png, image/jpeg"--}}
+                                        {{--                                                       style="display: none"--}}
+                                        {{--                                                       class="image-file"--}}
+                                        {{--                                                       id="image-file"--}}
+                                        {{--                                                       name="file-image-nft"--}}
+                                        {{--                                                />--}}
+                                        {{--                                                <label for="image-file">--}}
+                                        {{--                                                    <img class="image-label img-preview" src="https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg">--}}
+                                        {{--                                                </label>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            <div class="col-4">--}}
+                                        {{--                                                <div class="col-10 mt-20">--}}
+                                        {{--                                                    <input type="text" required--}}
+                                        {{--                                                           class="form-control nft_symbol"--}}
+                                        {{--                                                           value="Standard">--}}
+                                        {{--                                                </div>--}}
+                                        {{--                                                <div class="col-10 mt-20">--}}
+                                        {{--                                                    <input type="text" required--}}
+                                        {{--                                                           class="form-control nft_name"--}}
+                                        {{--                                                           placeholder="NFT Title"--}}
+                                        {{--                                                           name="nft_name">--}}
+                                        {{--                                                </div>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            <div class="col-2" style="margin-top: 50px">--}}
+                                        {{--                                                <input type="number" required--}}
+                                        {{--                                                       class="form-control nft_amount"--}}
+                                        {{--                                                       value="1"--}}
+                                        {{--                                                       name="nft_amount">--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            <div class="col-2" style="margin-top: 50px">--}}
+                                        {{--                                                <button type="button" class="btn-delete-nft-ticket btn btn-danger">Delete</button>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
                                     </div>
                                     <div class="col-6 append-nft-detail">
                                         @if ($countNFT)
-                                            <div class="row mb-3">
-                                                <div class="col-4">
-                                                    <label for="image-file">
-                                                        <img class="img-preview img-preview-nft" src="{{ $countNFT[0]->nft_uri ?? 'https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg' }}">
-                                                    </label>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="col-10 mt-25">
-                                                        <p class="class-ticket">{{ $countNFT[0]->nft_symbol }}</p>
+                                            @foreach($countNFT as $name)
+                                                @php
+                                                    $countNFTData = App\Models\NFT\NFTMint::where([
+                                                        'task_id' => $eventId,
+                                                        'type' => 1,
+                                                        'nft_symbol' => $name
+                                                    ])->get();
+                                                @endphp
+                                                @if ($countNFTData)
+                                                    <div class="row mb-3">
+                                                        <div class="col-4">
+                                                            <label for="image-file">
+                                                                <img class="img-preview img-preview-nft" src="{{ $countNFTData[0]->nft_uri ?? 'https://static.vecteezy.com/system/resources/previews/007/567/154/original/select-image-icon-vector.jpg' }}">
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="col-10 mt-25">
+                                                                <p class="class-ticket">{{ $countNFTData[0]->nft_symbol }}</p>
+                                                            </div>
+                                                            <div class="col-10 mt-20">
+                                                                <p class="class-ticket">{{ $countNFTData[0]->nft_title }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2" style="margin-top: 50px">
+                                                            <p class="class-ticket">{{ count($countNFTData) }}</p>
+                                                        </div>
+                                                        <div class="col-2" style="margin-top: 50px">
+                                                            <p class="class-ticket"><a href="https://explorer.solana.com/address/{{$countNFTData[0]->address_organizer}}'=devnet">TxHash</a></p>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-10 mt-20">
-                                                        <p class="class-ticket">{{ $countNFT[0]->nft_title }}</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-2" style="margin-top: 50px">
-                                                    <p class="class-ticket">{{ count($countNFT) }}</p>
-                                                </div>
-                                                <div class="col-2" style="margin-top: 50px">
-                                                    <p class="class-ticket"><a href="https://explorer.solana.com/address/{{$countNFT[0]->address_organizer}}'=devnet">TxHash</a></p>
-                                                </div>
-                                            </div>
+                                                @endif
+                                            @endforeach
                                         @endif
                                     </div>
                                 </div>
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">--}}
-{{--                                        <div class="p-2">--}}
-{{--                                            <button id="btnAddItemNft" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i class="mdi mdi-plus me-1"></i> Add More</button>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">--}}
-{{--                                        <div class="p-2">--}}
-{{--                                            <button id="btnGenItemNft" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2">Generate NFT Ticket</button>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
+                                {{--                                <div class="row">--}}
+                                {{--                                    <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">--}}
+                                {{--                                        <div class="p-2">--}}
+                                {{--                                            <button id="btnAddItemNft" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i class="mdi mdi-plus me-1"></i> Add More</button>--}}
+                                {{--                                        </div>--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
+                                {{--                                <div class="row">--}}
+                                {{--                                    <div class="col-6 d-flex flex-row-reverse" style="border-left: 1px;border-right: 1px solid;">--}}
+                                {{--                                        <div class="p-2">--}}
+                                {{--                                            <button id="btnGenItemNft" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 me-2">Generate NFT Ticket</button>--}}
+                                {{--                                        </div>--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
                             </div>
                             <!-- Sessiom -->
                             @include('cws.event.forms._session-preview', [
