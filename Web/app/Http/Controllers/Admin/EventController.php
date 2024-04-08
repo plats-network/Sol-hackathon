@@ -655,7 +655,7 @@ class EventController extends Controller
         //$urlAnswers = route('quiz-name.answers', $eventId);
         $urlAnswersFull = 'https://colosseum.plats.network/event/' . $eventId . '?check_in=true';
         //Shorten url
-        $urlAnswers = Url::shortenUrl($urlAnswersFull);
+        $urlAnswers = $urlAnswersFull;
 
         $qrCode = QrCode::format('png')->size(250)->generate($urlAnswers);
 
