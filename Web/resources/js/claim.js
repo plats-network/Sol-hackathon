@@ -58,7 +58,7 @@ $('.claim-btn').click(async function () {
         // check wallet
         if (balance/LAMPORTS_PER_SOL <= 0) {
             $('.loading').hide();
-            alert('Balance is empty, please deposit Sol to wallet '+ adapter +' to claim nft !!!')
+            alert('Balance is empty, please deposit Sol to claim nft !!!')
         } else {
             const buyTokenAddress = await getAssociatedTokenAddress(
                 mintKeypair,
@@ -111,7 +111,7 @@ $('.claim-btn').click(async function () {
                 $('.claim-success').show();
                 $('.sol-link').show();
                 $('.btn-claim-id').hide();
-                $(this).hide();
+                $('.claim-btn').hide();
             } catch (error) {
                 alert(error.message);
             }
@@ -194,6 +194,7 @@ $('.btn-claim-id').click(async function () {
         $('.claim-success').show();
         $('.sol-link').show();
         $('.btn-claim-id').hide();
+        $('.claim-btn').hide();
     } catch (error) {
         alert(error.message);
     }

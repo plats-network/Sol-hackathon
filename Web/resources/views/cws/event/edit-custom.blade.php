@@ -426,7 +426,7 @@
                                                             <p class="class-ticket">{{ count($countNFTData) }}</p>
                                                         </div>
                                                         <div class="col-2" style="margin-top: 50px">
-                                                            <p class="class-ticket"><a href="https://explorer.solana.com/address/{{$countNFTData[0]->address_organizer}}'=devnet">TxHash</a></p>
+                                                            <p class="class-ticket"><a href="https://explorer.solana.com/address/SfmKb6KG6MdXeqWz4o6kLj7hmVsvczAftDgGiToxxh1{{$countNFTData[0]->address_organizer}}?cluster=devnet">TxHash</a></p>
                                                         </div>
                                                     </div>
                                                 @endif
