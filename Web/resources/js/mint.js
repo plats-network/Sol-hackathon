@@ -234,7 +234,7 @@ $('.page-content').on("click", "#btnGenItemNft", async function () {
                         let nftName = $(this).find('.nft_name').val();
                         let nftSymbol = $(this).find('.nft_symbol').val();
                         for (let i = 0; i < amount; i++) {
-                            txs.push(await createNftTx(nftName, nftSymbol, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                            txs.push(await createNftTx(nftName, response1.data.path, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
                         }
                         console.log(amount);
                         // appendNftDetail
@@ -337,7 +337,7 @@ $('.page-content').on("click", "#btnGenItemSession", async function () {
                 }).then(async response1 => {
                     let sessionName = $(this).find('.name_session').val();
                     let description = $(this).find('.description_session').val();
-                    txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                    txs.push(await createNftTx(sessionName, description, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
                     // appendNftDetail
                     appendNftSessionDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
                     // empty
@@ -433,7 +433,7 @@ $('.page-content').on("click", "#btnGenItemBooth", async function () {
                 }).then(async response1 => {
                     let sessionName = $(this).find('.name_booth').val();
                     let description = $(this).find('.description_booth').val();
-                    txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                    txs.push(await createNftTx(sessionName, description, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
                     // appendNftDetail
                     appendNftBoothDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
                     // empty

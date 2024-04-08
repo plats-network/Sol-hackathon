@@ -408,6 +408,7 @@
                                                     ])->get();
                                                 @endphp
                                                 @if ($countNFTData)
+                                                    @dd($countNFTData)
                                                     <div class="row mb-3">
                                                         <div class="col-4">
                                                             <label for="image-file">
@@ -1120,14 +1121,14 @@
                 "order": null
             }];
 
-            fileAvatarInit10 = [{
-                "path": "{{$nftItem->image_url}}",
-                "base_url": "",
-                "type": null,
-                "size": null,
-                "name": null,
-                "order": null
-            }];
+            {{--fileAvatarInit10 = [{--}}
+            {{--    "path": "{{$nftItem->image_url}}",--}}
+            {{--    "base_url": "",--}}
+            {{--    "type": null,--}}
+            {{--    "size": null,--}}
+            {{--    "name": null,--}}
+            {{--    "order": null--}}
+            {{--}];--}}
             @endif
 
             // fileSlideInit = [
