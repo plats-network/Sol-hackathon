@@ -408,7 +408,6 @@
                                                     ])->get();
                                                 @endphp
                                                 @if ($countNFTData)
-                                                    @dd($countNFTData)
                                                     <div class="row mb-3">
                                                         <div class="col-4">
                                                             <label for="image-file">
