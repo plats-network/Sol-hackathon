@@ -342,10 +342,10 @@ class Job extends Controller
                 ->toArray();
 
             $travelSessions = $this->travelGame
-                ->whereIn('id', $travelSessionIds)
+//                ->whereIn('id', $travelSessionIds)
                 ->orderBy('created_at', 'desc')
                 ->get();
-
+//dd($travelSessions);
             $travelBooths = $this->travelGame->whereIn('id', $travelBootsIds)->get();
 
             // Start
