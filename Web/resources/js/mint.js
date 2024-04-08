@@ -234,7 +234,7 @@ $('.page-content').on("click", "#btnGenItemNft", async function () {
                         let nftName = $(this).find('.nft_name').val();
                         let nftSymbol = $(this).find('.nft_symbol').val();
                         for (let i = 0; i < amount; i++) {
-                            txs.push(await createNftTx(nftName, response1.data.path, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                            txs.push(await createNftTx(nftName, nftSymbol, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
                         }
                         console.log(amount);
                         // appendNftDetail
