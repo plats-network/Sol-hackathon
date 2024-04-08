@@ -126,39 +126,32 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    @if($groupSessions)
-                        @foreach($groupSessions as $groupSession)
-                            @if($groupSession[0]['id'])
-                                @php
-                                    $nft = \App\Models\NFT\NFTMint::where([
-                                        'session_id' => $groupSession[0]['id'],
-                                        'status' => 1,
-                                        'type' => 2,
-                                    ])->first();
-                                    if ($nft) {
-                                            $userNft = new \App\Models\NFT\UserNft();
-                                            $userNft->user_id = \auth()->user()->id;
-                                            $userNft->nft_mint_id = $nft->id;
-                                            $userNft->type = $nft->type;
-                                            $userNft->session_id = $nft->session_id;
-                                            $userNft->task_id = $nft->task_id;
-                                            $userNft->save();
-                                    }
-                                @endphp
-                                @if ($nft && $nft->status < 3)
-                                    <input id="address_organizer" value="{{ $nft->address_organizer }}" type="hidden">
-                                    <input id="address_nft" value="{{ $nft->address_nft }}" type="hidden">
-                                    <input id="seed" value="{{ $nft->seed }}" type="hidden">
-                                    <input id="user_address" value="{{ auth()->user()->wallet_address }}" type="hidden">
-                                    <input id="nft_id" value="{{ $nft->id }}" type="hidden">
-                                    <input id="email_login" value="{{ auth()->user()->email }}" type="hidden">
-                                    <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
+                    @php
+                        $nft = \App\Models\NFT\NFTMint::where([
+                            'status' => 1,
+                            'type' => 2,
+                        ])->first();
+                        if ($nft) {
+                                $userNft = new \App\Models\NFT\UserNft();
+                                $userNft->user_id = \auth()->user()->id;
+                                $userNft->nft_mint_id = $nft->id;
+                                $userNft->type = $nft->type;
+                                $userNft->session_id = $nft->session_id;
+                                $userNft->task_id = $nft->task_id;
+                                $userNft->save();
+                        }
+                    @endphp
+                    @if ($nft && $nft->status < 3)
+                        <input id="address_organizer" value="{{ $nft->address_organizer }}" type="hidden">
+                        <input id="address_nft" value="{{ $nft->address_nft }}" type="hidden">
+                        <input id="seed" value="{{ $nft->seed }}" type="hidden">
+                        <input id="user_address" value="{{ auth()->user()->wallet_address }}" type="hidden">
+                        <input id="nft_id" value="{{ $nft->id }}" type="hidden">
+                        <input id="email_login" value="{{ auth()->user()->email }}" type="hidden">
+                        <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
 
-                                @endif
-                                <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
-                            @endif
-                        @endforeach
                     @endif
+                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
                 </div>
 
                 <ul class="nav nav-tabs">
