@@ -416,7 +416,7 @@
                                                         </div>
                                                         <div class="col-4">
                                                             <div class="col-10 mt-25">
-                                                                <p class="class-ticket">{{ $countNFTData[0]->nft_symbol }}</p>
+                                                                <img class="image-label img-preview" src="{{ $countNFTData[0]->nft_symbol }}">
                                                             </div>
                                                             <div class="col-10 mt-20">
                                                                 <p class="class-ticket">{{ $countNFTData[0]->nft_title }}</p>
