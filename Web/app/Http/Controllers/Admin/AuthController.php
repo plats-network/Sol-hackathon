@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use App\Http\Requests\Auth\{
     LoginRequest,
     RegisAdmin
 };
-use Illuminate\Support\Facades\{Auth, Log, Session};
+use Illuminate\Support\Facades\{Auth, Log, Session, Validator};
 use Illuminate\Support\Arr;
 use Carbon\Carbon;
 use App\Services\UserService;
@@ -17,9 +19,10 @@ use App\Services\UserService;
 class AuthController extends Controller
 {
     public function __construct(
-        private User $user,
+        private User        $user,
         private UserService $userService,
-    ) {
+    )
+    {
         // code
     }
 
@@ -33,6 +36,7 @@ class AuthController extends Controller
 
         return view('cws.auth.login');
     }
+
     //autoLogin
     public function autoLogin(Request $request)
     {
@@ -87,8 +91,33 @@ class AuthController extends Controller
         return view('cws.auth.register');
     }
 
-    public function register(RegisAdmin $request)
+    public function register(Request $request)
     {
+        $params = $request->all();
+        $validator = Validator::make($params, [
+            'name' => ['required', 'min: 5', 'max: 50'],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')
+            ],
+            'password' => [
+                'required',
+                'string',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+                'confirmed'
+            ],
+            'term' => ['required']
+        ]);
+        if ($validator->fails()) {
+            notify()->error($validator->errors()->first());
+            return redirect()->route('cws.fromSignUp');
+        }
         try {
             $datas = $request->except(['term']);
             $this->userService->storeAccount($datas, CLIENT_ROLE);
