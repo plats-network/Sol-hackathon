@@ -213,8 +213,8 @@ $('.page-content').on("click", "#btnGenItemNft", async function () {
             var symbols = [];
             var uris = [];
             var pools = [];
-            console.log($('.nft-ticket-div'));
 
+            console.log($('.nft-ticket-div').length)
             $('.nft-ticket-div').each(async function (index) {
                 let data = new FormData();
                 let file = $(this).find('.image-file').prop('files');
@@ -228,22 +228,26 @@ $('.page-content').on("click", "#btnGenItemNft", async function () {
                             'Accept-Language': 'en-US,en;q=0.8',
                             'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                         }
-                    });
-                    uri = response1.data.path;
-                }
-                let amount = $(this).find('.nft_amount').val()
+                    }).then(async response1 => {
+                        let amount = $(this).find('.nft_amount').val()
 
-                let nftName = $(this).find('.nft_name').val();
-                let nftSymbol = $(this).find('.nft_symbol').val();
-                for (let i = 0; i < amount; i++) {
-                    txs.push(await createNftTx(nftName, nftSymbol, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                        let nftName = $(this).find('.nft_name').val();
+                        let nftSymbol = $(this).find('.nft_symbol').val();
+                        for (let i = 0; i < amount; i++) {
+                            txs.push(await createNftTx(nftName, nftSymbol, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                        }
+                        console.log(amount);
+                        // appendNftDetail
+                        appendNftDetail(await convert_to_base64(file ? file[0] : ''), nftSymbol, nftName, amount, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
+                        // empty
+                        $(this).empty();
+                    })
+                    // uri = response1.data.path;
                 }
-
-                // appendNftDetail
-                appendNftDetail(await convert_to_base64(file ? file[0] : ''), nftSymbol, nftName, amount, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
-                // empty
-                $(this).empty();
             })
+
+            console.log(txs);
+
 
             setTimeout(async () => {
                 const signedTxs = await pub.signAllTransactions(txs);
@@ -294,7 +298,7 @@ $('.page-content').on("click", "#btnGenItemNft", async function () {
                 $('#navItemTab3').parent().removeClass('tab-disabled')
                 $('.loading').hide();
                 $('#btnAddItemSession').click();
-            }, 2000);
+            }, 4000);
         }
     } else {
         alert('Please add nft to mint!!!')
@@ -330,17 +334,18 @@ $('.page-content').on("click", "#btnGenItemSession", async function () {
                         'Accept-Language': 'en-US,en;q=0.8',
                         'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                     }
+                }).then(async response1 => {
+                    let sessionName = $(this).find('.name_session').val();
+                    let description = $(this).find('.description_session').val();
+                    txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                    // appendNftDetail
+                    appendNftSessionDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
+                    // empty
+                    $(this).hide();
+                    $(this).removeClass('itemSessionDetailMint');
                 });
-                uri = response1.data.path;
+                // uri = response1.data.path;
             }
-            let sessionName = $(this).find('.name_session').val();
-            let description = $(this).find('.description_session').val();
-            txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-            // appendNftDetail
-            appendNftSessionDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
-            // empty
-            $(this).hide();
-            $(this).removeClass('itemSessionDetailMint');
         });
 
         setTimeout(async () => {
@@ -390,7 +395,7 @@ $('.page-content').on("click", "#btnGenItemSession", async function () {
             alert('Mint NFT is success. Please see on https://explorer.solana.com/');
             $('.loading').hide();
             $('#btnAddItemBooth').click();
-        }, 2000);
+        }, 4000);
     } else {
         alert('Please add nft to mint!!!')
         $('.loading').hide();
@@ -425,17 +430,18 @@ $('.page-content').on("click", "#btnGenItemBooth", async function () {
                         'Accept-Language': 'en-US,en;q=0.8',
                         'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                     }
+                }).then(async response1 => {
+                    let sessionName = $(this).find('.name_booth').val();
+                    let description = $(this).find('.description_booth').val();
+                    txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
+                    // appendNftDetail
+                    appendNftBoothDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
+                    // empty
+                    $(this).hide();
+                    $(this).removeClass('itemBoothDetailMint');
                 });
-                uri = response1.data.path;
+                // uri = response1.data.path;
             }
-            let sessionName = $(this).find('.name_booth').val();
-            let description = $(this).find('.description_booth').val();
-            txs.push(await createNftTx(sessionName, description, uri, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
-            // appendNftDetail
-            appendNftBoothDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '=devnet');
-            // empty
-            $(this).hide();
-            $(this).removeClass('itemBoothDetailMint');
         });
 
         setTimeout(async () => {
@@ -486,7 +492,7 @@ $('.page-content').on("click", "#btnGenItemBooth", async function () {
             $('.loading').hide();
             $('.min-save-btn').show();
 
-        }, 2000);
+        }, 4000);
     } else {
         alert('Please add nft to mint!!!')
         $('.loading').hide();
