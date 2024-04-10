@@ -127,18 +127,20 @@
 
                 <div class="row justify-content-center">
                     @php
-                        $nft = \App\Models\NFT\NFTMint::where([
-                            'status' => 1,
-                            'type' => 2,
-                        ])->first();
-                        if ($nft) {
-                                $userNft = new \App\Models\NFT\UserNft();
-                                $userNft->user_id = \auth()->user()->id;
-                                $userNft->nft_mint_id = $nft->id;
-                                $userNft->type = $nft->type;
-                                $userNft->session_id = $nft->session_id;
-                                $userNft->task_id = $nft->task_id;
-                                $userNft->save();
+                        if (!$checkNftMint) {
+                            $nft = \App\Models\NFT\NFTMint::where([
+                                'status' => 1,
+                                'type' => 2,
+                            ])->first();
+                            if ($nft) {
+                                    $userNft = new \App\Models\NFT\UserNft();
+                                    $userNft->user_id = \auth()->user()->id;
+                                    $userNft->nft_mint_id = $nft->id;
+                                    $userNft->type = $nft->type;
+                                    $userNft->session_id = $nft->session_id;
+                                    $userNft->task_id = $nft->task_id;
+                                    $userNft->save();
+                            }
                         }
                     @endphp
                     @if ($nft && $nft->status < 3)
@@ -149,9 +151,10 @@
                         <input id="nft_id" value="{{ $nft->id }}" type="hidden">
                         <input id="email_login" value="{{ auth()->user()->email }}" type="hidden">
                         <button id="button-claim" type="button" class="btn btn-primary btn--order">Claim</button>
-
+                    @else
+                        <a class="link-primary" style="color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/{{ auth()->user()->wallet_address }}?cluster=devnet">Sol Explorer</a>
                     @endif
-                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/HG9iQtoiKXmgJsNMpbjSbixkZGpnGFzxKgfeoRd9h8PLL7eRQc1cSSW2FGF4651vUA84pbLTbfLWardi71sF4Ff?cluster=devnet">Sol Explorer</a>
+                    <a class="link-primary" style="display: none; color:blue" id="button-claim-link" href="https://explorer.solana.com/tx/{{ auth()->user()->wallet_address }}?cluster=devnet">Sol Explorer</a>
                 </div>
 
                 <ul class="nav nav-tabs">
