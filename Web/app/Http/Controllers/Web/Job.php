@@ -280,8 +280,7 @@ class Job extends Controller
 
             // notify()->success('Scan QR code success');
             if ($countJobOne <= 1) {
-
-                return $this->getTravelGame($request,$taskId);
+                return $this->getTravelGame($request, $taskId);
 
             }
 
@@ -421,14 +420,14 @@ class Job extends Controller
                 //                                    ->where('type', 0)
                 //                                    ->pluck('number_code')
                 //                                    ->implode(',');
-               /* $this->userCode->create([
-                    'user_id' => $userId,
-                    'task_event_id' => $sEventId,
-                    'travel_game_id' => $tId,
-                    'type' => 0,
-                    'number_code' => $maxSession + 1,
-                    'color_code' => randColor()
-                ]);*/
+                /* $this->userCode->create([
+                     'user_id' => $userId,
+                     'task_event_id' => $sEventId,
+                     'travel_game_id' => $tId,
+                     'type' => 0,
+                     'number_code' => $maxSession + 1,
+                     'color_code' => randColor()
+                 ]);*/
 
                 //Check user code not exists
                 $checkCode = $this->userCode
@@ -575,6 +574,7 @@ class Job extends Controller
             'nft' => $sessionNFT && $sessionNFT['nft'] ? 1 : 0,
             'flagU' => $flagU,
             'qrCode' => $qrCode,
+            'checkNftMint' => $checkNftMint,
 
             'groupSessions' => ($groupSessions),
         ]);
@@ -610,11 +610,11 @@ class Job extends Controller
     private function countBootDone($eventDetailId){
         $userId = Auth::user()->id;
         $status = $this->taskDone
-           ->whereUserId($userId)
-           ->whereTaskEventDetailId($eventDetailId)
-           ->count();
+            ->whereUserId($userId)
+            ->whereTaskEventDetailId($eventDetailId)
+            ->count();
 
-       return $status;
+        return $status;
     }
     private function checkDoneJob($eventDetailId)
     {

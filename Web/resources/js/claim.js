@@ -110,6 +110,7 @@ $('.claim-btn').click(async function () {
                 $('.loading').hide();
                 $('.claim-success').show();
                 $('.sol-link').show();
+                $('.sol-link').attr('href', 'https://explorer.solana.com/address/' + adapter + '?cluster=devnet')
                 $('.btn-claim-id').hide();
                 $('.claim-btn').hide();
             } catch (error) {

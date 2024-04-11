@@ -238,7 +238,7 @@ $('.page-content').on("click", "#btnGenItemNft", async function () {
                         }
                         console.log(amount);
                         // appendNftDetail
-                        appendNftDetail(await convert_to_base64(file ? file[0] : ''), nftSymbol, nftName, amount, 'https://explorer.solana.com/address/SfmKb6KG6MdXeqWz4o6kLj7hmVsvczAftDgGiToxxh1' + walletOr + '?cluster=devnet');
+                        appendNftDetail(await convert_to_base64(file ? file[0] : ''), nftSymbol, nftName, amount, 'https://explorer.solana.com/address/' + walletOr + '?cluster=devnet');
                         // empty
                         $(this).empty();
                     })
@@ -339,7 +339,7 @@ $('.page-content').on("click", "#btnGenItemSession", async function () {
                     let description = $(this).find('.description_session').val();
                     txs.push(await createNftTx(sessionName, description, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
                     // appendNftDetail
-                    appendNftSessionDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/SfmKb6KG6MdXeqWz4o6kLj7hmVsvczAftDgGiToxxh1' + walletOr + '?cluster=devnet');
+                    appendNftSessionDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '?cluster=devnet');
                     // empty
                     $(this).hide();
                     $(this).removeClass('itemSessionDetailMint');
@@ -435,7 +435,7 @@ $('.page-content').on("click", "#btnGenItemBooth", async function () {
                     let description = $(this).find('.description_booth').val();
                     txs.push(await createNftTx(sessionName, description, response1.data.path, blockhash, ownerWallet, lastValidBlockHeight, mintAccount, names, symbols, uris))
                     // appendNftDetail
-                    appendNftBoothDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/SfmKb6KG6MdXeqWz4o6kLj7hmVsvczAftDgGiToxxh1' + walletOr + '?cluster=devnet');
+                    appendNftBoothDetail(await convert_to_base64(file ? file[0] : ''), sessionName, description, 'https://explorer.solana.com/address/' + walletOr + '?cluster=devnet');
                     // empty
                     $(this).hide();
                     $(this).removeClass('itemBoothDetailMint');
