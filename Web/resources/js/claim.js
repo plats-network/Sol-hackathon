@@ -58,7 +58,7 @@ $('.claim-btn').click(async function () {
         // check wallet
         if (balance/LAMPORTS_PER_SOL <= 0) {
             $('.loading').hide();
-            alert('Balance is empty, please deposit Sol to claim nft !!!')
+            alert('Balance is empty, please deposit Sol to '+ adapter +' claim nft !!!')
         } else {
             const buyTokenAddress = await getAssociatedTokenAddress(
                 mintKeypair,
