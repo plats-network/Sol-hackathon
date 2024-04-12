@@ -395,7 +395,7 @@ $('.page-content').on("click", "#btnGenItemSession", async function () {
             alert('Mint NFT is success. Please see on https://explorer.solana.com/');
             $('.loading').hide();
             $('#btnAddItemBooth').click();
-        }, 4000);
+        }, 1000 * $('.itemSessionDetailMint').length);
     } else {
         alert('Please add nft to mint!!!')
         $('.loading').hide();
@@ -492,7 +492,7 @@ $('.page-content').on("click", "#btnGenItemBooth", async function () {
             $('.loading').hide();
             $('.min-save-btn').show();
 
-        }, 4000);
+        }, 1000 * $('.itemBoothDetailMint').length);
     } else {
         alert('Please add nft to mint!!!')
         $('.loading').hide();
