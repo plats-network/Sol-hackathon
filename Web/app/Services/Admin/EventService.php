@@ -555,7 +555,7 @@ class EventService extends BaseService
                             $nft->secret_key = $data['nft-ticket-secret-key-booth'][$index] ?? '';
                             $nft->type = 3;
                             $nft->task_id = $task->id;
-                            $nft->session_id = $sessionTask->id;
+                            $nft->booth_id = $sessionTask->id;
                             $nft->save();
                         }
                     }
@@ -602,7 +602,7 @@ class EventService extends BaseService
                                 $nft->secret_key = $data['nft-ticket-secret-key-booth'][$index] ?? '';
                                 $nft->type = 3;
                                 $nft->task_id = $task->id;
-                                $nft->session_id = $sessionTask->id;
+                                $nft->booth_id = $sessionTask->id;
                                 $nft->save();
                             }
                             $index;

@@ -727,7 +727,7 @@ class Home extends Controller
             $sessions = $this->eventDetail->whereTaskEventId($eventSession->id)->orderBy('sort', 'asc')->get();
             $booths = $this->eventDetail->whereTaskEventId($eventBooth->id)->orderBy('sort', 'asc')->get();
 
-            return redirect(route('job.getTravelGame', ['task_id' => $task->id]));
+            return redirect(route('job.getTravelGame', ['task_id' => $task->id, 'detail' => $request->detail]));
 
 
             foreach ($sessions as $session) {

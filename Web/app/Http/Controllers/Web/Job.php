@@ -136,6 +136,7 @@ class Job extends Controller
 //                    ]);
 //                }
             }
+
             //không có mã qr hợp lệ
             if ($event && !$event->status) {
 
@@ -146,7 +147,7 @@ class Job extends Controller
             } else {
 
                 notify()->success('Scan QR code success');
-                return $this->getJob($request,$event->code);
+                return $this->getJob($request, $event->code);
                 // return redirect()->route('job.getJob', [
                 //     'code' => $event->code
                 // ]);
@@ -221,16 +222,14 @@ class Job extends Controller
                 ->where('task_event_detail_id', $detail->id)
                 ->whereUserId($user->id)
                 ->exists();
-
             if (!$checkEventJob) {
 
                 if (!$detail->status) {
 
                     notify()->error('QR code locked');
-
                     return redirect()->route('web.jobEvent', [
                         'id' => $task->code,
-                        'type' => $taskEvent->type
+                        'type' => $taskEvent->type,
                     ]);
 
                 } else {
@@ -290,7 +289,8 @@ class Job extends Controller
             // notify()->success('Scan QR code success');
             return redirect()->route('web.jobEvent', [
                 'id' => $task->code,
-                'type' => $taskEvent->type
+                'type' => $taskEvent->type,
+                'detail' => $detail->id
             ]);
 
 
@@ -316,7 +316,6 @@ class Job extends Controller
      */
     public function getTravelGame(Request $request, $taskId)
     {
-
         try {
             $event = $this->task->find($taskId);
             //$checkUserGetCode = $this->checkUserGetCode($request, $taskId);
@@ -330,6 +329,7 @@ class Job extends Controller
                 ->whereTaskEventId($session->id)
                 ->pluck('travel_game_id')
                 ->toArray();
+
 
             $travelBoots = [];
             $booth = $this->taskEvent->whereTaskId($taskId)->whereType(TASK_BOOTH)->first();
@@ -388,6 +388,7 @@ class Job extends Controller
                 if ($isDoneTask) {
                     $totalCompleted++;
                 }
+
                 $sessionDatas[] = [
                     'id' => $session->id,
                     'travel_game_id' => $session->travel_game_id ?? '',
@@ -528,11 +529,20 @@ class Job extends Controller
             array_splice($groupSessions[$item['travel_game_id']], 7, 0, [$tempArray[1]]);
         }
 
-        $checkNftMint = UserNft::where([
-            'booth_id'=> $booth->id,
-            'session_id' => $session->id,
-            'user_id' => \auth()->user()->id,
-        ])->first();
+        $taskDetailEvent = TaskEventDetail::find($request->detail);
+        $checkNftMint = null;
+
+        if ($taskDetailEvent && $event->type == 0) {
+            $checkNftMint = UserNft::where([
+                'session_id' => $taskDetailEvent->id,
+                'user_id' => \auth()->user()->id,
+            ])->first();
+        } else if ($taskDetailEvent && $event->type == 1) {
+            $checkNftMint = UserNft::where([
+                'booth_id'=> $taskDetailEvent->id,
+                'user_id' => \auth()->user()->id,
+            ])->first();
+        }
 
         $qrCode = '';
 
@@ -575,7 +585,7 @@ class Job extends Controller
             'flagU' => $flagU,
             'qrCode' => $qrCode,
             'checkNftMint' => $checkNftMint,
-
+            'taskDetailEvent' => $taskDetailEvent,
             'groupSessions' => ($groupSessions),
         ]);
     }
