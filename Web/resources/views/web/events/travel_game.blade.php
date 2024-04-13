@@ -136,7 +136,11 @@
                                     $userNft->user_id = \auth()->user()->id;
                                     $userNft->nft_mint_id = $nft->id;
                                     $userNft->type = $nft->type;
-                                    $userNft->session_id = $nft->session_id;
+                                    if($taskDetailEvent && $taskDetailEvent->type == 0) {
+                                        $userNft->session_id = $taskDetailEvent->id;
+                                    } else if($taskDetailEvent && $taskDetailEvent->type == 1) {
+                                        $userNft->booth_id = $taskDetailEvent->id;
+                                    }
                                     $userNft->task_id = $nft->task_id;
                                     $userNft->save();
                             }
