@@ -130,8 +130,7 @@
                         if (!$checkNftMint) {
                             $nft = \App\Models\NFT\NFTMint::where([
                                 'status' => 1,
-                                'type' => 2,
-                            ])->first();
+                            ])->whereIn('type', [2,3])->first();
                             if ($nft) {
                                     $userNft = new \App\Models\NFT\UserNft();
                                     $userNft->user_id = \auth()->user()->id;

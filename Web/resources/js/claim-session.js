@@ -31,83 +31,85 @@ let provider = new AnchorProvider(connection, solConnect.getWallet(), {commitmen
 let program = new Program(idl, PROGRAM_ID, provider);
 
 $('#button-claim').click(async function () {
-    $('.loading').show();
-
-
-    const emailLogin = $('#email_login').val();
-    console.log(emailLogin);
-    const didToken = await magic?.auth.loginWithEmailOTP({email: emailLogin})
+    try {
+        $('.loading').show();
+        const emailLogin = $('#email_login').val();
+        console.log(emailLogin);
+        const didToken = await magic?.auth.loginWithEmailOTP({email: emailLogin})
 // const userAddress = '0xef2fB5192536d336c47681CBe861381D44A83DF2';
 // const userPublicKey = new web3.PublicKey(userAddress)
-    const metadata = await magic.user.getMetadata();
-    console.log(metadata);
-    const adapter = new PublicKey(metadata.publicAddress);
-    console.log(adapter)
+        const metadata = await magic.user.getMetadata();
+        console.log(metadata);
+        const adapter = new PublicKey(metadata.publicAddress);
+        console.log(adapter)
 // const adapter = userPublicKey;
-    walletOr = metadata.publicAddress;
-    const mintKeypairId = $('#address_nft').val();
-    const feeW = $('#address_organizer').val();
-    const seedP = $('#seed').val();
-    const nftId = $('#nft_id').val();
-    console.log(mintKeypairId);
-    console.log(feeW)
-    console.log(seedP)
-    const mintKeypair = new PublicKey(mintKeypairId);
-    const wallet0 = adapter
-    console.log(mintKeypair);
+        walletOr = metadata.publicAddress;
+        const mintKeypairId = $('#address_nft').val();
+        const feeW = $('#address_organizer').val();
+        const seedP = $('#seed').val();
+        const nftId = $('#nft_id').val();
+        console.log(mintKeypairId);
+        console.log(feeW)
+        console.log(seedP)
+        const mintKeypair = new PublicKey(mintKeypairId);
+        const wallet0 = adapter
+        console.log(mintKeypair);
 
-    const buyTokenAddress = await getAssociatedTokenAddress(
-        mintKeypair,
-        adapter
-    );
+        const buyTokenAddress = await getAssociatedTokenAddress(
+            mintKeypair,
+            adapter
+        );
 
-    const seed = new BN(seedP); // TODO: enter seed
-    const pool = web3.PublicKey.findProgramAddressSync(
-        [
-            Buffer.from("state"),
-            seed.toArrayLike(Buffer, "le", 8)
-        ],
-        program.programId
-    )[0];
+        const seed = new BN(seedP); // TODO: enter seed
+        const pool = web3.PublicKey.findProgramAddressSync(
+            [
+                Buffer.from("state"),
+                seed.toArrayLike(Buffer, "le", 8)
+            ],
+            program.programId
+        )[0];
 
-    const poolTokenAddress = await getAssociatedTokenAddressSync(
-        mintKeypair,
-        pool,
-        true
-    );
+        const poolTokenAddress = await getAssociatedTokenAddressSync(
+            mintKeypair,
+            pool,
+            true
+        );
 
-    const feeWallet = new PublicKey(feeW);
+        const feeWallet = new PublicKey(feeW);
 
-    const claimTx = await program.methods
-        .claim()
-        .accounts(
-            {
-                mint: mintKeypair,
-                poolTokenAccount: poolTokenAddress,
-                pool: pool,
-                buyerTokenAccount: buyTokenAddress,
-                buyerAuthority: adapter,
-                feeWallet: feeWallet,
+        const claimTx = await program.methods
+            .claim()
+            .accounts(
+                {
+                    mint: mintKeypair,
+                    poolTokenAccount: poolTokenAddress,
+                    pool: pool,
+                    buyerTokenAccount: buyTokenAddress,
+                    buyerAuthority: adapter,
+                    feeWallet: feeWallet,
+                }
+            ).instruction();
+
+        await confirmSign(adapter, claimTx, mintKeypair, feeWallet);
+
+        try {
+            const body = {
+                nft_id: nftId
             }
-        ).instruction();
+            console.log(body);
 
-    await confirmSign(adapter, claimTx, mintKeypair, feeWallet);
-
-    try {
-        const body = {
-            nft_id: nftId
+            const res = await axios.post("/update_nft_status", body);
+            alert('Claim NFT is success. Please see on https://explorer.solana.com/')
+            $('.loading').hide();
+            $('#button-claim').hide()
+            $('#button-claim-link').show();
+        } catch (error) {
+            alert(error.message);
         }
-        console.log(body);
-
-        const res = await axios.post("/update_nft_status", body);
-        alert('Claim NFT is success. Please see on https://explorer.solana.com/')
-        $('.loading').hide();
-        $('#button-claim').hide()
-        $('#button-claim-link').show();
     } catch (error) {
         alert(error.message);
+        $('.loading').hide();
     }
-
 })
 
 async function confirmSign(ownerWallet, mintTx, mintKeypair, feeWallet) {
